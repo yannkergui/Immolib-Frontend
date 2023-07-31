@@ -20,7 +20,8 @@ import persoProfil from "./screens/perso/persoProfil";
 import persoVisites from "./screens/perso/persoVisites";
 import persoTchats from "./screens/perso/persoTchats";
 import WelcomeScreenPerso from "./screens/perso/WelcomeScreenPerso";
-import monDossier1 from "./screens/perso/monDossier1";
+import persoMonDossier1 from "./screens/perso/persoMonDossier1";
+import persoMonDossierLoc2 from "./screens/perso/persoMonDossier2Loc";
 
 
 import PageTests from "./screens/pageTests";
@@ -145,7 +146,7 @@ export default function App() {
             <Stack.Screen name="PageTests" component={firstScreen}/>
             <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
             <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
-            <Stack.Screen name="monDossier1" component={monDossier1} />
+            <Stack.Screen name="monDossier1" component={persoMonDossier1} />
             <Stack.Screen name="monDossierPro" component={monDossierPro} />
             <Stack.Screen
             name="TabNavigatorPro"
