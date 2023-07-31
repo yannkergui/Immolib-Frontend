@@ -9,6 +9,8 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 import Navbar from "./navigation/Navbar"
 
+import firstScreen from "./screens/firstScreen";
+
 import proHome from "./screens/pro/proHome";
 import proClients from "./screens/pro/proClients";
 import proVisites from "./screens/pro/proVisites";

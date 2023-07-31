@@ -51,7 +51,7 @@ export default function WelcomeScreenPro({ navigation }) {
 
   // au click sur bouton Skip on passe à la page de connection/inscription
   const handleSubmit = () => {
-    navigation.navigate('TabNavigator', { screen: 'visites' });
+    navigation.navigate('proConnectionScreen');
   }
 
   // constante permettant de 'mapper' le tableau des trois écrans avec appel de leur propriété
