@@ -29,7 +29,6 @@ export default function pageBlanche(props) {
   return (
     // <SafeAreaView>
     <View style={styles.Fullpage}>
-      <Text>PageBlanche</Text>
       <TouchableOpacity onPress={() => handleClickPro()}>
         <Text style={styles.button}>Go to PRO</Text>
       </TouchableOpacity>
