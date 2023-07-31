@@ -13,6 +13,7 @@ import proVisites from "./screens/pro/proVisites";
 import proTchats from "./screens/pro/proTchats";
 import proAnnonces from "./screens/pro/proAnnonces";
 
+import ConnectionScreen from "./screens/perso/connectionScreen";
 import persoHome from "./screens/perso/persoHome";
 import persoProfil from "./screens/perso/persoProfil";
 import persoVisites from "./screens/perso/persoVisites";
@@ -134,7 +135,7 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
-            <Stack.Screen name="PageTests" component={PageTests} />
+            <Stack.Screen name="Connection" component={ConnectionScreen} />
             <Stack.Screen name="TabNavigatorPro" component={TabNavigatorPro} />
             <Stack.Screen name="TabNavigatorPerso" component={TabNavigatorPerso} />
           </Stack.Navigator>
