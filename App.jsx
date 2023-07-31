@@ -47,7 +47,7 @@ const TabNavigatorPro = () => {
         let iconName = "";
         if (route.name === "Home") {
           iconName = "home";
-          size = focused ? 50 : 24; // Set different sizes for active and inactive icons
+          size = focused ? 50 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné)
         } else if (route.name === "Mes tchats") {
           iconName = "commenting-o";
         } else if (route.name === "Mes annonces") {
@@ -73,11 +73,11 @@ const TabNavigatorPro = () => {
           return null;
         },
         tabBarActiveTintColor: '#1F2937',
-        tabBarActiveBackgroundColor: 'white',
+        tabBarActiveBackgroundColor: 'white', // on initialise la couleur pour la partie da Tab Bar sélectionnée 
         
         tabBarInactiveTintColor: "#b2b2b2",
         headerShown: false,
-        tabBarStyle: {
+        tabBarStyle: { // on initialise le style pour l'ensemble de la Tab Bar
           position: 'absolute',
           backgroundColor: 'rgba(255, 255, 255, 0.5)',
           height: 60,
@@ -92,7 +92,7 @@ const TabNavigatorPro = () => {
           left : 20,
           right : 20
         },
-        tabBarItemStyle: { // Set the borderRadius for each tab item
+        tabBarItemStyle: { // on initialise le style pour l'icone sélectionné
           borderRadius: 30,
           height: 50,
           justifyContent:'center'
