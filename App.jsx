@@ -24,13 +24,12 @@ import monDossier1 from "./screens/perso/monDossier1";
 
 
 import PageTests from "./screens/pageTests";
-
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-import { Provider } from 'react-redux';
-import user from './reducers/user';
+import { Provider } from "react-redux";
+import user from "./reducers/user";
 
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
   reducer: { user },
@@ -43,43 +42,46 @@ const TabNavigatorPro = () => {
         tabBarIcon: ({ color, size }) => {
           let iconName = "";
           if (route.name === "Home") {
-            iconName = "minus";
+            iconName = "home";
           } else if (route.name === "Mes tchats") {
-            iconName = "minus";
+            iconName = "commenting-o";
           } else if (route.name === "Mes annonces") {
-            iconName = "minus";
+            iconName = "map-signs";
           } else if (route.name === "Mes visites") {
-            iconName = "minus";
+            iconName = "calendar-o";
           } else if (route.name === "Mes clients") {
-            iconName = "minus";
+            iconName = "folder-open-o";
           }
           return (
             <FontAwesome
               name={iconName}
-              size={60}
+              size={size}
               color={color}
               style={styles.icon}
             />
           );
         },
-        tabBarActiveTintColor: "white",
+        tabBarActiveTintColor: "black",
+
         tabBarInactiveTintColor: "#b2b2b2",
         headerShown: false,
         tabBarStyle: {
-          justifyContent: 'center',
-          alignItems: 'center',
-          position: 'absolute',
-          //backgroundColor: "transparent",
-          borderTopWidth: 0,
-          elevation: 0, // For Android to remove the shadow
-          width: 341,
-          height: 56,
-          flexShrink: 0,
-          background: 'rgba(255, 255, 255, 0,7)',
+          marginBottom: 200,
+          backgroundColor: "red",
+          width: "100%",
+          height: "10%",
+          alignItems: "center",
+          justifyContent: "center",
+          padding:0,
+          // elevation: 0,
           borderRadius: 30,
         },
         tabBarOptions: {
           showLabel: false, // Hide the tab labels
+          // backgroundColor: "blue",
+          background: "rgba(255, 255, 255, 0,7)",
+          position: "absolute",
+          paddingBottom: 0,
         },
       })}
     >
@@ -126,10 +128,10 @@ const TabNavigatorPerso = () => {
         },
       })}
     >
-      <Tab.Screen name="Home" component={persoHome}  />
+      <Tab.Screen name="Home" component={persoHome} />
       <Tab.Screen name="Mes tchats" component={persoTchats} />
       <Tab.Screen name="Mes visites" component={persoVisites} />
-      <Tab.Screen name="Mon profil" component={persoProfil}/>
+      <Tab.Screen name="Mon profil" component={persoProfil} />
     </Tab.Navigator>
   );
 };
@@ -144,8 +146,15 @@ export default function App() {
             <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
             <Stack.Screen name="monDossier1" component={monDossier1} />
             <Stack.Screen name="monDossierPro" component={monDossierPro} />
-            <Stack.Screen name="TabNavigatorPro" component={TabNavigatorPro} />
-            <Stack.Screen name="TabNavigatorPerso" component={TabNavigatorPerso} />
+            <Stack.Screen
+            name="TabNavigatorPro"
+            component={TabNavigatorPro}
+            style={styles.tabNavigator}
+          />
+            <Stack.Screen
+            name="TabNavigatorPerso"
+            component={TabNavigatorPerso}
+          />
           </Stack.Navigator>
         </NavigationContainer>
     </Provider>
@@ -154,10 +163,13 @@ export default function App() {
 
 const styles = StyleSheet.create({
   main: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    // flex: 1,
+    // backgroundColor: "#fff",
+    // alignItems: "center",
+    // justifyContent: "flex-start",
   },
-  icon: {},
+  // tabNavigator: {},
+  icon: {
+    padding:0,
+  },
 });
