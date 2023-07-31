@@ -17,6 +17,8 @@ import persoHome from "./screens/perso/persoHome";
 import persoProfil from "./screens/perso/persoProfil";
 import persoVisites from "./screens/perso/persoVisites";
 import persoTchats from "./screens/perso/persoTchats";
+import persoMonDossier1 from "./screens/perso/persoMonDossier1";
+import persoMonDossierLoc2 from "./screens/perso/persoMonDossier2Loc";
 
 import PageTests from "./screens/pageTests";
 
@@ -134,7 +136,7 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
-            <Stack.Screen name="PageTests" component={PageTests} />
+            <Stack.Screen name="PageTests" component={persoMonDossierLoc2} />
             <Stack.Screen name="TabNavigatorPro" component={TabNavigatorPro} />
             <Stack.Screen name="TabNavigatorPerso" component={TabNavigatorPerso} />
           </Stack.Navigator>

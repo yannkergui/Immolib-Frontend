@@ -2,9 +2,9 @@ import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import { useState } from "react";
 
-export default function monDossier1() {
+export default function persoMonDossier1() {
   // 3 Etats relatif à la situation actuelle  choisie (util au changement de couleur du choix)
-  const [locataireChoice, setLocatairechoice] = useState(false);
+  const [locataireChoice, setLocataireChoice] = useState(false);
   const [proprietaireChoice, setProprietaireChoice] = useState(false);
   const [hebergeChoice, setHebergeChoice] = useState(false);
 
@@ -16,20 +16,20 @@ export default function monDossier1() {
   // les trois fonction appelée au clique sur la situation actuelle, utile pour le changement de style du boutton et en push en BDD.
 
   const handleLocataire = () => {
-    setLocatairechoice(!locataireChoice);
+    setLocataireChoice(!locataireChoice);
     setProprietaireChoice(false);
     setHebergeChoice(false);
   };
 
   const handleProprietaire = () => {
     setProprietaireChoice(!proprietaireChoice);
-    setLocatairechoice(false);
+    setLocataireChoice(false);
     setHebergeChoice(false);
   };
 
   const handleHeberge = () => {
     setHebergeChoice(!hebergeChoice);
-    setLocatairechoice(false);
+    setLocataireChoice(false);
     setProprietaireChoice(false);
   };
 
