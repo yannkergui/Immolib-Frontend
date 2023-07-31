@@ -7,7 +7,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-import Navbar from "./navigation/Navbar"
 
 import firstScreen from "./screens/firstScreen";
 
@@ -35,7 +34,7 @@ import { Provider } from "react-redux";
 import user from "./reducers/user";
 
 import { configureStore } from "@reduxjs/toolkit";
-import firstScreen from "./screens/firstScreen";
+
 
 const store = configureStore({
   reducer: { user },
@@ -169,7 +168,7 @@ export default function App() {
             component={TabNavigatorPro}
             style={styles.tabNavigator}
           />
-            <Stack.Screen name="PageTests" component={PageTests} />
+            <Stack.Screen name="PageTests" component={persoMonDossier2Achat} />
             <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
             <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
             <Stack.Screen name="monDossier1" component={monDossier1} />
