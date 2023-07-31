@@ -7,21 +7,34 @@ import {
 } from "react-native";
 import React, { Component } from "react";
 
-export default function PageBlanche(props) {
+import { useSelector } from 'react-redux';
+import { UserState } from '../reducers/user';
+import { useDispatch } from 'react-redux';
+import { profilage } from "../reducers/user";
 
-  
+export default function pageBlanche(props) {
 
-  const handleClick = () => {
-    props.navigation.navigate("TabNavigator");
+  const dispatch = useDispatch()
+
+  const handleClickPro = () => {
+    props.navigation.navigate("TabNavigatorPro");
   };
+
+  const handleClickPerso = () => {
+    props.navigation.navigate("TabNavigatorPerso");
+  };
+
   
 
   return (
     // <SafeAreaView>
     <View style={styles.Fullpage}>
       <Text>PageBlanche</Text>
-      <TouchableOpacity onPress={() => handleClick()}>
-        <Text style={styles.button}>Go to Tabs</Text>
+      <TouchableOpacity onPress={() => handleClickPro()}>
+        <Text style={styles.button}>Go to PRO</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => handleClickPerso()}>
+        <Text style={styles.button}>Go to PERSO</Text>
       </TouchableOpacity>
     </View>
     // </SafeAreaView>
