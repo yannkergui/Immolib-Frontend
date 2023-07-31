@@ -30,6 +30,7 @@ import { Provider } from "react-redux";
 import user from "./reducers/user";
 
 import { configureStore } from "@reduxjs/toolkit";
+import firstScreen from "./screens/firstScreen";
 
 const store = configureStore({
   reducer: { user },
@@ -141,7 +142,7 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
-            <Stack.Screen name="PageTests" component={PageTests} />
+            <Stack.Screen name="PageTests" component={firstScreen}/>
             <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
             <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
             <Stack.Screen name="monDossier1" component={monDossier1} />

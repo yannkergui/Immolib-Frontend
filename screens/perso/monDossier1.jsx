@@ -106,18 +106,13 @@ export default function monDossier1() {
             <Text>Achat</Text>
           </TouchableOpacity>
         </View>
-        <View style = {styles.nextBtnContainer}>
-            <TouchableOpacity style = {styles.skip}>
-                <Text>
-                    Passer cette étape
-                </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style = {styles.next}>
-                <Text>
-                    Etape suivante
-                </Text>
-            </TouchableOpacity>
-
+        <View style={styles.nextBtnContainer}>
+          <TouchableOpacity style={styles.skip}>
+            <Text>Passer cette étape</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.next}>
+            <Text>Etape suivante</Text>
+          </TouchableOpacity>
         </View>
       </LinearGradient>
     </View>
@@ -248,7 +243,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-around",
     marginTop: 60,
-  }, 
+  },
 
   skip: {
     alignItems: "center",
@@ -272,5 +267,5 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     marginRight: 3,
-  }
+  },
 });
