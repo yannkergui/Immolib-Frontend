@@ -2,9 +2,9 @@ import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import { useState } from "react";
 
-export default function persoMonDossier1() {
+export default function monDossierPro() {
   // 3 Etats relatif à la situation actuelle  choisie (util au changement de couleur du choix)
-  const [locataireChoice, setLocataireChoice] = useState(false);
+  const [locataireChoice, setLocatairechoice] = useState(false);
   const [proprietaireChoice, setProprietaireChoice] = useState(false);
   const [hebergeChoice, setHebergeChoice] = useState(false);
 
@@ -16,20 +16,20 @@ export default function persoMonDossier1() {
   // les trois fonction appelée au clique sur la situation actuelle, utile pour le changement de style du boutton et en push en BDD.
 
   const handleLocataire = () => {
-    setLocataireChoice(!locataireChoice);
+    setLocatairechoice(!locataireChoice);
     setProprietaireChoice(false);
     setHebergeChoice(false);
   };
 
   const handleProprietaire = () => {
     setProprietaireChoice(!proprietaireChoice);
-    setLocataireChoice(false);
+    setLocatairechoice(false);
     setHebergeChoice(false);
   };
 
   const handleHeberge = () => {
     setHebergeChoice(!hebergeChoice);
-    setLocataireChoice(false);
+    setLocatairechoice(false);
     setProprietaireChoice(false);
   };
 
@@ -106,13 +106,18 @@ export default function persoMonDossier1() {
             <Text>Achat</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.nextBtnContainer}>
-          <TouchableOpacity style={styles.skip}>
-            <Text>Passer cette étape</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.next}>
-            <Text>Etape suivante</Text>
-          </TouchableOpacity>
+        <View style = {styles.nextBtnContainer}>
+            <TouchableOpacity style = {styles.skip}>
+                <Text>
+                    Passer cette étape
+                </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style = {styles.next}>
+                <Text>
+                    Etape suivante
+                </Text>
+            </TouchableOpacity>
+
         </View>
       </LinearGradient>
     </View>
@@ -243,7 +248,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-around",
     marginTop: 60,
-  },
+  }, 
 
   skip: {
     alignItems: "center",
@@ -267,5 +272,5 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     marginRight: 3,
-  },
+  }
 });

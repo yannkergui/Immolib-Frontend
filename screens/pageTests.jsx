@@ -17,11 +17,11 @@ export default function pageBlanche(props) {
   const dispatch = useDispatch()
 
   const handleClickPro = () => {
-    props.navigation.navigate("TabNavigatorPro");
+    props.navigation.navigate("WelcomeScreenPro");
   };
 
   const handleClickPerso = () => {
-    props.navigation.navigate("TabNavigatorPerso");
+    props.navigation.navigate("WelcomeScreenPerso");
   };
 
   

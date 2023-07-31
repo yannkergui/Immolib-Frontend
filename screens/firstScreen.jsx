@@ -1,13 +1,13 @@
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Image,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 
-export default function firstScreen() {
+export default function firstScreen({navigation}) {
+  const handleToParticulier = () => {
+    navigation.navigate("WelcomeScreenPerso");
+  };
+  const handleToPro = () => {
+    navigation.navigate("WelcomeScreenPro");
+  };
   return (
     <View style={styles.container}>
       {/* Use LinearGradient as the container's background */}
@@ -17,12 +17,19 @@ export default function firstScreen() {
         end={{ x: 1, y: 1 }} // End point of the gradient
         style={styles.container}
       >
-        <Image style={styles.logo} source={require('../assets/IMMOLIB.png')}></Image>
+        <Image
+          style={styles.logo}
+          source={require("../assets/IMMOLIB.png")}
+        ></Image>
         {/* <Text style={styles.title}>IMMOLIB</Text> */}
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => handleToParticulier()}
+        >
           <Text style={styles.textButton}>Espace Particulier</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button}
+        onPress={() => handleToPro()}>
           <Text style={styles.textButton}>Espace Professionnel</Text>
         </TouchableOpacity>
       </LinearGradient>
@@ -39,8 +46,8 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   logo: {
-    width: '100%',
-    height: '50%',
+    width: "100%",
+    height: "50%",
   },
   button: {
     alignItems: "center",

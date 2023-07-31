@@ -16,11 +16,11 @@ import {
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import { useFonts } from 'expo-font';
 
-export default function WelcomeScreen({ navigation }) {
+export default function WelcomeScreenPerso(props) {
 
   const [fontsLoaded] = useFonts({
-    Nunitobold: require('../assets/fonts/Nunito/static/Nunito-Bold.ttf'),
-    NunitoSans: require('../assets/fonts/Nunito_Sans/static/NunitoSans_7pt-Medium.ttf')
+    Nunitobold: require('../../assets/fonts/Nunito/static/Nunito-Bold.ttf'),
+    NunitoSans: require('../../assets/fonts/Nunito_Sans/static/NunitoSans_7pt-Medium.ttf')
   });
   // if (!fontsLoaded) {
   //   return <View/>;
@@ -30,19 +30,16 @@ export default function WelcomeScreen({ navigation }) {
   const slides = [
     {
       id: '1',
-      image: require('../assets/welcomepage.jpg'),
       title: 'Immolib me simplifie la vie',
       subtitle: "un outil simple pour demander et gérer mes visites",
     },
     {
       id: '2',
-      image: require('../assets/welcomepage.jpg'),
       title: "Ne ratez aucune opportunité",
       subtitle: "je remplis mon dossier une seule fois et je peux ensuite l'envoyer d'un simple click afin de ne plus rien rater, même aux professionels qui n'utilisent pas Immolib 👍",
     },
     {
       id: '3',
-      image: require('../assets/welcomepage.jpg'),
       title: "Un emploi du temps pour TOUTES mes visites",
       subtitle: "Un calendrier performant accessible a tout moment et mis à jour en temps réel",
     },
@@ -54,7 +51,7 @@ export default function WelcomeScreen({ navigation }) {
 
   // au click sur bouton Skip on passe à la page de connection/inscription
   const handleSubmit = () => {
-    navigation.navigate('TabNavigator', { screen: 'visites' });
+    props.navigation.navigate("monDossier1");
   }
 
   // constante permettant de 'mapper' le tableau des trois écrans avec appel de leur propriété
@@ -62,7 +59,7 @@ export default function WelcomeScreen({ navigation }) {
     return (
       <View style={[styles.slide, {width: screenWidth }]}>
         <View style={styles.header}>
-          <Image  style={styles.image} source={require('../assets/IMMOLIB.png')}></Image>
+          <Image  style={styles.image} source={require('../../assets/IMMOLIB.png')}></Image>
         </View>
         <View style={styles.text}>
         <Text style={styles.title}>{item.title}</Text>
