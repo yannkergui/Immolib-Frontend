@@ -11,13 +11,72 @@ import { useState } from "react";
 
 export default function persoMonDossierLoc2() {
 
-  
-  // 3 Etats relatif au bien recherché choisie (util au changement de couleur du choix et au push en BDD)
+  //Etat relatif au budget renseigné (util au push en BDD)
 
-  const [maisonChoice, setChoice] = useState(false);
+  const [monBudget, setMonBudget] = useState(0);
+
+  // 3 Etats relatifs au bien recherché choisie (util au changement de couleur du choix et au push en BDD)
+
+  const [maisonChoice, setMaisonChoice] = useState(false);
   const [appartementChoice, setAppartementChoice] = useState(false);
   const [autreChoice, setAutreChoice] = useState(false);
 
+  //  Etat relatif à la surface minimum (util au push en BDD)
+
+  const [surface, setSurface] = useState(0);
+
+   //  Etat relatif à la surface minimum (util au push en BDD)
+
+   const [nbPiece, setNbPiece] = useState(0);
+
+  //  Etat relatif au nombre de locataire (util au push en BDD)
+
+  const [nbLocataire, setNbLocataire] = useState(0);
+
+  // 3 Etats relatifs au bien recherché choisie (util au changement de couleur du choix et au push en BDD)
+
+  const [bienMeuble, setBienMeuble] = useState(false);
+  const [bienNonMeuble, setBienNonMeuble] = useState(false);
+  const [indifferent, setIndifferent] = useState(false);
+
+  // fonctions relatives au type de bien (changement du booléens et du style)
+
+  const handleMaison = () => {
+    setMaisonChoice(!maisonChoice);
+    setAppartementChoice(false);
+    setAutreChoice(false);
+  };
+
+  const handleAppartement = () => {
+    setAppartementChoice(!appartementChoice);
+    setMaisonChoice(false);
+    setAutreChoice(false);
+  };
+
+  const handleAutre = () => {
+    setAutreChoice(!autreChoice);
+    setAppartementChoice(false);
+    setMaisonChoice(false);
+  };
+
+   // fonctions relatives au bien meublé (changement du booléens et du style)
+   const handleMeuble = () => {
+    setBienMeuble(!bienMeuble);
+    setBienNonMeuble(false);
+    setIndifferent(false);
+  };
+
+  const handleNonMeuble = () => {
+    setBienNonMeuble(!bienNonMeuble);
+    setBienMeuble(false);
+    setIndifferent(false);
+  };
+
+  const handleIndifferent = () => {
+    setIndifferent(!indifferent);
+    setBienNonMeuble(false);
+    setBienMeuble(false);
+  };
 
   return (
     <View style={styles.container}>
@@ -47,54 +106,43 @@ export default function persoMonDossierLoc2() {
           </View>
         </View>
         <View style={styles.formContainer}>
-          <View style= {styles.lineContainer}>
+          <View style={styles.lineContainer}>
             <Text>Budget Mensuel Maximum</Text>
-            <TextInput style= {styles.input}>/€</TextInput>
+            <TextInput style={styles.input} keyboardType="numeric" placeholder="/€" onChangeText={(value) => setMonBudget(value)} value={monBudget}></TextInput>
           </View>
-          <View style= {styles.lineContainer}>
+          <View style={styles.lineContainer}>
             <Text>Bien recherché</Text>
-            <TouchableOpacity style= {styles.button}>
+            <TouchableOpacity style={maisonChoice ? styles.buttonSelected : styles.button} onPress={() => handleMaison()}>
               <Text>Maison</Text>
             </TouchableOpacity>
-            <TouchableOpacity style= {styles.button}>
+            <TouchableOpacity style={appartementChoice ? styles.buttonSelected : styles.button} onPress={() => handleAppartement()}>
               <Text>Appartement</Text>
             </TouchableOpacity>
-            <TouchableOpacity style= {styles.button}>
+            <TouchableOpacity style={autreChoice ? styles.buttonSelected : styles.button} onPress={() => handleAutre()}>
               <Text>Autre</Text>
             </TouchableOpacity>
           </View>
-          <View style= {styles.lineContainer}>
+          <View style={styles.lineContainer}>
             <Text>Surface minimum</Text>
-            <TextInput style= {styles.input}>m²</TextInput>
+            <TextInput style={styles.input} keyboardType="numeric" placeholder="m²" onChangeText={(value) => setSurface(value)} value={surface}></TextInput>
           </View>
-          <View style= {styles.lineContainer}>
+          <View style={styles.lineContainer}>
             <Text>Nombre de pièces minimum</Text>
-            <TextInput style= {styles.input}>0</TextInput>
+            <TextInput style={styles.input} keyboardType="numeric" placeholder="0" onChangeText={(value) => setNbPiece(value)} value={nbPiece}></TextInput>
           </View>
-          <View style= {styles.lineContainer}>
+          <View style={styles.lineContainer}>
             <Text>Nombre de locataire</Text>
-            <TouchableOpacity style= {styles.button}>
-              <Text>1</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style= {styles.button}>
-              <Text>2</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style= {styles.button}>
-              <Text>3</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style= {styles.button}>
-              <Text>+ de 3</Text>
-            </TouchableOpacity>
+            <TextInput style={styles.input}keyboardType="numeric" placeholder="0" onChangeText={(value) => setNbLocataire(value)} value={nbLocataire}></TextInput>
           </View>
-          <View style= {styles.lineContainer}>
+          <View style={styles.lineContainer}>
             <Text>Bien meublé</Text>
-            <TouchableOpacity style= {styles.button}>
+            <TouchableOpacity style={bienMeuble ? styles.buttonSelected : styles.button}  onPress={() => handleMeuble()}>
               <Text>Oui</Text>
             </TouchableOpacity>
-            <TouchableOpacity style= {styles.button}>
+            <TouchableOpacity style={bienNonMeuble ? styles.buttonSelected : styles.button} onPress={() => handleNonMeuble()}>
               <Text>Non</Text>
             </TouchableOpacity>
-            <TouchableOpacity style= {styles.button}>
+            <TouchableOpacity style={indifferent ? styles.buttonSelected : styles.button} onPress={() => handleIndifferent()}>
               <Text>Indifférent</Text>
             </TouchableOpacity>
           </View>
@@ -116,7 +164,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    backgroundColor: "#e8be4b",
     alignItems: "center",
     justifyContent: "flex-start",
   },
@@ -197,7 +244,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-around",
     marginTop: 70,
-  }, 
+  },
 
   skip: {
     alignItems: "center",
@@ -224,35 +271,42 @@ const styles = StyleSheet.create({
   },
 
   formContainer: {
-    width: '90%'
+    width: "90%",
   },
 
   lineContainer: {
     flexDirection: "row",
-    justifyContent: 'space-between',
-    marginTop: 20
+    justifyContent: "space-between",
+    marginTop: 20,
   },
 
   input: {
     borderColor: "white",
     borderWidth: 2,
-    borderRadius:10,
+    borderRadius: 10,
     width: 100,
     height: 40,
-    textAlign: "center"
+    textAlign: "center",
   },
 
   button: {
     borderColor: "white",
     borderWidth: 2,
-    borderRadius:10,
+    borderRadius: 10,
     width: 60,
     height: 40,
-    alignItems: 'center',
-    justifyContent: 'center'
-  }, 
+    alignItems: "center",
+    justifyContent: "center",
+  },
 
-
-
-  
+  buttonSelected: {
+    borderColor: "black",
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderRadius: 10,
+    width: 60,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
