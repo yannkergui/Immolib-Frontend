@@ -8,8 +8,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-import firstScreen from "./screens/firstScreen";
-
 import proHome from "./screens/pro/proHome";
 import proClients from "./screens/pro/proClients";
 import proVisites from "./screens/pro/proVisites";
@@ -50,15 +48,19 @@ const TabNavigatorPro = () => {
         let iconName = "";
         if (route.name === "Home") {
           iconName = "home";
-          size = focused ? 50 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné)
+          size = focused ? 45 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné)
         } else if (route.name === "Mes tchats") {
           iconName = "commenting-o";
+          size = focused ? 45 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné)
         } else if (route.name === "Mes annonces") {
           iconName = "map-signs";
+          size = focused ? 45 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné)
         } else if (route.name === "Mes visites") {
           iconName = "calendar-o";
+          size = focused ? 45 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné)
         } else if (route.name === "Mes clients") {
           iconName = "folder-open-o";
+          size = focused ? 45 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné)
         }
           return (
             <FontAwesome
