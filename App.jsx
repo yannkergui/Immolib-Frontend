@@ -1,15 +1,14 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-import Navbar from "./navigation/Navbar"
 
 import firstScreen from "./screens/firstScreen";
+import ConnectionScreen from "./screens/perso/connectionScreen";
 
 import proHome from "./screens/pro/proHome";
 import proClients from "./screens/pro/proClients";
@@ -19,7 +18,6 @@ import proAnnonces from "./screens/pro/proAnnonces";
 import WelcomeScreenPro from "./screens/pro/WelcomeScreenPro";
 import monDossierPro from "./screens/pro/monDossierpro"
 
-import ConnectionScreen from "./screens/perso/connectionScreen";
 import persoHome from "./screens/perso/persoHome";
 import persoProfil from "./screens/perso/persoProfil";
 import persoVisites from "./screens/perso/persoVisites";
@@ -29,14 +27,13 @@ import persoMonDossier1 from "./screens/perso/persoMonDossier1";
 import persoMonDossierLoc2 from "./screens/perso/persoMonDossier2Loc";
 import persoMonDossier2Achat from "./screens/perso/persoMonDossier2Achat";
 import persoMonDossier3Achat from "./screens/perso/persoMonDossier3Achat";
-import PageTests from "./screens/pageTests";
+
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 import { Provider } from "react-redux";
 import user from "./reducers/user";
 
 import { configureStore } from "@reduxjs/toolkit";
-import firstScreen from "./screens/firstScreen";
 
 const store = configureStore({
   reducer: { user },
@@ -112,8 +109,6 @@ const TabNavigatorPro = () => {
     </Tab.Navigator>
   );
 };
-
-
 
 const TabNavigatorPerso = () => {
   return (
