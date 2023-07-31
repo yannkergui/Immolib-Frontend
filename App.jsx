@@ -22,7 +22,8 @@ import persoProfil from "./screens/perso/persoProfil";
 import persoVisites from "./screens/perso/persoVisites";
 import persoTchats from "./screens/perso/persoTchats";
 import WelcomeScreenPerso from "./screens/perso/WelcomeScreenPerso";
-import monDossier1 from "./screens/perso/monDossier1";
+import persoMonDossier1 from "./screens/perso/persoMonDossier1";
+import persoMonDossierLoc2 from "./screens/perso/persoMonDossier2Loc";
 
 
 import PageTests from "./screens/pageTests";
@@ -32,6 +33,7 @@ import { Provider } from "react-redux";
 import user from "./reducers/user";
 
 import { configureStore } from "@reduxjs/toolkit";
+import firstScreen from "./screens/firstScreen";
 
 const store = configureStore({
   reducer: { user },
