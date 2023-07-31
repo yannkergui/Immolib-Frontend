@@ -7,6 +7,7 @@ import welcomeScreen from './screens/welcomeScreen';
 import homePage from './screens/homePage';
 import visites from './screens/mesVisites';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import firstScreen from './screens/firstScreen'
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -38,7 +39,7 @@ const TabNavigator = () => {
         },
       })}
     >
-      <Tab.Screen name="welcome" component={welcomeScreen} />
+      <Tab.Screen name="firstScreen" component={firstScreen} />
       <Tab.Screen name="visites" component={visites} />
     </Tab.Navigator>
   );
