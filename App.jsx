@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import welcomeScreen from "./screens/welcomeScreen";
 import home from "./screens/home";
+import monDossier1 from "./screens/monDossier1"
 import clients from "./screens/clients";
 import visitesPro from "./screens/visitesPro";
 import tchats from "./screens/tchats";
@@ -63,7 +64,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="PageBlanche" component={PageBlanche} />
+        <Stack.Screen name="PageBlanche" component={monDossier1} />
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
