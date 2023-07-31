@@ -1,32 +1,42 @@
 import React from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { StatusBar } from "expo-status-bar";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+import Navbar from "./navigation/Navbar"
+
+import firstScreen from "./screens/firstScreen";
 
 import proHome from "./screens/pro/proHome";
 import proClients from "./screens/pro/proClients";
 import proVisites from "./screens/pro/proVisites";
 import proTchats from "./screens/pro/proTchats";
 import proAnnonces from "./screens/pro/proAnnonces";
+import WelcomeScreenPro from "./screens/pro/WelcomeScreenPro";
+import monDossierPro from "./screens/pro/monDossierpro"
 
 import ConnectionScreen from "./screens/perso/connectionScreen";
 import persoHome from "./screens/perso/persoHome";
 import persoProfil from "./screens/perso/persoProfil";
 import persoVisites from "./screens/perso/persoVisites";
 import persoTchats from "./screens/perso/persoTchats";
-
+import WelcomeScreenPerso from "./screens/perso/WelcomeScreenPerso";
+import persoMonDossier1 from "./screens/perso/persoMonDossier1";
+import persoMonDossierLoc2 from "./screens/perso/persoMonDossier2Loc";
+import persoMonDossier2Achat from "./screens/perso/persoMonDossier2Achat";
+import persoMonDossier3Achat from "./screens/perso/persoMonDossier3Achat";
 import PageTests from "./screens/pageTests";
-
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-import { Provider } from 'react-redux';
-import user from './reducers/user';
+import { Provider } from "react-redux";
+import user from "./reducers/user";
 
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore } from "@reduxjs/toolkit";
+import firstScreen from "./screens/firstScreen";
 
 const store = configureStore({
   reducer: { user },
@@ -35,50 +45,65 @@ const store = configureStore({
 const TabNavigatorPro = () => {
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ color, size }) => {
-          let iconName = "";
-          if (route.name === "Home") {
-            iconName = "minus";
-          } else if (route.name === "Mes tchats") {
-            iconName = "minus";
-          } else if (route.name === "Mes annonces") {
-            iconName = "minus";
-          } else if (route.name === "Mes visites") {
-            iconName = "minus";
-          } else if (route.name === "Mes clients") {
-            iconName = "minus";
-          }
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({ color, size, focused }) => {
+        let iconName = "";
+        if (route.name === "Home") {
+          iconName = "home";
+          size = focused ? 50 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné)
+        } else if (route.name === "Mes tchats") {
+          iconName = "commenting-o";
+        } else if (route.name === "Mes annonces") {
+          iconName = "map-signs";
+        } else if (route.name === "Mes visites") {
+          iconName = "calendar-o";
+        } else if (route.name === "Mes clients") {
+          iconName = "folder-open-o";
+        }
           return (
             <FontAwesome
               name={iconName}
-              size={60}
+              size={size}
               color={color}
               style={styles.icon}
             />
           );
         },
-        tabBarActiveTintColor: "white",
+        tabBarLabel: ({ focused, color }) => {
+          if (!focused) {
+            return <Text style={styles.tabLabel}>{route.name}</Text>;
+          }
+          return null;
+        },
+        tabBarActiveTintColor: '#1F2937',
+        tabBarActiveBackgroundColor: 'white', // on initialise la couleur pour la partie da Tab Bar sélectionnée 
+        
         tabBarInactiveTintColor: "#b2b2b2",
         headerShown: false,
-        tabBarStyle: {
-          justifyContent: 'center',
-          alignItems: 'center',
+        tabBarStyle: { // on initialise le style pour l'ensemble de la Tab Bar
           position: 'absolute',
-          //backgroundColor: "transparent",
-          borderTopWidth: 0,
-          elevation: 0, // For Android to remove the shadow
-          width: 341,
-          height: 56,
-          flexShrink: 0,
-          background: 'rgba(255, 255, 255, 0,7)',
+          backgroundColor: 'rgba(255, 255, 255, 0.5)',
+          height: 60,
+          alignItems: "center",
+          justifyContent: "center",
           borderRadius: 30,
+          paddingBottom: 10,
+          paddingTop: 4,
+          paddingLeft: 5,
+          paddingRight:5,
+          marginBottom: 20,
+          left : 20,
+          right : 20
         },
-        tabBarOptions: {
-          showLabel: false, // Hide the tab labels
+        tabBarItemStyle: { // on initialise le style pour l'icone sélectionné
+          borderRadius: 30,
+          height: 50,
+          justifyContent:'center'
         },
+
       })}
     >
+      
       <Tab.Screen name="Home" component={proHome} />
       <Tab.Screen name="Mes tchats" component={proTchats} />
       <Tab.Screen name="Mes annonces" component={proAnnonces} />
@@ -87,6 +112,8 @@ const TabNavigatorPro = () => {
     </Tab.Navigator>
   );
 };
+
+
 
 const TabNavigatorPerso = () => {
   return (
@@ -122,10 +149,13 @@ const TabNavigatorPerso = () => {
         },
       })}
     >
-      <Tab.Screen name="Home" component={persoHome}  />
+      <View style={styles.navbar}>
+      <Tab.Screen name="Home" component={persoHome} />
       <Tab.Screen name="Mes tchats" component={persoTchats} />
       <Tab.Screen name="Mes visites" component={persoVisites} />
-      <Tab.Screen name="Mon profil" component={persoProfil}/>
+      <Tab.Screen name="Mon profil" component={persoProfil} />
+
+      </View>
     </Tab.Navigator>
   );
 };
@@ -135,9 +165,20 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
-            <Stack.Screen name="Connection" component={ConnectionScreen} />
-            <Stack.Screen name="TabNavigatorPro" component={TabNavigatorPro} />
-            <Stack.Screen name="TabNavigatorPerso" component={TabNavigatorPerso} />
+            <Stack.Screen
+            name="TabNavigatorPro"
+            component={TabNavigatorPro}
+            style={styles.tabNavigator}
+          />
+            <Stack.Screen name="PageTests" component={PageTests} />
+            <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
+            <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
+            <Stack.Screen name="monDossier1" component={monDossier1} />
+            <Stack.Screen name="monDossierPro" component={monDossierPro} />
+            <Stack.Screen
+            name="TabNavigatorPerso"
+            component={TabNavigatorPerso}
+          />
           </Stack.Navigator>
         </NavigationContainer>
     </Provider>
@@ -151,5 +192,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  icon: {},
+  tabLabel: {
+    fontSize: 10,
+  },
 });
