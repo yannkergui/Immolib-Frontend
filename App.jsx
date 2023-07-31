@@ -51,7 +51,7 @@ const TabNavigatorPro = () => {
           size = focused ? 45 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné),
         } else if (route.name === "Mes tchats") {
           iconName = "commenting-o";
-          size = focused ? 45 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné)
+          size = focused ? 45 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné),
         } else if (route.name === "Mes annonces") {
           iconName = "map-signs";
           size = focused ? 45 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné)
