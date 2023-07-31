@@ -10,7 +10,8 @@ import {
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import { useState } from "react";
 
-export default function persoMonDossierLoc2() {
+export default function persoMonDossier2Loc() {
+
   //Etat relatif au budget renseigné (util au push en BDD)
 
   const [monBudget, setMonBudget] = useState(0);
@@ -233,7 +234,7 @@ const styles = StyleSheet.create({
     height: "4%",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 20,
+    marginTop: 35,
   },
 
   title: {
