@@ -1,11 +1,13 @@
 import React from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { StatusBar } from "expo-status-bar";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+import Navbar from "./navigation/Navbar"
 
 import firstScreen from "./screens/firstScreen";
 
@@ -41,20 +43,21 @@ const store = configureStore({
 const TabNavigatorPro = () => {
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ color, size }) => {
-          let iconName = "";
-          if (route.name === "Home") {
-            iconName = "home";
-          } else if (route.name === "Mes tchats") {
-            iconName = "commenting-o";
-          } else if (route.name === "Mes annonces") {
-            iconName = "map-signs";
-          } else if (route.name === "Mes visites") {
-            iconName = "calendar-o";
-          } else if (route.name === "Mes clients") {
-            iconName = "folder-open-o";
-          }
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({ color, size, focused }) => {
+        let iconName = "";
+        if (route.name === "Home") {
+          iconName = "home";
+          size = focused ? 50 : 24; // Set different sizes for active and inactive icons
+        } else if (route.name === "Mes tchats") {
+          iconName = "commenting-o";
+        } else if (route.name === "Mes annonces") {
+          iconName = "map-signs";
+        } else if (route.name === "Mes visites") {
+          iconName = "calendar-o";
+        } else if (route.name === "Mes clients") {
+          iconName = "folder-open-o";
+        }
           return (
             <FontAwesome
               name={iconName}
@@ -64,30 +67,41 @@ const TabNavigatorPro = () => {
             />
           );
         },
-        tabBarActiveTintColor: "black",
-
+        tabBarLabel: ({ focused, color }) => {
+          if (!focused) {
+            return <Text style={styles.tabLabel}>{route.name}</Text>;
+          }
+          return null;
+        },
+        tabBarActiveTintColor: '#1F2937',
+        tabBarActiveBackgroundColor: 'white',
+        
         tabBarInactiveTintColor: "#b2b2b2",
         headerShown: false,
         tabBarStyle: {
-          marginBottom: 200,
-          backgroundColor: "red",
-          width: "100%",
-          height: "10%",
+          position: 'absolute',
+          backgroundColor: 'rgba(255, 255, 255, 0.5)',
+          height: 60,
           alignItems: "center",
           justifyContent: "center",
-          padding:0,
-          // elevation: 0,
           borderRadius: 30,
+          paddingBottom: 10,
+          paddingTop: 4,
+          paddingLeft: 5,
+          paddingRight:5,
+          marginBottom: 20,
+          left : 20,
+          right : 20
         },
-        tabBarOptions: {
-          showLabel: false, // Hide the tab labels
-          // backgroundColor: "blue",
-          background: "rgba(255, 255, 255, 0,7)",
-          position: "absolute",
-          paddingBottom: 0,
+        tabBarItemStyle: { // Set the borderRadius for each tab item
+          borderRadius: 30,
+          height: 50,
+          justifyContent:'center'
         },
+
       })}
     >
+      
       <Tab.Screen name="Home" component={proHome} />
       <Tab.Screen name="Mes tchats" component={proTchats} />
       <Tab.Screen name="Mes annonces" component={proAnnonces} />
@@ -96,6 +110,8 @@ const TabNavigatorPro = () => {
     </Tab.Navigator>
   );
 };
+
+
 
 const TabNavigatorPerso = () => {
   return (
@@ -131,10 +147,13 @@ const TabNavigatorPerso = () => {
         },
       })}
     >
+      <View style={styles.navbar}>
       <Tab.Screen name="Home" component={persoHome} />
       <Tab.Screen name="Mes tchats" component={persoTchats} />
       <Tab.Screen name="Mes visites" component={persoVisites} />
       <Tab.Screen name="Mon profil" component={persoProfil} />
+
+      </View>
     </Tab.Navigator>
   );
 };
@@ -153,11 +172,11 @@ export default function App() {
             name="TabNavigatorPro"
             component={TabNavigatorPro}
             style={styles.tabNavigator}
-          />
+            />
             <Stack.Screen
             name="TabNavigatorPerso"
             component={TabNavigatorPerso}
-          />
+            />
           </Stack.Navigator>
         </NavigationContainer>
     </Provider>
@@ -166,13 +185,12 @@ export default function App() {
 
 const styles = StyleSheet.create({
   main: {
-    // flex: 1,
-    // backgroundColor: "#fff",
-    // alignItems: "center",
-    // justifyContent: "flex-start",
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  // tabNavigator: {},
-  icon: {
-    padding:0,
+  tabLabel: {
+    fontSize: 10,
   },
 });
