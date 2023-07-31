@@ -21,7 +21,8 @@ import persoVisites from "./screens/perso/persoVisites";
 import persoTchats from "./screens/perso/persoTchats";
 import WelcomeScreenPerso from "./screens/perso/WelcomeScreenPerso";
 import persoMonDossier1 from "./screens/perso/persoMonDossier1";
-import persoMonDossierLoc2 from "./screens/perso/persoMonDossier2Loc";
+import persoMonDossier2Loc from "./screens/perso/persoMonDossier2Loc";
+import persoMonDossier3Loc from "./screens/perso/persoMonDossier3Loc";
 import persoMonDossier2Achat from "./screens/perso/persoMonDossier2Achat";
 import persoMonDossier3Achat from "./screens/perso/persoMonDossier3Achat";
 import PageTests from "./screens/pageTests";
@@ -143,7 +144,7 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
-            <Stack.Screen name="PageTests" component={persoMonDossier3Achat}/>
+            <Stack.Screen name="PageTests" component={firstScreen}/>
             <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
             <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
             <Stack.Screen name="persoMonDossier1" component={persoMonDossier1} />
