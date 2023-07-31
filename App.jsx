@@ -23,8 +23,10 @@ import persoProfil from "./screens/perso/persoProfil";
 import persoVisites from "./screens/perso/persoVisites";
 import persoTchats from "./screens/perso/persoTchats";
 import WelcomeScreenPerso from "./screens/perso/WelcomeScreenPerso";
-import monDossierPerso1 from "./screens/perso/monDossierPerso1";
+import monDossier1 from "./screens/perso/monDossier1";
 
+
+import PageTests from "./screens/pageTests";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 import { Provider } from "react-redux";
@@ -142,12 +144,11 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
-            <Stack.Screen name="FirstScreen" component={firstScreen}/>
+            <Stack.Screen name="PageTests" component={firstScreen}/>
             <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
             <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
-            <Stack.Screen name="MonDossierPerso1" component={monDossierPerso1} />
-            <Stack.Screen name="proPreferences" component={proPreferences} />
-            <Stack.Screen name="proConnectionScreen" component={proConnectionScreen} />
+            <Stack.Screen name="monDossier1" component={monDossier1} />
+            <Stack.Screen name="monDossierPro" component={monDossierPro} />
             <Stack.Screen
             name="TabNavigatorPro"
             component={TabNavigatorPro}
