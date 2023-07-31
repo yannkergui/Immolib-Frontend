@@ -14,8 +14,17 @@ import {
   Dimensions,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
+import { useFonts } from 'expo-font';
 
-export default function welcomeScreen({ navigation }) {
+export default function WelcomeScreen({ navigation }) {
+
+  const [fontsLoaded] = useFonts({
+    Nunitobold: require('../assets/fonts/Nunito/static/Nunito-Bold.ttf'),
+    NunitoSans: require('../assets/fonts/Nunito_Sans/static/NunitoSans_7pt-Medium.ttf')
+  });
+  // if (!fontsLoaded) {
+  //   return <View/>;
+  // }
 
   // tableau des screens qui vont défiler dans le screen 
   const slides = [
@@ -52,7 +61,9 @@ export default function welcomeScreen({ navigation }) {
   const Slide = ({ item }) => {
     return (
       <View style={[styles.slide, {width: screenWidth }]}>
-        <View style={styles.header}></View>
+        <View style={styles.header}>
+          <Image  style={styles.image} source={require('../assets/IMMOLIB.png')}></Image>
+        </View>
         <View style={styles.text}>
         <Text style={styles.title}>{item.title}</Text>
         <Text style={styles.subtitle}>{item.subtitle}</Text>
@@ -115,7 +126,7 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "#e8be4b",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-between",
   },
   background: {
     flex: 1,
@@ -127,7 +138,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   title: {
-    // fontFamily: 'Nunito',
+    fontFamily: 'Nunitobold',
     color: 'white',
     fontSize: 60,
     fontStyle: 'normal',
@@ -136,16 +147,20 @@ const styles = StyleSheet.create({
     letterSpacing: -1.5, 
     marginBottom:50,
     marginRight : 15,
+    paddingTop: 10,
+    textAlign:'center',
+
   },
   subtitle: {
-    // fontFamily: 'Nunito',
+    fontFamily: 'NunitoSans',
     color: '#1F2937',
     fontSize: 20,
     fontStyle: 'normal',
     fontWeight: '600',
     lineHeight: 34,
     letterSpacing: 0.25, 
-    marginRight: 10
+    marginRight: 20,
+    textAlign:'center',
   },
   traits: {
     // height: 10,
@@ -160,7 +175,7 @@ const styles = StyleSheet.create({
   },
   indicator:{
     height : 3,
-    width : 30,
+    width : 10,
     backgroundColor:'grey',
     marginHorizontal: 3,
     borderRadius:2,
@@ -185,6 +200,7 @@ const styles = StyleSheet.create({
     color:'#1F2937',
     fontSize: 20,
     fontWeight: 'bold',
+    fontFamily: 'Nunitobold',
   },
  
   buttoncontainer: {
@@ -194,6 +210,16 @@ const styles = StyleSheet.create({
     right: 0,
     alignItems: 'center',
   },
-  
+  image: {
+    height : 150,
+    alignItems: 'center',
+  },
+  header:{
+    position: 'absolute',
+    top: 100,
+    justifyContent:'center',
+    alignItems: 'center',
+    width:'100%'
+  },
  
 });
