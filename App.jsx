@@ -173,7 +173,6 @@ export default function App() {
             <Stack.Screen name="PageTests" component={persoMonDossier2Achat} />
             <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
             <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
-            <Stack.Screen name="monDossier1" component={monDossier1} />
             <Stack.Screen name="monDossierPro" component={monDossierPro} />
             <Stack.Screen
             name="TabNavigatorPerso"
