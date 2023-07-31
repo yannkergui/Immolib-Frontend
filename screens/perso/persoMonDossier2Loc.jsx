@@ -5,12 +5,12 @@ import {
   View,
   Image,
   TextInput,
+  SafeAreaView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import { useState } from "react";
 
 export default function persoMonDossierLoc2() {
-
   //Etat relatif au budget renseigné (util au push en BDD)
 
   const [monBudget, setMonBudget] = useState(0);
@@ -25,9 +25,9 @@ export default function persoMonDossierLoc2() {
 
   const [surface, setSurface] = useState(0);
 
-   //  Etat relatif à la surface minimum (util au push en BDD)
+  //  Etat relatif à la surface minimum (util au push en BDD)
 
-   const [nbPiece, setNbPiece] = useState(0);
+  const [nbPiece, setNbPiece] = useState(0);
 
   //  Etat relatif au nombre de locataire (util au push en BDD)
 
@@ -59,8 +59,8 @@ export default function persoMonDossierLoc2() {
     setMaisonChoice(false);
   };
 
-   // fonctions relatives au bien meublé (changement du booléens et du style)
-   const handleMeuble = () => {
+  // fonctions relatives au bien meublé (changement du booléens et du style)
+  const handleMeuble = () => {
     setBienMeuble(!bienMeuble);
     setBienNonMeuble(false);
     setIndifferent(false);
@@ -86,75 +86,121 @@ export default function persoMonDossierLoc2() {
         end={{ x: 1, y: 1 }} // End point of the gradient
         style={styles.container}
       >
-        <View style={styles.smallTextContainer}>
-          <Text>Je cherche une location</Text>
-        </View>
-        <View style={styles.textContainer}>
-          <Text>15/03/2023 à 17h</Text>
-          <Text>66 rue Victor Hugo, 75001 Paris</Text>
-        </View>
-        <Text style={styles.title}>Mon Dossier</Text>
-        <View style={styles.pageContainer}>
-          <View style={styles.pageNumber}>
-            <Text>1/3</Text>
+        <SafeAreaView style={styles.container}>
+          <View style={styles.smallTextContainer}>
+            <Text>Je cherche une location</Text>
           </View>
-          <View style={styles.pageNumberActive}>
-            <Text>2/3</Text>
+          <View style={styles.textContainer}>
+            <Text>15/03/2023 à 17h</Text>
+            <Text>66 rue Victor Hugo, 75001 Paris</Text>
           </View>
-          <View style={styles.pageNumber}>
-            <Text>3/3</Text>
+          <Text style={styles.title}>Mon Dossier</Text>
+          <View style={styles.pageContainer}>
+            <View style={styles.pageNumber}>
+              <Text>1/3</Text>
+            </View>
+            <View style={styles.pageNumberActive}>
+              <Text>2/3</Text>
+            </View>
+            <View style={styles.pageNumber}>
+              <Text>3/3</Text>
+            </View>
           </View>
-        </View>
-        <View style={styles.formContainer}>
-          <View style={styles.lineContainer}>
-            <Text>Budget Mensuel Maximum</Text>
-            <TextInput style={styles.input} keyboardType="numeric" placeholder="/€" onChangeText={(value) => setMonBudget(value)} value={monBudget}></TextInput>
+          <View style={styles.formContainer}>
+            <View style={styles.lineContainer}>
+              <Text>Budget Mensuel Maximum</Text>
+              <TextInput
+                style={styles.input}
+                keyboardType="numeric"
+                placeholder="/€"
+                onChangeText={(value) => setMonBudget(value)}
+                value={monBudget}
+              ></TextInput>
+            </View>
+            <View style={styles.lineContainer}>
+              <Text>Bien recherché</Text>
+              <TouchableOpacity
+                style={maisonChoice ? styles.buttonSelected : styles.button}
+                onPress={() => handleMaison()}
+              >
+                <Text>Maison</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={
+                  appartementChoice ? styles.buttonSelected : styles.button
+                }
+                onPress={() => handleAppartement()}
+              >
+                <Text>Appartement</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={autreChoice ? styles.buttonSelected : styles.button}
+                onPress={() => handleAutre()}
+              >
+                <Text>Autre</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.lineContainer}>
+              <Text>Surface minimum</Text>
+              <TextInput
+                style={styles.input}
+                keyboardType="numeric"
+                placeholder="m²"
+                onChangeText={(value) => setSurface(value)}
+                value={surface}
+              ></TextInput>
+            </View>
+            <View style={styles.lineContainer}>
+              <Text>Nombre de pièces minimum</Text>
+              <TextInput
+                style={styles.input}
+                keyboardType="numeric"
+                placeholder="0"
+                onChangeText={(value) => setNbPiece(value)}
+                value={nbPiece}
+              ></TextInput>
+            </View>
+            <View style={styles.lineContainer}>
+              <Text>Nombre de locataire</Text>
+              <TextInput
+                style={styles.input}
+                keyboardType="numeric"
+                placeholder="0"
+                onChangeText={(value) => setNbLocataire(value)}
+                value={nbLocataire}
+              ></TextInput>
+            </View>
+            <View style={styles.lineContainer}>
+              <Text>Bien meublé</Text>
+              <TouchableOpacity
+                style={bienMeuble ? styles.buttonSelected : styles.button}
+                onPress={() => handleMeuble()}
+              >
+                <Text>Oui</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={bienNonMeuble ? styles.buttonSelected : styles.button}
+                onPress={() => handleNonMeuble()}
+              >
+                <Text>Non</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={indifferent ? styles.buttonSelected : styles.button}
+                onPress={() => handleIndifferent()}
+              >
+                <Text>Indifférent</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={styles.lineContainer}>
-            <Text>Bien recherché</Text>
-            <TouchableOpacity style={maisonChoice ? styles.buttonSelected : styles.button} onPress={() => handleMaison()}>
-              <Text>Maison</Text>
+          <View style={styles.nextBtnContainer}>
+            <TouchableOpacity style={styles.skip}>
+              <Text>Passer cette étape</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={appartementChoice ? styles.buttonSelected : styles.button} onPress={() => handleAppartement()}>
-              <Text>Appartement</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={autreChoice ? styles.buttonSelected : styles.button} onPress={() => handleAutre()}>
-              <Text>Autre</Text>
+            <TouchableOpacity style={styles.next}>
+              <Text>Etape suivante</Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.lineContainer}>
-            <Text>Surface minimum</Text>
-            <TextInput style={styles.input} keyboardType="numeric" placeholder="m²" onChangeText={(value) => setSurface(value)} value={surface}></TextInput>
-          </View>
-          <View style={styles.lineContainer}>
-            <Text>Nombre de pièces minimum</Text>
-            <TextInput style={styles.input} keyboardType="numeric" placeholder="0" onChangeText={(value) => setNbPiece(value)} value={nbPiece}></TextInput>
-          </View>
-          <View style={styles.lineContainer}>
-            <Text>Nombre de locataire</Text>
-            <TextInput style={styles.input}keyboardType="numeric" placeholder="0" onChangeText={(value) => setNbLocataire(value)} value={nbLocataire}></TextInput>
-          </View>
-          <View style={styles.lineContainer}>
-            <Text>Bien meublé</Text>
-            <TouchableOpacity style={bienMeuble ? styles.buttonSelected : styles.button}  onPress={() => handleMeuble()}>
-              <Text>Oui</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={bienNonMeuble ? styles.buttonSelected : styles.button} onPress={() => handleNonMeuble()}>
-              <Text>Non</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={indifferent ? styles.buttonSelected : styles.button} onPress={() => handleIndifferent()}>
-              <Text>Indifférent</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={styles.nextBtnContainer}>
-          <TouchableOpacity style={styles.skip}>
-            <Text>Passer cette étape</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.next}>
-            <Text>Etape suivante</Text>
-          </TouchableOpacity>
-        </View>
+        </SafeAreaView>
       </LinearGradient>
     </View>
   );

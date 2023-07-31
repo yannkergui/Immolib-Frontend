@@ -19,6 +19,38 @@ export default function persoMonDossier3Achat() {
   const [appartementChoice, setAppartementChoice] = useState(false);
   const [autreChoice, setAutreChoice] = useState(false);
 
+  //Etat relatif au budget renseigné (util au push en BDD)
+
+  const [monBudget, setMonBudget] = useState(0);
+
+  //  Etat relatif à la surface minimum (util au push en BDD)
+
+  const [surface, setSurface] = useState(0);
+
+  //  Etat relatif à la surface minimum (util au push en BDD)
+
+  const [nbPiece, setNbPiece] = useState(0);
+
+  // fonctions relatives au type de bien (changement du booléens et du style)
+
+  const handleMaison = () => {
+    setMaisonChoice(!maisonChoice);
+    setAppartementChoice(false);
+    setAutreChoice(false);
+  };
+
+  const handleAppartement = () => {
+    setAppartementChoice(!appartementChoice);
+    setMaisonChoice(false);
+    setAutreChoice(false);
+  };
+
+  const handleAutre = () => {
+    setAutreChoice(!autreChoice);
+    setAppartementChoice(false);
+    setMaisonChoice(false);
+  };
+
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -55,9 +87,13 @@ export default function persoMonDossier3Achat() {
           <View style={styles.formContainer}>
             <View style={styles.lineContainer}>
               <Text>Budget Maximum</Text>
-              <TextInput style={styles.input} keyboardType={"numeric"}>
-                /€
-              </TextInput>
+              <TextInput
+                style={styles.input}
+                keyboardType={"numeric"}
+                placeholder="/€"
+                onChangeText={(value) => setMonBudget(value)}
+                value={monBudget}
+              />
             </View>
             <View style={styles.lineContainer}>
               <Text>Bien recherché</Text>
