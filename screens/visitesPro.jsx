@@ -1,10 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function homePage() {
+export default function visitesPro() {
+
+
+  
   return (
     <View style={styles.container}>
-      <Text>HomePage</Text>
+      <Text>Page visites</Text>
       <StatusBar style="auto" />
     </View>
   );
@@ -13,7 +16,7 @@ export default function homePage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'red',
+    backgroundColor: 'green',
     alignItems: 'center',
     justifyContent: 'center',
   },

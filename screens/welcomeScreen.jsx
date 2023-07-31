@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Button,
   SafeAreaView,
@@ -12,8 +12,8 @@ import {
   ImageBackground,
   FlatList,
   Dimensions,
-} from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient'; // Import LinearGradient
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 
 export default function welcomeScreen({ navigation }) {
 
@@ -104,7 +104,6 @@ const updateCurrentSlideIndex = e => {
           showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => <Slide item={item} />}
         />
-       
       </LinearGradient>
     </View>
   );
@@ -113,17 +112,17 @@ const updateCurrentSlideIndex = e => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%',
-    backgroundColor: '#e8be4b',
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: "100%",
+    backgroundColor: "#e8be4b",
+    alignItems: "center",
+    justifyContent: "center",
   },
   background: {
     flex: 1,
-    width: '100%',
+    width: "100%",
   },
   slide: {
-    justifyContent: 'center',
+    justifyContent: "center",
     // alignItems: 'flex-start',
     marginLeft: 5,
   },
@@ -198,4 +197,3 @@ const styles = StyleSheet.create({
   
  
 });
-
