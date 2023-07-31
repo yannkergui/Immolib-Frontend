@@ -12,11 +12,16 @@ import proClients from "./screens/pro/proClients";
 import proVisites from "./screens/pro/proVisites";
 import proTchats from "./screens/pro/proTchats";
 import proAnnonces from "./screens/pro/proAnnonces";
+import WelcomeScreenPro from "./screens/pro/WelcomeScreenPro";
+import monDossierPro from "./screens/pro/monDossierpro"
 
 import persoHome from "./screens/perso/persoHome";
 import persoProfil from "./screens/perso/persoProfil";
 import persoVisites from "./screens/perso/persoVisites";
 import persoTchats from "./screens/perso/persoTchats";
+import WelcomeScreenPerso from "./screens/perso/WelcomeScreenPerso";
+import monDossier1 from "./screens/perso/monDossier1";
+
 
 import PageTests from "./screens/pageTests";
 
@@ -135,6 +140,10 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
             <Stack.Screen name="PageTests" component={PageTests} />
+            <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
+            <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
+            <Stack.Screen name="monDossier1" component={monDossier1} />
+            <Stack.Screen name="monDossierPro" component={monDossierPro} />
             <Stack.Screen name="TabNavigatorPro" component={TabNavigatorPro} />
             <Stack.Screen name="TabNavigatorPerso" component={TabNavigatorPerso} />
           </Stack.Navigator>
