@@ -24,8 +24,8 @@ import persoTchats from "./screens/perso/persoTchats";
 import WelcomeScreenPerso from "./screens/perso/WelcomeScreenPerso";
 import persoMonDossier1 from "./screens/perso/persoMonDossier1";
 import persoMonDossierLoc2 from "./screens/perso/persoMonDossier2Loc";
-
-
+import persoMonDossier2Achat from "./screens/perso/persoMonDossier2Achat";
+import persoMonDossier3Achat from "./screens/perso/persoMonDossier3Achat";
 import PageTests from "./screens/pageTests";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
