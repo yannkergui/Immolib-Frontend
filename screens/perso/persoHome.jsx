@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { LinearGradient } from "expo-linear-gradient";
 
-export default function home({ navigation }) {
+export default function persoHome({ navigation }) {
   //Il faudra rajouter les components ={nomducomposant} dans les Tab.Screen pour rendre la navigation fonctionnelle.
   return (
     <View style={styles.container}>
@@ -14,7 +14,7 @@ export default function home({ navigation }) {
         style={styles.background}
       >
         <View style={styles.container}>
-          <Text>Home</Text>
+          <Text>PERSO Home</Text>
           <StatusBar style="auto" />
         </View>
       </LinearGradient>
