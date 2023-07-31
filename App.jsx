@@ -18,6 +18,7 @@ import proAnnonces from "./screens/pro/proAnnonces";
 import WelcomeScreenPro from "./screens/pro/WelcomeScreenPro";
 import monDossierPro from "./screens/pro/monDossierpro"
 
+import ConnectionScreen from "./screens/perso/connectionScreen";
 import persoHome from "./screens/perso/persoHome";
 import persoProfil from "./screens/perso/persoProfil";
 import persoVisites from "./screens/perso/persoVisites";
