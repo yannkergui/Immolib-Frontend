@@ -36,11 +36,12 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 import { Provider } from "react-redux";
 import user from "./reducers/user";
+import pro from "./reducers/pro";
 
 import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
-  reducer: { user },
+  reducer: { user, pro, },
 });
 
 const TabNavigatorPro = () => {
