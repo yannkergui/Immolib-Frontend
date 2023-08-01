@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   photo: {
     width: 100,
     height: 100,
-    borderRadius: 30
+    borderRadius: 30,
     borderColor: 'black',
     borderWidth: 4,
 },

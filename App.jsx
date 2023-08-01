@@ -194,7 +194,7 @@ export default function App() {
   return (
     <Provider store={store}>
         <NavigationContainer>
-            <Stack.Screen name="PageTests" component={ConnectionScreen} />
+            <Stack.Screen name="PageTests" component={ProPreferences} />
             <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
             <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
             <Stack.Screen name="ConnectionScreen" component={ConnectionScreen} />
