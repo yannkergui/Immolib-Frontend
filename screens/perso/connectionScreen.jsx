@@ -26,10 +26,24 @@ export default function ConnectionScreen({ navigation }) {
 
   // 2eme boutton "Se connecter" qui redirige vers la homePage
   const handleConnexionBis = () => {
+    // Si correspondance avec la REXEXP EMAIL
     if (EMAIL_REGEX.test(email)) {
-        // dispatch(updateEmail(email));
-        // navigation.navigate('TabNavigator', { screen: 'Gallery' });
-        setEmail('');
+      //Récupération des données de l'utilisateur de la BDD
+      fetch('http://192.168.10.171:3000/users/signin', {
+      method : 'POST',
+      headers : {'Content-Type' : 'application/json'},
+      body : JSON.stringify({email : email, motDePasse: mdp})
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.result) {
+          // dispatch(updateEmail(email));
+          navigation.navigate('TabNavigatorPerso', { screen: 'Home' });
+          setEmail('');
+          setEmailError(false);
+        }
+      })  
+     // Si PAS de correspondances avec la REXEXP EMAIL     
     } else {
         setEmailError(true);
     } 
@@ -40,7 +54,7 @@ export default function ConnectionScreen({ navigation }) {
     setModalInscription(true);
   }
 
-    // 2eme bouton "S'inscrire" qui ouvre la modale
+    // 2eme bouton "S'inscrire" qui qui redirige vers la homePage
     const handleInscriptionBis = () => {
         if (EMAIL_REGEX.test(email)) {
             // dispatch(updateEmail(email));
@@ -54,6 +68,11 @@ export default function ConnectionScreen({ navigation }) {
   const closeModal = () => {
     setModalConnexion(false);
     setModalInscription(false);
+    setEmail('');
+    setPrenom('');
+    setNom('');
+    setMdp('');
+    setEmailError(false);
   }
 
   return (
@@ -87,7 +106,7 @@ export default function ConnectionScreen({ navigation }) {
                                         <TouchableOpacity style={styles.btnSeConnecter} onPress={()=>handleConnexionBis()}>
                                             <Text style={styles.textButton}>Se connecter</Text>
                                         </TouchableOpacity>
-                                        {emailError && <Text style={styles.error}>Invalid email address</Text>}       
+                                        {emailError && <Text style={styles.error}>Adresse mail invalide</Text>}       
                                     </View>
                                     <View style={styles.deleteModal}>
                                         <TouchableOpacity style={styles.btnDeleteModal} onPress={()=>closeModal()}>
@@ -111,7 +130,7 @@ export default function ConnectionScreen({ navigation }) {
                                     <TouchableOpacity style={styles.btnSeConnecter} onPress={()=>handleInscriptionBis()}>
                                             <Text style={styles.textButton}>S'inscrire</Text>
                                         </TouchableOpacity> 
-                                        {emailError && <Text style={styles.error}>Invalid email address</Text>}             
+                                        {emailError && <Text style={styles.error}>Adresse mail invalide</Text>}             
                                 </View>
                                 <View style={styles.deleteModal}>
                                     <TouchableOpacity style={styles.btnDeleteModal} onPress={()=>closeModal()}>
