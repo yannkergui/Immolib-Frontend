@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useState } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 export default function PersoVisites() {
@@ -9,65 +10,102 @@ export default function PersoVisites() {
       nom: "Appartement 3 pièces",
       adresse: "77 rue victor hugo, 75000 Paris",
       date: "21/09/2023",
-      statut : "en attente de validation"
+      statut: "en attente de validation",
     },
     {
       nom: "Maison 160m²",
       adresse: "77 rue victor hugo, 75000 Paris",
       date: "24/12/2023",
-      statut : "en attente de validation"
+      statut: "en attente de validation",
     },
     {
       nom: "studio 20 m²",
       adresse: "77 rue victor hugo, 75000 Paris",
       date: "11/01/2024",
-      statut : "confirmées"
+      statut: "confirmées",
     },
     {
       nom: "Villa 220 m²",
       adresse: "77 rue victor hugo, 75000 Paris",
       date: "21/09/2023",
-      statut : "en attente de validation"
+      statut: "en attente de validation",
     },
     {
       nom: "Chateau ",
       adresse: "77 rue victor hugo, 75000 Paris",
       date: "21/05/2023",
-      statut : "passées"
+      statut: "passées",
     },
   ];
 
-  const visitesCards = visitesPerso.map(data => { 
-    let visiteEnAttente
-      if (data.statut === 'en attente de validation') {
+  const [activPage, setActivPage] = useState('');
+
+  const visiteEnAttente = visitesPerso.map((data) => {
+    
+    if (data.statut === "en attente de validation") {
       return (
         <View style={styles.clientsCard}>
-          <View style={styles.clientsCardOrientation}>
-            <View style={styles.leftCardOrientation}>
-              <TouchableOpacity style={styles.cardIcon}>
-                <FontAwesome style={styles.iconClient} name='user' size={40} color='#1F2937' />
+            <View style={styles.lineCard}>
+              <Text> Le {data.date} </Text>
+              <TouchableOpacity>
+                <FontAwesome name="edit" size={30} color="#1F2937" />
               </TouchableOpacity>
             </View>
-            <View style={styles.centerCardOrientation}>
-              <Text style={styles.titleCard}>{data.nom} {data.prénom} </Text>
-              <Text style={styles.subCard}>{nextvisite}</Text>
-            </View>
-            <View style={styles.rigthCardOrientation}>
-              <TouchableOpacity style={styles.cardIcon}>
-                <FontAwesome style={styles.iconPhone} name='phone' size={40} color='#1F2937' />
+            <View style={styles.lineCard}>
+              <Text> {data.adresse}</Text>
+              <TouchableOpacity>
+                <FontAwesome name="remove" size={30} color="#1F2937" />
               </TouchableOpacity>
             </View>
-          </View>
         </View>
       );
-    } else {
+    } 
+  });
+
+  const visitePassees = visitesPerso.map((data) => {
+    
+    if (data.statut === "passées") {
       return (
-        <View>
-          <Text> Pas de visite en attente de validation</Text>
+        <View style={styles.clientsCard}>
+            <View style={styles.lineCard}>
+              <Text> Le {data.date} </Text>
+              <TouchableOpacity>
+                <FontAwesome name="edit" size={30} color="#1F2937" />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.lineCard}>
+              <Text> {data.adresse}</Text>
+              <TouchableOpacity>
+                <FontAwesome name="remove" size={30} color="#1F2937" />
+              </TouchableOpacity>
+            </View>
+
         </View>
-      )
-    }}
-  );
+      );
+    } 
+  });
+
+  const visiteConfirmees = visitesPerso.map((data) => {
+    
+    if (data.statut === "confirmées") {
+      return (
+        <View style={styles.clientsCard}>
+            <View style={styles.lineCard}>
+              <Text> Le {data.date} </Text>
+              <TouchableOpacity>
+                <FontAwesome name="edit" size={30} color="#1F2937" />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.lineCard}>
+              <Text> {data.adresse}</Text>
+              <TouchableOpacity>
+                <FontAwesome name="remove" size={30} color="#1F2937" />
+              </TouchableOpacity>
+            </View>
+        </View>
+      );
+    } 
+  });
 
   return (
     <View style={styles.container}>
@@ -80,17 +118,19 @@ export default function PersoVisites() {
       >
         <Text style={styles.title}>Mon Dossier</Text>
         <View style={styles.pageContainer}>
-          <View style={styles.pageNumberActive}>
+          <View style={styles.pageActive}>
             <Text>En attente</Text>
           </View>
-          <View style={styles.pageNumber}>
+          <View style={styles.page}>
             <Text>Confirmées</Text>
           </View>
-          <View style={styles.pageNumber}>
+          <View style={styles.page}>
             <Text>Passées</Text>
           </View>
         </View>
-        
+        <View style={styles.cardContainer}>
+          {visiteEnAttente}
+        </View>
       </LinearGradient>
     </View>
   );
@@ -116,7 +156,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
 
-  pageNumberActive: {
+  pageActive: {
     alignItems: "center",
     justifyContent: "center",
     width: "30%",
@@ -127,7 +167,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginLeft: 3,
   },
-  pageNumber: {
+  page: {
     alignItems: "center",
     justifyContent: "center",
     width: "30%",
@@ -147,29 +187,31 @@ const styles = StyleSheet.create({
     marginTop: "10%",
   },
 
-  clientsCard :{
-    justifyContent : 'center',
-    alignItems : 'center',
-    height : 100,
-    width : '90%',
+  cardContainer: {
+    width: "100%",
+    alignItems: "center",
+  },
+
+  clientsCard: {
+    justifyContent: "space-between",
+    // alignItems: "center",
+    height: 150,
+    width: '90%',
     borderRadius: 40,
-    backgroundColor:'#BCCDB6',
+    backgroundColor: "#BCCDB6",
     shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 9,
-      },
-      shadowOpacity: 0.48,
-      shadowRadius: 11.95,
-      elevation: 18,
-      margin: 10,
-  
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+    elevation: 18,
+    margin: 10,
   },
-  clientsCardOrientation:{
-    width : '100%',
-    height : '90%',
-    flexDirection:'row',
-    justifyContent:'space-around',
-    alignItems:'center',
+  lineCard: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    margin: 15
   },
-})
+});
