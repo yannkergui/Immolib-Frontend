@@ -18,7 +18,7 @@ import ProConnectionScreen from "./screens/pro/proConnectionScreen";
 import ProPreferences from "./screens/pro/proPreferences";
 import FirstScreen from "./screens/firstScreen";
 
-import ConnectionScreen from "./screens/perso/connectionScreen";
+import ConnectionScreen from "./screens/perso/persoConnectionScreen";
 import PersoHome from "./screens/perso/persoHome";
 import PersoProfil from "./screens/perso/persoProfil";
 import PersoVisites from "./screens/perso/persoVisites";
