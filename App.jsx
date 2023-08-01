@@ -48,19 +48,19 @@ const TabNavigatorPro = () => {
         let iconName = "";
         if (route.name === "Home") {
           iconName = "home";
-          size = focused ? 45 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné),
+          size = focused ? 40 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné),
         } else if (route.name === "Mes tchats") {
           iconName = "commenting-o";
-          size = focused ? 45 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné),
+          size = focused ? 40 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné),
         } else if (route.name === "Mes annonces") {
           iconName = "map-signs";
-          size = focused ? 45 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné)
+          size = focused ? 40 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné)
         } else if (route.name === "Mes visites") {
           iconName = "calendar-o";
-          size = focused ? 45 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné)
+          size = focused ? 40 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné)
         } else if (route.name === "Mes clients") {
           iconName = "folder-open-o";
-          size = focused ? 45 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné)
+          size = focused ? 40 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné)
         }
           return (
             <FontAwesome
@@ -116,70 +116,98 @@ const TabNavigatorPro = () => {
 };
 
 
-
 const TabNavigatorPerso = () => {
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ color, size }) => {
-          let iconName = "";
-          if (route.name === "welcome") {
-            iconName = "minus";
-          } else if (route.name === "visites") {
-            iconName = "minus";
-          }
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({ color, size, focused }) => {
+        let iconName = "";
+        if (route.name === "Home") {
+          iconName = "home";
+          size = focused ? 40 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné),
+        } else if (route.name === "Mes tchats") {
+          iconName = "commenting-o";
+          size = focused ? 40 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné),
+        } else if (route.name === "Mes visites") {
+          iconName = "calendar-o";
+          size = focused ? 40 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné)
+        } else if (route.name === "Mon profil") {
+          iconName = "user";
+          size = focused ? 40 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné)
+        }
           return (
             <FontAwesome
               name={iconName}
-              size={60}
+              size={size}
               color={color}
               style={styles.icon}
             />
           );
         },
-        tabBarActiveTintColor: "white",
+        tabBarLabel: ({ focused, color }) => {
+          if (!focused) {
+            return <Text style={styles.tabLabel}>{route.name}</Text>;
+          }
+          return null;
+        },
+        tabBarActiveTintColor: '#1F2937',
+        tabBarActiveBackgroundColor: 'white', // on initialise la couleur pour la partie da Tab Bar sélectionnée 
+        
         tabBarInactiveTintColor: "#b2b2b2",
         headerShown: false,
-        tabBarStyle: {
-          position: "absolute",
-          backgroundColor: "transparent",
-          borderTopWidth: 0,
-          elevation: 0, // For Android to remove the shadow
+        tabBarStyle: { // on initialise le style pour l'ensemble de la Tab Bar
+          position: 'absolute',
+          backgroundColor: 'rgba(255, 255, 255, 0.5)',
+          height: 60,
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: 30,
+          paddingBottom: 10,
+          paddingTop: 4,
+          paddingLeft: 5,
+          paddingRight:5,
+          marginBottom: 20,
+          left : 20,
+          right : 20
         },
-        tabBarOptions: {
-          showLabel: false, // Hide the tab labels
+        tabBarItemStyle: { // on initialise le style pour l'icone sélectionné
+          borderRadius: 30,
+          height: 50,
+          justifyContent:'center'
         },
+
       })}
     >
-      <View style={styles.navbar}>
+      
       <Tab.Screen name="Home" component={PersoHome} />
       <Tab.Screen name="Mes tchats" component={PersoTchats} />
       <Tab.Screen name="Mes visites" component={PersoVisites} />
       <Tab.Screen name="Mon profil" component={PersoProfil} />
-
-      </View>
     </Tab.Navigator>
   );
 };
+
+
+
 
 export default function App() {
   return (
     <Provider store={store}>
         <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
-            <Stack.Screen name="PageTests" component={PersoMonDossier2Achat} />
-            <Stack.Screen
-            name="TabNavigatorPro"
-            component={TabNavigatorPro}
-            style={styles.tabNavigator}
-          />
+            <Stack.Screen name="PageTests" component={ConnectionScreen} />
             <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
             <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
             <Stack.Screen name="monDossierPro" component={MonDossierPro} />
-            <Stack.Screen
-            name="TabNavigatorPerso"
-            component={TabNavigatorPerso}
-          />
+            <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
+              <Stack.Screen
+              name="TabNavigatorPro"
+              component={TabNavigatorPro}
+              style={styles.tabNavigator}
+            />
+              <Stack.Screen
+              name="TabNavigatorPerso"
+              component={TabNavigatorPerso}
+            />
           </Stack.Navigator>
         </NavigationContainer>
     </Provider>
