@@ -14,6 +14,7 @@ import ProTchats from "./screens/pro/proTchats";
 import ProAnnonces from "./screens/pro/proAnnonces";
 import WelcomeScreenPro from "./screens/pro/WelcomeScreenPro";
 import MonDossierPro from "./screens/pro/monDossierpro"
+import ProPreferences from "./screens/pro/proPreferences"
 
 import ConnectionScreen from "./screens/perso/connectionScreen";
 import PersoHome from "./screens/perso/persoHome";
@@ -163,7 +164,7 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
-            <Stack.Screen name="PageTests" component={ConnectionScreen} />
+            <Stack.Screen name="PageTests" component={ProPreferences} />
             <Stack.Screen
             name="TabNavigatorPro"
             component={TabNavigatorPro}
