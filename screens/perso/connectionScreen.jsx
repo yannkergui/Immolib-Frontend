@@ -9,11 +9,14 @@ export default function ConnectionScreen({ navigation }) {
    const [mdp, setMdp]=useState('');
    const [prenom, setPrenom]=useState('');
    const [nom, setNom]=useState('');
-   const [tel, setTel]=useState(0);
+   const [tel, setTel]=useState('');
 
    const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-   const TEL_REGEX = /^(\+33\s[1-9]{8})|(0[1-9]\s{8})$/
+   const TEL_REGEX = /^(?:(?:(?:\+|00)33\s?|0)[67]\s?\d{8})$/
    const [emailError, setEmailError] = useState(false);
+   const [telError, setTelError] = useState(false);
+   // Etat pour gérer les champs vides
+   const [errorEmpty, setErrorEmpty] = useState(false);
 
   // Etats pour création des modales de connexion et d'inscription  
   const [modalConnexion, setModalConnexion]=useState(false);
@@ -27,7 +30,7 @@ export default function ConnectionScreen({ navigation }) {
   // 2eme boutton "Se connecter" qui redirige vers la homePage
   const handleConnexionBis = () => {
     // Si correspondance avec la REXEXP EMAIL
-    if (EMAIL_REGEX.test(email)) {
+    if (EMAIL_REGEX.test(email) && mdp) {
       //Récupération des données de l'utilisateur de la BDD
       fetch('http://192.168.10.171:3000/users/signin', {
       method : 'POST',
@@ -43,9 +46,14 @@ export default function ConnectionScreen({ navigation }) {
           setEmailError(false);
         }
       })  
-     // Si PAS de correspondances avec la REXEXP EMAIL     
+     // Si PAS de correspondances avec la REXEXP EMAIL  
     } else {
+      if (!EMAIL_REGEX.test(email))   {
         setEmailError(true);
+      }
+      if (!mdp) {
+        setErrorEmpty(true);    
+      }    
     } 
   }
 
@@ -56,12 +64,32 @@ export default function ConnectionScreen({ navigation }) {
 
     // 2eme bouton "S'inscrire" qui qui redirige vers la homePage
     const handleInscriptionBis = () => {
-        if (EMAIL_REGEX.test(email)) {
-            // dispatch(updateEmail(email));
-            // navigation.navigate('TabNavigator', { screen: 'Gallery' });
-            setEmail('');
+        if (EMAIL_REGEX.test(email) && TEL_REGEX.test(tel)) {
+          fetch('http://192.168.10.171:3000/users/signup', {
+            method : 'POST',
+            headers : {'Content-Type' : 'application/json'},
+            body : JSON.stringify({prenom : prenom, nom: nom, email : email, tel : tel, motDePasse: mdp})
+            })
+            .then(response => response.json())
+            .then(data => {
+              if (data.result) {
+                // dispatch(updateEmail(email));
+                navigation.navigate('TabNavigatorPerso', { screen: 'Home' });
+                setEmail('');
+                setEmailError(false);
+                setTelError(false);
+              } 
+            })  
         } else {
+          if (!EMAIL_REGEX.test(email)) {
             setEmailError(true);
+          } 
+          if (!TEL_REGEX.test(tel)) {
+            setTelError(true);
+          }
+          if (!prenom || !nom || !mdp) {
+            setErrorEmpty(true);
+          }
         } 
       }
 
@@ -100,19 +128,24 @@ export default function ConnectionScreen({ navigation }) {
                         <Modal style={styles.modalConnect} visible={modalConnexion} animationType="fade" transparent>
                             <View style={styles.centeredView}>                  
                                 <View style={styles.modalContainer}>
+                                  <View style={styles.inputsEtDelete}>
                                     <View style={styles.inputs}>
-                                        <TextInput placeholder="email" style={styles.inputModal} onChangeText={(value) => setEmail(value)} value={email}/>
-                                        <TextInput placeholder="Mot de passe" style={styles.inputModal} onChangeText={(value) => setMdp(value)} value={mdp}/>  
-                                        <TouchableOpacity style={styles.btnSeConnecter} onPress={()=>handleConnexionBis()}>
-                                            <Text style={styles.textButton}>Se connecter</Text>
-                                        </TouchableOpacity>
-                                        {emailError && <Text style={styles.error}>Adresse mail invalide</Text>}       
-                                    </View>
-                                    <View style={styles.deleteModal}>
-                                        <TouchableOpacity style={styles.btnDeleteModal} onPress={()=>closeModal()}>
-                                            <Text style={styles.textDelete}>X</Text>
-                                        </TouchableOpacity>
-                                    </View>
+                                          <TextInput placeholder="email" style={styles.inputModal} onChangeText={(value) => setEmail(value)} value={email}/>
+                                          <TextInput placeholder="Mot de passe" style={styles.inputModal} onChangeText={(value) => setMdp(value)} value={mdp}/>  
+                                                
+                                      </View>
+                                      <View style={styles.deleteModal}>
+                                          <TouchableOpacity style={styles.btnDeleteModal} onPress={()=>closeModal()}>
+                                              <Text style={styles.textDelete}>X</Text>
+                                          </TouchableOpacity>
+                                      </View>
+                                  </View>
+                                    <TouchableOpacity style={styles.btnSeConnecter} onPress={()=>handleConnexionBis()}>
+                                      <Text style={styles.textButton}>Se connecter</Text>
+                                    </TouchableOpacity>
+                                        {emailError && <Text style={styles.error}>Adresse mail invalide ou inéxistante</Text>}
+                                        {telError && <Text style={styles.error}>numéro de téléphone invalide</Text>}
+                                        {errorEmpty && <Text style={styles.error}>Tous les champs ne sont pas complétés</Text>}    
                                 </View>
                             </View>
                         </Modal>  
@@ -121,28 +154,31 @@ export default function ConnectionScreen({ navigation }) {
                    <Modal style={styles.modalInscription} visible={modalInscription} animationType="fade" transparent>
                         <View style={styles.centeredView}>
                             <View style={styles.modalContainer}>
+                              <View style={styles.inputsEtDelete}>
                                 <View style={styles.inputs}>
                                     <TextInput placeholder="Prénom" style={styles.inputModal} onChangeText={(value) => setPrenom(value)} value={prenom}/>
                                     <TextInput placeholder="nom" style={styles.inputModal} onChangeText={(value) => setNom(value)} value={nom}/>
                                     <TextInput placeholder="email" style={styles.inputModal} onChangeText={(value) => setEmail(value)} value={email}/>
                                     <TextInput placeholder="Mot de passe" style={styles.inputModal} onChangeText={(value) => setMdp(value)} value={mdp}/> 
-                                    <TextInput placeholder="téléphone +33" style={styles.inputModal} onChangeText={(value) => setTel(value)} value={tel}/> 
-                                    <TouchableOpacity style={styles.btnSeConnecter} onPress={()=>handleInscriptionBis()}>
-                                            <Text style={styles.textButton}>S'inscrire</Text>
-                                        </TouchableOpacity> 
-                                        {emailError && <Text style={styles.error}>Adresse mail invalide</Text>}             
+                                    <TextInput placeholder="numéro de téléphone" style={styles.inputModal} onChangeText={(value) => setTel(value)} value={tel}/>           
                                 </View>
                                 <View style={styles.deleteModal}>
-                                    <TouchableOpacity style={styles.btnDeleteModal} onPress={()=>closeModal()}>
+                                    <TouchableOpacity  onPress={()=>closeModal()}>
                                         <Text style={styles.textDelete}>X</Text>
                                     </TouchableOpacity>
                                 </View>
+                              </View>
+                                <TouchableOpacity style={styles.btnInscription} onPress={()=>handleInscriptionBis()}>
+                                      <Text style={styles.textButton}>S'inscrire</Text>
+                                </TouchableOpacity> 
+                                  {emailError && <Text style={styles.error}>Adresse mail invalide</Text>} 
+                                  {telError && <Text style={styles.error}>numéro de téléphone invalide</Text>}
+                                  {errorEmpty && <Text style={styles.error}>Tous les champs ne sont pas complétés</Text>}   
                             </View>
                         </View>
                    </Modal>
                 </View>
           <StatusBar style="auto" />
-
         </View>
       </LinearGradient>
     </View>
@@ -164,9 +200,10 @@ const styles = StyleSheet.create({
   image : {
     // borderColor : 'black',
     // borderWidth : 1,
+    // paddingTop : 50,
   },
   btnContainer : {
-    flex: 1,
+    //flex: 1,
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
@@ -175,7 +212,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: "80%",
-    height: "7%",
+    height: "8%",
     backgroundColor: "#47AFA5",
     borderRadius: 10,
     marginBottom: "25%",
@@ -216,19 +253,20 @@ const styles = StyleSheet.create({
     alignItems : 'center',
   },
   modalContainer : {
-    flexDirection : 'row',
     backgroundColor : 'rgba(255, 255, 255, 0.7)',
-    width : '60%',
-    padding : 20,
-    borderRadius : 10,
-    justifyContent : 'space-between',
-    // borderColor : 'black',
-    // borderWidth : 1,
+    width : '80%',
+    padding : 10,
+    borderRadius : 10, 
+    alignItems : 'center',
+  },
+  inputsEtDelete:{
+    flexDirection : 'row',
   },
   inputs : {
     justifyContent : 'center',
     alignItems : 'center',
     paddingLeft : 30,
+    width:'90%',
   },
   inputModal: {
     borderBottomColor : '#47AFA5',
@@ -239,18 +277,24 @@ const styles = StyleSheet.create({
     width : '100%',
   },
   deleteModal : {
-    justifyContent : 'flex-start',
-
-    margin : 20,
+    paddingLeft : 5,
   },
   textDelete : {
-    fontSize : 20,
+    fontSize : 25,
   },
   btnSeConnecter : {
-    marginTop : 50,
+    marginTop : 20,
     backgroundColor : '#47AFA5',
     padding : 20,
     borderRadius : 10,
+    width : '90%',
+  },
+  btnInscription : {
+    marginTop : 20,
+    backgroundColor : '#47AFA5',
+    padding : 20,
+    borderRadius : 10,
+    width : '90%',
   },
   error: {
     marginTop: 10,
