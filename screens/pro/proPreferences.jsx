@@ -1,32 +1,50 @@
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, SafeAreaView } from 'react-native';
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function ProPreferences() {
   return (
-    <View style={styles.main}>
-      <Text>Mon profil</Text>
-      <View style = {styles.accredit}>
-          <View style = {styles.accreditImage}>
-            <Image source={{ uri : '.../assets/welcomepage.jpg' }} style={styles.photo}/>
-            <Text>Modifiez votre photo</Text>
-          </View>
-          <View style = {styles.accreditTexts}>
-            <Text>Alice du Pays</Text>
-            <Text>alice.dupays@merveilles.fr</Text>
-            <Text>Agence des Merveilles</Text>
-          </View>
-      </View>
-      <Text>Mes préférences</Text>
-      <View style = {styles.pref}>
-        <View style = {styles.prefLine}>
-          <Text>Durée d'une visite</Text>
-          <Text>30mn</Text>
+
+  <LinearGradient
+          colors={["#BCCDB6", "#46AFA5"]} // Set your desired gradient colors
+          start={{ x: 0, y: 0 }} // Start point of the gradient
+          end={{ x: 1, y: 1 }} // End point of the gradient
+          style={styles.background}
+  >
+    <SafeAreaView style={styles.main}>
+    <Text>Mon profil</Text>
+        <View style = {styles.accredit}>
+            <View style = {styles.accreditImage}>
+              <Image source={{ uri : '.../assets/welcomepage.jpg' }} style={styles.photo}/>
+              <Text>Modifiez votre photo</Text>
+            </View>
+            <View style = {styles.accreditTexts}>
+              <Text>Alice du Pays</Text>
+              <Text>alice.dupays@merveilles.fr</Text>
+              <Text>Agence des Merveilles</Text>
+            </View>
         </View>
-        <Text>Restreindre les visites aux utilisateurs avec dossier complet</Text>
-        <Text>Validation automatique des demandes de visite</Text>
-        <Text>Notification pour chaque demande de visite</Text>
-      </View>
-      
-    </View>
+      <Text>Mes préférences</Text>
+        <View style = {styles.pref}>
+          <View style = {styles.prefLine}>
+            <Text style = {styles.prefTexts}>Durée d'une visite</Text>
+            <Text>30mn</Text>
+          </View>
+          <View style = {styles.prefLine}>
+            <Text style = {styles.prefTexts}>Restreindre les visites aux utilisateurs avec dossier complet</Text>
+            <Text>30mn</Text>
+          </View>
+          <View style = {styles.prefLine}>
+            <Text style = {styles.prefTexts}>Validation automatique des demandes de visite</Text>
+            <Text>30mn</Text>
+          </View>
+          <View style = {styles.prefLine}>
+            <Text style = {styles.prefTexts}>Notification pour chaque demande de visite</Text>
+            <Text>30mn</Text>
+          </View>
+        </View>
+    </SafeAreaView>
+  </LinearGradient>
+
   );
 }
 
@@ -34,8 +52,8 @@ export default function ProPreferences() {
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "space-around",
+    alignItems: "center",
   },
   accredit: {
     width: '90%',
@@ -66,7 +84,16 @@ const styles = StyleSheet.create({
     borderWidth: 4,
   },
   prefLine: {
-   flexDirection: "row",
-   justifyContent: "space-between",
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  prefTexts: {
+    width: "70%",
+    margin: 8,
+  },
+  background: {
+    flex: 1,
+    width: "100%",
   },
 })
