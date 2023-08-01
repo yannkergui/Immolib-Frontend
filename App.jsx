@@ -196,25 +196,14 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
-<<<<<<< HEAD
-=======
               <Stack.Screen name="PageTests" component={ProConnectionScreen} />
               <Stack.Screen name="PersoProfil" component={PersoProfil} />
->>>>>>> 8e6ce89ec130277ff1f9a9a07d1dcd51806638a9
               <Stack.Screen
                 name="TabNavigatorPro"
                 component={TabNavigatorPro}
                 style={styles.tabNavigator}
               />
-<<<<<<< HEAD
-              <Stack.Screen name="FicheClient" component={FicheClient} />
-              <Stack.Screen name="ProPreferences" component={ProPreferences} />
-              <Stack.Screen name="MonDossierpro" component={MonDossierPro} />
-              <Stack.Screen name="FirstScreen" component={FirstScreen} />
-              <Stack.Screen name="PageTests" component={ProPreferences} />
-=======
               <Stack.Screen name="PersoConnexionScreen" component={PersoConnectionScreen} />
->>>>>>> 8e6ce89ec130277ff1f9a9a07d1dcd51806638a9
               <Stack.Screen name="ProVisites" component={ProVisites} />
               <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
               <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
