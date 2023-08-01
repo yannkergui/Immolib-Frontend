@@ -1,7 +1,30 @@
 import { StyleSheet, Text, View, Image, SafeAreaView } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
+import SwitchSelector from "react-native-switch-selector";
+
+import { useState } from "react";
 
 export default function ProPreferences() {
+
+
+  //switch selector restriction visite aux dossiers complets :
+  const [restrict, setRestrict] = useState(false);
+  const [color, setColor] = useState("blue");
+  const restrictOptions = [
+    { label: "N", restrict: false },
+    { label: "O", restrict: true },
+  ];
+
+  function colorButton () {
+    if (restrict) {
+      setColor("white")
+      return "white"
+    } else {
+      setColor("blue")
+      return "blue"
+    }
+  }
+  
   return (
 
   <LinearGradient
@@ -31,7 +54,18 @@ export default function ProPreferences() {
           </View>
           <View style = {styles.prefLine}>
             <Text style = {styles.prefTexts}>Restreindre les visites aux utilisateurs avec dossier complet</Text>
-            <Text>30mn</Text>
+            <SwitchSelector
+                options={restrictOptions}
+                initial={0}
+                onPress={()=>setRestrict(!restrict)}
+                valuePadding={2.5}
+                hasPadding
+                style={styles.switchSelector}
+                buttonColor="#47AFA5"
+                height={30} 
+                backgroundColor={()=>colorButton()}
+                //"#ff0000" Changer la couleur de fond ici (par exemple, rouge) 
+            />
           </View>
           <View style = {styles.prefLine}>
             <Text style = {styles.prefTexts}>Validation automatique des demandes de visite</Text>
@@ -95,5 +129,8 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     width: "100%",
+  },
+  switchSelector: {
+    width: 60,
   },
 })
