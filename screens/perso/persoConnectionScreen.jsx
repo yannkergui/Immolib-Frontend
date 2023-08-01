@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useDispatch } from 'react-redux';
 import {userDatas} from '../../reducers/user'
 
-export default function ConnectionScreen({ navigation }) {
+export default function PersoConnectionScreen({ navigation }) {
 
    //Etats pour récupérer les inputs utilisateur
    const [email, setEmail]=useState('');
@@ -52,6 +52,7 @@ export default function ConnectionScreen({ navigation }) {
                             tel : data.data.tel,
                             token : data.data.token,
                             motDePasse : data.data.motDePasse}));
+          setModalConnexion(false)
           navigation.navigate('TabNavigatorPerso', { screen: 'Home' });
           setEmail('');
           setEmailError(false);
@@ -90,6 +91,7 @@ export default function ConnectionScreen({ navigation }) {
                   tel : data.data.tel,
                   token : data.data.token,
                   motDePasse : data.data.motDePasse}));
+                setModalInscription(false)
                 navigation.navigate('TabNavigatorPerso', { screen: 'Home' });
                 setEmail('');
                 setEmailError(false);
@@ -131,7 +133,8 @@ export default function ConnectionScreen({ navigation }) {
         style={styles.background}
       >    
         <View style={styles.container}>  
-                <Image style={styles.image} source={require('../../assets/IMMOLIB.png')} />         
+                <Image style={styles.image} source={require('../../assets/IMMOLIB.png')} />       
+                <Text style={styles.text}>Programme ta visite en toute simplicité pour visiter un bien </Text>
                 <View style={styles.btnContainer}>
                     <TouchableOpacity style={styles.button} onPress={()=>handleConnexion()}>
                         <Text style={styles.textButton}>Se connecter</Text>
@@ -215,6 +218,17 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
   },
+  text : {
+    color: "#ffffff",
+    width: 300,
+    fontWeight: "600",
+    fontSize: 18,
+    // borderColor : 'black',
+    // borderWidth : 1,
+    textAlign:'center',
+    paddingTop:3,
+    fontSize: 20,
+  },
   image : {
     // borderColor : 'black',
     // borderWidth : 1,
@@ -234,7 +248,7 @@ const styles = StyleSheet.create({
     height: "8%",
     backgroundColor: "#47AFA5",
     borderRadius: 10,
-    marginBottom: "25%",
+    marginBottom: "15%",
 
     // paramètrage de l'ombre des boutons. utiliser : (https://ethercreative.github.io/react-native-shadow-generator/) si besoin
 
