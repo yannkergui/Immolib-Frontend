@@ -3,10 +3,19 @@ import { StyleSheet, Text, View, TouchableOpacity, Linking, Platform } from 'rea
 import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useFonts } from 'expo-font';
+import { useDispatch } from 'react-redux';
+import { userDatas } from '../../reducers/monclient';
 
 
+export default function ProClients({navigation}) {
 
-export default function ProClients() {
+  const dispatch = useDispatch();
+
+  const handleSubmit = (e) => {
+    dispatch(userDatas(e));
+    navigation.navigate('FicheClient')
+
+  };
 
   const [fontsLoaded] = useFonts({
     Nunitobold: require('../../assets/fonts/Nunito/static/Nunito-Bold.ttf'),
@@ -47,7 +56,7 @@ nextvisite = `prochaine visite : ${data.prochainevisite}`
       <View style={styles.clientsCard}>
         <View style={styles.clientsCardOrientation}>
           <View >
-            <TouchableOpacity style={styles.cardIcon}>
+            <TouchableOpacity style={styles.cardIcon} onPress={() => { handleSubmit(data) }}>
               <FontAwesome style={styles.iconClient} name='user' size={40} color='#1F2937' />
             </TouchableOpacity>
           </View>
