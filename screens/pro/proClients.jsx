@@ -1,6 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+
 
 export default function ProClients() {
   return (
@@ -12,8 +14,12 @@ export default function ProClients() {
       style={styles.background}
     >
       <View style={styles.container}>
-        <Text>PRO Home</Text>
-        <StatusBar style="auto" />
+        <View style={styles.header}>
+        <Text>Mes Clients</Text>
+        <TouchableOpacity>
+          <FontAwesome style={styles.icon} name='user' size={25} color='#1F2937' />
+        </TouchableOpacity>
+        </View>
       </View>
     </LinearGradient>
   </View>
@@ -31,4 +37,17 @@ background: {
   flex: 1,
   width: "100%",
 },
+header: {
+  flexDirection: 'row',
+  position: 'absolute',
+  top: 80, 
+  alignItems: 'center', // Center the content horizontally
+  justifyContent: 'center'
+},
+icon: {
+ position :'absolute',
+//  right : 20,
+left : 100,
+ top: -15
+}
 });

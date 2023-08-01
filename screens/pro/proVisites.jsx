@@ -15,7 +15,7 @@ export default function ProVisites() {
       style={styles.background}
     >
       <View style={styles.container}>
-        <Text>PRO Home</Text>
+        <Text>PRO Visit</Text>
         <StatusBar style="auto" />
       </View>
     </LinearGradient>
