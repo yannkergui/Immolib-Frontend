@@ -6,7 +6,22 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 export default function ProClients() {
 
-  const ClientsCard = () => {
+  const clientsPro = [
+    {nom: 'theBest', prénom: 'Adrien', prochainevisite : '21/09/2023'},
+    {nom: 'Beauty', prénom: 'thibaut', prochainevisite : '24/12/2023'},
+    {nom: 'Queen', prénom: 'Alice', prochainevisite : '11/01/2024'},
+    {nom: 'Ugly', prénom:' Yann-Erwan', prochainevisite : '21/09/2023'},
+    {nom: 'Teacher', prénom: 'Amine', prochainevisite : ''},
+  ]
+
+const clientsCards = clientsPro.map(data => { 
+  let nextvisite
+
+    if (data.prochainevisite !== '') {
+nextvisite = `prochaine visite : ${data.prochainevisite}`
+    } else {nextvisite = 'pas de visite prévue'}
+  
+
     return (
       <View style={styles.clientsCard}>
         <View style={styles.clientsCardOrientation}>
@@ -16,8 +31,8 @@ export default function ProClients() {
             </TouchableOpacity>
           </View>
           <View style={styles.centerCardOrientation}>
-            <Text style={styles.titleCard}>Nom Prénom</Text>
-            <Text style={styles.subCard}>prochaine Visite ?</Text>
+            <Text style={styles.titleCard}>{data.nom} {data.prénom} </Text>
+            <Text style={styles.subCard}>{nextvisite}</Text>
           </View>
           <View style={styles.rigthCardOrientation}>
             <TouchableOpacity style={styles.cardIcon}>
@@ -27,7 +42,11 @@ export default function ProClients() {
         </View>
       </View>
     );
-  };
+  }
+);
+
+
+
 
 
   return (
@@ -45,7 +64,7 @@ export default function ProClients() {
           <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' />
         </TouchableOpacity>
         </View>
-          <ClientsCard/>
+          {clientsCards}
       </View>
     </LinearGradient>
   </View>
@@ -106,6 +125,8 @@ clientsCard :{
     shadowOpacity: 0.48,
     shadowRadius: 11.95,
     elevation: 18,
+    margin: 10,
+
 },
 clientsCardOrientation:{
   width : '100%',
