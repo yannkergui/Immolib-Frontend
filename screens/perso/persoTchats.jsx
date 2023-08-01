@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function persoTchats() {
+export default function PersoTchats() {
   return (
     <View style={styles.container}>
       <Text>Page PERSO tchats</Text>

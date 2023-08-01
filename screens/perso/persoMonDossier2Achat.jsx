@@ -12,7 +12,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import { useState } from "react";
 
-export default function persoMonDossier2Achat() {
+export default function PersoMonDossier2Achat() {
   // 3 Etats relatif au bien recherché choisie (utile au changement de couleur du choix et au push en BDD)
 
   const [maisonChoice, setChoice] = useState(false);

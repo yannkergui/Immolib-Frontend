@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { LinearGradient } from "expo-linear-gradient";
 
-export default function proHome({ navigation }) {
+export default function ProHome({ navigation }) {
   //Il faudra rajouter les components ={nomducomposant} dans les Tab.Screen pour rendre la navigation fonctionnelle.
   return (
     <View style={styles.container}>

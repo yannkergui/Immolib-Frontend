@@ -12,7 +12,7 @@ import { UserState } from '../reducers/user';
 import { useDispatch } from 'react-redux';
 import { profilage } from "../reducers/user";
 
-export default function pageBlanche(props) {
+export default function PageBlanche(props) {
 
   const dispatch = useDispatch()
 

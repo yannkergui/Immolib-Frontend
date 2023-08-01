@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image } from 'react-native';
 
-export default function proPreferences() {
+export default function ProPreferences() {
   return (
     <View style={styles.main}>
       <Text>Page PRO préférences Profil</Text>

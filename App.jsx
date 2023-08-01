@@ -8,25 +8,25 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-import proHome from "./screens/pro/proHome";
-import proClients from "./screens/pro/proClients";
-import proVisites from "./screens/pro/proVisites";
-import proTchats from "./screens/pro/proTchats";
-import proAnnonces from "./screens/pro/proAnnonces";
+import ProHome from "./screens/pro/proHome";
+import ProClients from "./screens/pro/proClients";
+import ProVisites from "./screens/pro/proVisites";
+import ProTchats from "./screens/pro/proTchats";
+import ProAnnonces from "./screens/pro/proAnnonces";
 import WelcomeScreenPro from "./screens/pro/WelcomeScreenPro";
-import monDossierPro from "./screens/pro/monDossierpro"
+import MonDossierPro from "./screens/pro/monDossierpro"
 
 import ConnectionScreen from "./screens/perso/connectionScreen";
-import persoHome from "./screens/perso/persoHome";
-import persoProfil from "./screens/perso/persoProfil";
-import persoVisites from "./screens/perso/persoVisites";
-import persoTchats from "./screens/perso/persoTchats";
+import PersoHome from "./screens/perso/persoHome";
+import PersoProfil from "./screens/perso/persoProfil";
+import PersoVisites from "./screens/perso/persoVisites";
+import PersoTchats from "./screens/perso/persoTchats";
 import WelcomeScreenPerso from "./screens/perso/WelcomeScreenPerso";
-import persoMonDossier1 from "./screens/perso/persoMonDossier1";
-import persoMonDossier2Loc from "./screens/perso/persoMonDossier2Loc";
-import persoMonDossier3Loc from "./screens/perso/persoMonDossier3Loc";
-import persoMonDossier2Achat from "./screens/perso/persoMonDossier2Achat";
-import persoMonDossier3Achat from "./screens/perso/persoMonDossier3Achat";
+import PersoMonDossier1 from "./screens/perso/persoMonDossier1";
+import PersoMonDossier2Loc from "./screens/perso/persoMonDossier2Loc";
+import PersoMonDossier3Loc from "./screens/perso/persoMonDossier3Loc";
+import PersoMonDossier2Achat from "./screens/perso/persoMonDossier2Achat";
+import PersoMonDossier3Achat from "./screens/perso/persoMonDossier3Achat";
 import PageTests from "./screens/pageTests";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
@@ -167,15 +167,15 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
+            <Stack.Screen name="PageTests" component={ConnectionScreen} />
             <Stack.Screen
             name="TabNavigatorPro"
             component={TabNavigatorPro}
             style={styles.tabNavigator}
           />
-            <Stack.Screen name="PageTests" component={persoMonDossier2Achat} />
             <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
             <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
-            <Stack.Screen name="monDossierPro" component={monDossierPro} />
+            <Stack.Screen name="monDossierPro" component={MonDossierPro} />
             <Stack.Screen
             name="TabNavigatorPerso"
             component={TabNavigatorPerso}

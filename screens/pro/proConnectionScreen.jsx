@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
-export default function proConnectionScreen(props) {
+export default function ProConnectionScreen(props) {
 
     function toProPref () {
         props.navigation.navigate("proPreferences");

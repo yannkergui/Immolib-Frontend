@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 
-export default function proClients() {
+export default function ProClients() {
   return (
     <View style={styles.container}>
     <LinearGradient
