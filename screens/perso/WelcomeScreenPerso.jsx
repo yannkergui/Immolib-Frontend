@@ -51,7 +51,7 @@ export default function WelcomeScreenPerso(props) {
 
   // au click sur bouton Skip on passe à la page de connection/inscription
   const handleSubmit = () => {
-    props.navigation.navigate("persoMonDossier1");
+    props.navigation.navigate("PersoMonDossier1");
   }
 
   // constante permettant de 'mapper' le tableau des trois écrans avec appel de leur propriété

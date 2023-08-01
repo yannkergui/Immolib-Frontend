@@ -8,6 +8,8 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import { useState } from "react";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import * as DocumentPicker from "expo-document-picker";
 
 export default function PersoMonDossier3Loc() {
   //Etat relatif au revenu renseigné (util au push en BDD)
@@ -30,6 +32,27 @@ export default function PersoMonDossier3Loc() {
   const handleCdd = () => {
     setIsCdd(!isCdd);
     setIsCdi(false);
+  };
+
+  // fonction relative à l'upload des fichiers au clique sur l'icone 
+
+  const handleUploadPhoto = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: 'image/*',
+      });
+
+      if (result.type === 'success') {
+        // Le fichier a été sélectionné avec succès
+        console.log('Chemin du fichier sélectionné : ', result.uri);
+      } else {
+        // L'utilisateur a annulé la sélection du fichier
+        console.log('Sélection annulée');
+      }
+    } catch (err) {
+      // Une erreur s'est produite lors de la sélection du fichier
+      console.log('Erreur lors de la sélection du fichier : ', err);
+    }
   };
 
   return (
@@ -91,6 +114,12 @@ export default function PersoMonDossier3Loc() {
               onChangeText={(value) => setMonRevenu(value)}
               value={monRevenu}
             ></TextInput>
+          </View>
+          <View style={styles.lineContainer}>
+            <Text>Je charge mes documents</Text>
+            <TouchableOpacity onPress={handleUploadPhoto}>
+              <FontAwesome name="cloud-upload" size={50} color="#ffffff" />
+            </TouchableOpacity>
           </View>
         </View>
       </LinearGradient>
