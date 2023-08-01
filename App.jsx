@@ -1,6 +1,5 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -37,7 +36,6 @@ import { Provider } from "react-redux";
 import user from "./reducers/user";
 
 import { configureStore } from "@reduxjs/toolkit";
-
 
 const store = configureStore({
   reducer: { user },
@@ -117,7 +115,6 @@ const TabNavigatorPro = () => {
     </Tab.Navigator>
   );
 };
-
 
 const TabNavigatorPerso = () => {
   return (
