@@ -11,7 +11,6 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { LinearGradient } from "expo-linear-gradient";
 
 export default function PersoProfil({ navigation }) {
-
   //Il faudra rajouter les components ={nomducomposant} dans les Tab.Screen pour rendre la navigation fonctionnelle.
   const handleRecherche = () => {
     navigation.navigate("PersoMonDossier1");
@@ -32,7 +31,13 @@ export default function PersoProfil({ navigation }) {
           <View style={styles.Titre}>
             <Text style={styles.Titre}>Mon Profil</Text>
           </View>
-
+          <View style={styles.logoutBtnContainer}>
+            <FontAwesome
+            name="sign-out"
+            style={styles.logoutBtn}
+            size={30}
+            />
+          </View>
           <View style={styles.InfosProfil}>
             <View style={styles.photoContainer}>
               <FontAwesome
@@ -54,11 +59,17 @@ export default function PersoProfil({ navigation }) {
 
           <View style={styles.monDossierContainer}>
             <Text style={styles.monDossierTitre}> Mon dossier</Text>
+
             <View style={styles.dossierCompletion}>
-              <Text style={styles.dossierCompletion}>
+              <Text style={styles.pourcentageCompletion}>
                 Ton profil est complet à ... %
               </Text>
+
+              <Text style={styles.msgIncomplet}>
+                Complète le pour ne plus rater de bien 😉
+              </Text>
             </View>
+
             <View style={styles.BtnContainer}>
               <TouchableOpacity
                 style={styles.Btn}
@@ -96,6 +107,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     fontSize: 40,
     fontWeight: "bold",
+  },
+  logoutBtnContainer:{
+    position:"absolute",
+    right:30,
+    top:60,
+    
+  },
+  logoutBtn:{
+    // size:60,
   },
   InfosProfil: {
     flexDirection: "row",
@@ -155,7 +175,28 @@ const styles = StyleSheet.create({
   },
   dossierCompletion: {
     marginBottom: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexWrap: "wrap",
+    borderBottomWidth: 1,
+    paddingBottom: 20,
+    marginBottom:50,
   },
+  pourcentageCompletion: {
+    fontSize: 14,
+    width: 210,
+   
+    padding: 10,
+    borderRadius: 10,
+    marginRight: 20,
+  },
+  msgIncomplet: {
+    width: 120,
+    fontSize: 10,
+  // 
+  },
+
   BtnContainer: {
     flexDirection: "column",
     justifyContent: "center",
@@ -175,7 +216,6 @@ const styles = StyleSheet.create({
   },
   texteBtn: {
     color: "white",
-
 
     letterSpacing: 1,
   },
