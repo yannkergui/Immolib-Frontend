@@ -9,6 +9,7 @@ const Tab = createBottomTabNavigator();
 
 import ProHome from "./screens/pro/proHome";
 import ProClients from "./screens/pro/proClients";
+import FicheClient from "./screens/pro/ficheClient"
 import ProVisites from "./screens/pro/proVisites";
 import ProTchats from "./screens/pro/proTchats";
 import ProAnnonces from "./screens/pro/proAnnonces";
@@ -193,11 +194,7 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
-              <Stack.Screen
-              name="TabNavigatorPro"
-              component={TabNavigatorPro}
-              style={styles.tabNavigator}
-            />
+            <Stack.Screen name="FicheClient" component={FicheClient} />
             <Stack.Screen name="ProVisites" component={ProVisites} />
             <Stack.Screen name="PageTests" component={PageTests} />
             <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
@@ -219,6 +216,11 @@ export default function App() {
             <Stack.Screen name="ProPreferences" component={ProPreferences} />
             <Stack.Screen name="ProTchats" component={ProTchats} />
             <Stack.Screen name="FirstScreen" component={FirstScreen} />
+              <Stack.Screen
+              name="TabNavigatorPro"
+              component={TabNavigatorPro}
+              style={styles.tabNavigator}
+            />
               <Stack.Screen
               name="TabNavigatorPerso"
               component={TabNavigatorPerso}
