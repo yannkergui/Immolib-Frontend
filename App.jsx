@@ -203,7 +203,7 @@ export default function App() {
             <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
             <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
             <Stack.Screen name="ConnectionScreen" component={ConnectionScreen} />
-            <Stack.Screen name="PersoHome" component={PersoHome} />
+            <Stack.Screen name="PersoHome" component={PersoHome}/>
             <Stack.Screen name="PersoMonDossier1" component={PersoMonDossier1} />
             <Stack.Screen name="PersoMonDossier2Loc" component={PersoMonDossier2Loc} />
             <Stack.Screen name="PersoMonDossier3Loc" component={PersoMonDossier3Loc} />

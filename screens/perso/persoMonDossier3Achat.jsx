@@ -10,26 +10,15 @@ import {
 } from "react-native";
 
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
+import SwitchSelector from "react-native-switch-selector";
 import { useState } from "react";
 
-export default function PersoMonDossier3Achat() {
+export default function PersoMonDossier3Achat({ navigation }) {
   // 3 Etats relatif au bien recherché choisie (utile au changement de couleur du choix et au push en BDD)
 
-  const [maisonChoice, setChoice] = useState(false);
+  const [maisonChoice, setMaisonChoice] = useState(false);
   const [appartementChoice, setAppartementChoice] = useState(false);
   const [autreChoice, setAutreChoice] = useState(false);
-
-  //Etat relatif au budget renseigné (util au push en BDD)
-
-  const [monBudget, setMonBudget] = useState(0);
-
-  //  Etat relatif à la surface minimum (util au push en BDD)
-
-  const [surface, setSurface] = useState(0);
-
-  //  Etat relatif à la surface minimum (util au push en BDD)
-
-  const [nbPiece, setNbPiece] = useState(0);
 
   // fonctions relatives au type de bien (changement du booléens et du style)
 
@@ -50,6 +39,86 @@ export default function PersoMonDossier3Achat() {
     setAppartementChoice(false);
     setMaisonChoice(false);
   };
+
+  //Gestion des inputs qui ne doivent recevoir que des nombres (alors que c'est un TextInput, donc il faut appliquer une Regex) :
+  const [inputBudget, setInputBudget] = useState("");
+  const [inputSurface, setInputSurface] = useState("");
+  const [inputNbPiece, setInputNbPiece] = useState("");
+
+  const handleBudgetChange = (text) => {
+    const formattedText = text.replace(/[^0-9]/g, ""); // élimine tous les caractères non numériques
+    setInputBudget(formattedText);
+  };
+
+  const handleSurfaceChange = (text) => {
+    const formattedText = text.replace(/[^0-9]/g, ""); // élimine tous les caractères non numériques
+    setInputSurface(formattedText);
+  };
+
+  const handleNbPieceChange = (text) => {
+    const formattedText = text.replace(/[^0-9]/g, ""); // élimine tous les caractères non numériques
+    setInputNbPiece(formattedText);
+  };
+
+  //préparation des fonctions pour envoyer en base de données les inputs de budget, surface, nbPiece retravaillés:
+
+  const saveBudgetToDatabase = () => {
+    // Enregistrez 'budget' dans la base de données ici.
+  };
+  
+  const saveSurfaceToDatabase = () => {
+    // Enregistrez 'budget' dans la base de données ici.
+  };
+  
+  const saveNbPieceToDatabase = () => {
+    // Enregistrez 'budget' dans la base de données ici.
+  };
+  
+  //navigation en cliquant sur "Etape suivante":
+  const handleEtapeSuivante = () => {
+    navigation.navigate("PersoHome");
+  };
+  
+  //mise en place des options pour le switch selector du Primo Accédant :
+  const [valuePrimo, setValuePrimo] = useState(false);
+  
+  const optionsPrimo = [
+    { label: "Non", valuePrimo: false },
+    { label: "Oui", valuePrimo: true },
+  ];
+  function vérif() {
+    // console.log(optionsPrimo[0].valuePrimo);
+    setValuePrimo(!valuePrimo)
+    // console.log(valuePrimo);
+    
+  }
+  console.log(valuePrimo);
+  //mise en place des options pour le switch selector du type d'investissement :
+  const [valueTypeInvest, setValueTypeInvest] = useState("principale");
+
+  const optionsTypeInvest = [
+    { label: "Résidence principale", valueTypeInvest: "principale" },
+    { label: "Résidence secondaire", valueTypeInvest: "secondaire" },
+    { label: "Autre", valueTypeInvest: "autre" },
+  ];
+
+  //mise en place des options pour le switch selector du type d'investissement :
+  const [valueTypeFinancement, setValueTypeFinancement] =
+    useState("pretbancaire");
+
+  const optionsTypeFinancement = [
+    { label: "Prêt bancaire", valueTypeFinancement: "pretbancaire" },
+    { label: "Fonds propres", valueTypeFinancement: "fondspropres" },
+    { label: "Prêt relais", valueTypeFinancement: "pretrelais" },
+  ];
+
+  //mise en place des options pour le switch selector du pré-accord bancaire  :
+  const [valuePreAccord, setValuePreAccord] = useState(false);
+
+  const optionsPreAccord = [
+    { label: "Non", valuePreAccord: false },
+    { label: "Oui", valuePreAccord: true },
+  ];
 
   return (
     <View style={styles.container}>
@@ -85,49 +154,77 @@ export default function PersoMonDossier3Achat() {
           </View>
 
           <View style={styles.formContainer}>
-            <View style={styles.lineContainer}>
-              <Text>Budget Maximum</Text>
-              <TextInput
-                style={styles.input}
-                keyboardType={"numeric"}
-                placeholder="/€"
-                onChangeText={(value) => setMonBudget(value)}
-                value={monBudget}
+            <View style={styles.lineContainer2choix}>
+              <Text style={styles.sousTitre}>Primo accédant ?</Text>
+              <SwitchSelector
+                options={optionsPrimo}
+                initial={0}
+                onPress={() => vérif()}
+                valuePadding={2.5}
+                hasPadding
+                buttonMargin={1.5}
+                style={styles.SwitchSelector}
+                buttonColor="#47AFA5"
+                animationDuration={250}
+                height={45}
               />
             </View>
             <View style={styles.lineContainer}>
-              <Text>Bien recherché</Text>
-              <View style={styles.choixBien}>
-                <TouchableOpacity style={styles.button}>
-                  <Text>Maison</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
-                  <Text>Appartement</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
-                  <Text>Autre</Text>
-                </TouchableOpacity>
-              </View>
+              <Text style={styles.sousTitre}>Type d'investissement :</Text>
+              <SwitchSelector
+                options={optionsTypeInvest}
+                initial={0}
+                onPress={() => setValueTypeInvest(valueTypeInvest)}
+                valuePadding={2.5}
+                hasPadding
+                style={styles.SwitchSelector3choix}
+                buttonColor="#47AFA5"
+                buttonMargin={1.5}
+                animationDuration={250}
+                height={45}
+              />
             </View>
+
             <View style={styles.lineContainer}>
-              <Text>Surface minimum</Text>
-              <TextInput
-                style={styles.input}
-                keyboardType={"numeric"}
-              ></TextInput>
+              <Text style={styles.sousTitre}>Type de financement :</Text>
+              <SwitchSelector
+                options={optionsTypeFinancement}
+                initial={0}
+                onPress={setValueTypeFinancement}
+                valuePadding={2.5}
+                hasPadding
+                style={styles.SwitchSelector3choix}
+                buttonColor="#47AFA5"
+                buttonMargin={1.5}
+                animationDuration={250}
+                height={45}
+              />
             </View>
+
             <View style={styles.lineContainer}>
-              <Text>Nombre de pièces minimum</Text>
-              <TextInput style={styles.input} keyboardType={"numeric"}>
-                0
-              </TextInput>
+              <Text style={styles.sousTitre}>Pré-accord bancaire :</Text>
+              <SwitchSelector
+                options={optionsPreAccord}
+                initial={0}
+                onPress={setValuePreAccord}
+                valuePadding={2.5}
+                hasPadding
+                style={styles.SwitchSelector}
+                buttonColor="#47AFA5"
+                buttonMargin={1.5}
+                animationDuration={250}
+                height={45}
+              />
             </View>
           </View>
           <View style={styles.nextBtnContainer}>
             <TouchableOpacity style={styles.skip}>
               <Text>Passer cette étape</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.next}>
+            <TouchableOpacity
+              style={styles.next}
+              onPress={() => handleEtapeSuivante()}
+            >
               <Text>Etape suivante</Text>
             </TouchableOpacity>
           </View>
@@ -209,7 +306,7 @@ const styles = StyleSheet.create({
     height: "4%",
     alignItems: "center",
     justifyContent: "space-between",
-    marginTop: "5%",
+    marginVertical: "5%",
   },
 
   nextBtnContainer: {
@@ -221,7 +318,7 @@ const styles = StyleSheet.create({
     height: "10%",
     alignItems: "center",
     justifyContent: "space-around",
-    marginTop: 50,
+    marginTop: 15,
     marginBottom: 50,
   },
 
@@ -254,10 +351,10 @@ const styles = StyleSheet.create({
   },
 
   lineContainer: {
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 20,
+    alignItems: "flex-start",
+    marginVertical: 15,
   },
 
   input: {
@@ -281,7 +378,26 @@ const styles = StyleSheet.create({
   },
   choixBien: {
     display: "flex",
-    flexDirection: "column",
-    marginVertical: 15,
+    flexDirection: "row",
+    marginVertical: 10,
+  },
+  buttonSelected: {
+    borderColor: "black",
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderRadius: 10,
+    width: 60,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  SwitchSelector: {
+    width: 120,
+  },
+  SwitchSelector3choix: {
+    width: "100%",
+  },
+  sousTitre: {
+    marginBottom: 10,
   },
 });
