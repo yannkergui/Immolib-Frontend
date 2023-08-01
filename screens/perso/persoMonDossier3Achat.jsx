@@ -65,29 +65,36 @@ export default function PersoMonDossier3Achat({ navigation }) {
   const saveBudgetToDatabase = () => {
     // Enregistrez 'budget' dans la base de données ici.
   };
-
+  
   const saveSurfaceToDatabase = () => {
     // Enregistrez 'budget' dans la base de données ici.
   };
-
+  
   const saveNbPieceToDatabase = () => {
     // Enregistrez 'budget' dans la base de données ici.
   };
-
+  
   //navigation en cliquant sur "Etape suivante":
   const handleEtapeSuivante = () => {
-    navigation.navigate("PersoMonDossier3Achat");
+    navigation.navigate("PersoHome");
   };
-
+  
   //mise en place des options pour le switch selector du Primo Accédant :
   const [valuePrimo, setValuePrimo] = useState(false);
-
+  
   const optionsPrimo = [
-    { label: "Oui", valuePrimo: true },
     { label: "Non", valuePrimo: false },
+    { label: "Oui", valuePrimo: true },
   ];
+  function vérif() {
+    // console.log(optionsPrimo[0].valuePrimo);
+    setValuePrimo(!valuePrimo)
+    // console.log(valuePrimo);
+    
+  }
+  console.log(valuePrimo);
   //mise en place des options pour le switch selector du type d'investissement :
-  const [valueTypeInvest, setValueTypeInvest] = useState("");
+  const [valueTypeInvest, setValueTypeInvest] = useState("principale");
 
   const optionsTypeInvest = [
     { label: "Résidence principale", valueTypeInvest: "principale" },
@@ -96,12 +103,21 @@ export default function PersoMonDossier3Achat({ navigation }) {
   ];
 
   //mise en place des options pour le switch selector du type d'investissement :
-  const [valueTypeFinancement, setValueTypeFinancement] = useState("");
+  const [valueTypeFinancement, setValueTypeFinancement] =
+    useState("pretbancaire");
 
   const optionsTypeFinancement = [
     { label: "Prêt bancaire", valueTypeFinancement: "pretbancaire" },
     { label: "Fonds propres", valueTypeFinancement: "fondspropres" },
     { label: "Prêt relais", valueTypeFinancement: "pretrelais" },
+  ];
+
+  //mise en place des options pour le switch selector du pré-accord bancaire  :
+  const [valuePreAccord, setValuePreAccord] = useState(false);
+
+  const optionsPreAccord = [
+    { label: "Non", valuePreAccord: false },
+    { label: "Oui", valuePreAccord: true },
   ];
 
   return (
@@ -143,12 +159,14 @@ export default function PersoMonDossier3Achat({ navigation }) {
               <SwitchSelector
                 options={optionsPrimo}
                 initial={0}
-                onPress={setValuePrimo}
+                onPress={() => vérif()}
                 valuePadding={2.5}
                 hasPadding
+                buttonMargin={1.5}
                 style={styles.SwitchSelector}
                 buttonColor="#47AFA5"
-                
+                animationDuration={250}
+                height={45}
               />
             </View>
             <View style={styles.lineContainer}>
@@ -156,17 +174,19 @@ export default function PersoMonDossier3Achat({ navigation }) {
               <SwitchSelector
                 options={optionsTypeInvest}
                 initial={0}
-                onPress={setValueTypeInvest}
+                onPress={() => setValueTypeInvest(valueTypeInvest)}
                 valuePadding={2.5}
                 hasPadding
                 style={styles.SwitchSelector3choix}
                 buttonColor="#47AFA5"
-
+                buttonMargin={1.5}
+                animationDuration={250}
+                height={45}
               />
             </View>
 
             <View style={styles.lineContainer}>
-              <Text style={styles.sousTitre}>Type de financement</Text>
+              <Text style={styles.sousTitre}>Type de financement :</Text>
               <SwitchSelector
                 options={optionsTypeFinancement}
                 initial={0}
@@ -175,7 +195,25 @@ export default function PersoMonDossier3Achat({ navigation }) {
                 hasPadding
                 style={styles.SwitchSelector3choix}
                 buttonColor="#47AFA5"
-                
+                buttonMargin={1.5}
+                animationDuration={250}
+                height={45}
+              />
+            </View>
+
+            <View style={styles.lineContainer}>
+              <Text style={styles.sousTitre}>Pré-accord bancaire :</Text>
+              <SwitchSelector
+                options={optionsPreAccord}
+                initial={0}
+                onPress={setValuePreAccord}
+                valuePadding={2.5}
+                hasPadding
+                style={styles.SwitchSelector}
+                buttonColor="#47AFA5"
+                buttonMargin={1.5}
+                animationDuration={250}
+                height={45}
               />
             </View>
           </View>
@@ -280,7 +318,7 @@ const styles = StyleSheet.create({
     height: "10%",
     alignItems: "center",
     justifyContent: "space-around",
-    marginTop: 50,
+    marginTop: 15,
     marginBottom: 50,
   },
 
@@ -356,11 +394,10 @@ const styles = StyleSheet.create({
   SwitchSelector: {
     width: 120,
   },
-  SwitchSelector3choix:{
+  SwitchSelector3choix: {
     width: "100%",
-    
   },
- sousTitre:{
-  marginBottom:10,
- },
+  sousTitre: {
+    marginBottom: 10,
+  },
 });
