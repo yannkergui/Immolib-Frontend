@@ -73,7 +73,7 @@ export default function ConnectionScreen({ navigation }) {
     setModalInscription(true);
   }
 
-    // 2eme bouton "S'inscrire" qui qui redirige vers la homePage
+    // 2eme bouton "S'inscrire" qui redirige vers la homePage
     const handleInscriptionBis = () => {
         if (EMAIL_REGEX.test(email) && TEL_REGEX.test(tel)) {
           fetch('http://192.168.10.171:3000/users/signup', {
