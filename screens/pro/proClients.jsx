@@ -1,21 +1,51 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Linking, Platform } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { useFonts } from 'expo-font';
+import { useDispatch } from 'react-redux';
+import { userDatas } from '../../reducers/monclient';
 
 
-export default function ProClients() {
+export default function ProClients({navigation}) {
 
+  const dispatch = useDispatch();
+
+  const handleSubmit = (e) => {
+    dispatch(userDatas(e));
+    navigation.navigate('FicheClient')
+
+  };
+
+  const [fontsLoaded] = useFonts({
+    Nunitobold: require('../../assets/fonts/Nunito/static/Nunito-Bold.ttf'),
+    NunitoSans: require('../../assets/fonts/Nunito_Sans/static/NunitoSans_7pt-Medium.ttf')
+  });
+  
+// tableau d'exemples
   const clientsPro = [
-    {nom: 'theBest', prénom: 'Adrien', prochainevisite : '21/09/2023'},
-    {nom: 'Beauty', prénom: 'thibaut', prochainevisite : '24/12/2023'},
-    {nom: 'Queen', prénom: 'Alice', prochainevisite : '11/01/2024'},
-    {nom: 'Awesome', prénom:' Yann-Erwan', prochainevisite : '21/09/2023'},
-    {nom: 'Teacher', prénom: 'Amine', prochainevisite : ''},
+    {nom: 'theBest', prénom: 'Adrien', prochainevisite : '21/09/2023', téléphone : '0102030405'},
+    {nom: 'Beauty', prénom: 'thibaut', prochainevisite : '24/12/2023',téléphone : '0102030405'},
+    {nom: 'Queen', prénom: 'Alice', prochainevisite : '11/01/2024',téléphone : '0102030405'},
+    {nom: 'Ugly', prénom:' Yann-Erwan', prochainevisite : '21/09/2023',téléphone : '0102030405'},
+    {nom: 'Teacher', prénom: 'Amine', prochainevisite : '',téléphone : '0102030405'},
   ]
 
-const clientsCards = clientsPro.map(data => { 
+  // mapping du back pour afficher les cards des clients 
+const clientsCards = clientsPro.map((data, key) => { 
   let nextvisite
+  const onPressMobileNumberClick = (number) => {
+
+    let phoneNumber = '';
+    if (Platform.OS === 'android') {
+      phoneNumber = `tel:${number}`;
+    } else {
+      phoneNumber = `telprompt:${number}`;
+    }
+
+    Linking.openURL(phoneNumber);
+ }
+
 
     if (data.prochainevisite !== '') {
 nextvisite = `prochaine visite : ${data.prochainevisite}`
@@ -25,8 +55,8 @@ nextvisite = `prochaine visite : ${data.prochainevisite}`
     return (
       <View style={styles.clientsCard}>
         <View style={styles.clientsCardOrientation}>
-          <View style={styles.leftCardOrientation}>
-            <TouchableOpacity style={styles.cardIcon}>
+          <View >
+            <TouchableOpacity style={styles.cardIcon} onPress={() => { handleSubmit(data) }}>
               <FontAwesome style={styles.iconClient} name='user' size={40} color='#1F2937' />
             </TouchableOpacity>
           </View>
@@ -34,8 +64,8 @@ nextvisite = `prochaine visite : ${data.prochainevisite}`
             <Text style={styles.titleCard}>{data.nom} {data.prénom} </Text>
             <Text style={styles.subCard}>{nextvisite}</Text>
           </View>
-          <View style={styles.rigthCardOrientation}>
-            <TouchableOpacity style={styles.cardIcon}>
+          <View >
+            <TouchableOpacity style={styles.cardIcon} onPress={() => { onPressMobileNumberClick(data.téléphone) }}>
               <FontAwesome style={styles.iconPhone} name='phone' size={40} color='#1F2937' />
             </TouchableOpacity>
           </View>
@@ -58,7 +88,8 @@ nextvisite = `prochaine visite : ${data.prochainevisite}`
       style={styles.background}
     >
       <View style={styles.container}>
-        <View style={styles.header}>
+ 
+        <View style={styles.header}> 
         <Text style={styles.Title}>Mes Clients</Text>
         <TouchableOpacity style={styles.iconcontainer}>
           <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' />
@@ -115,7 +146,7 @@ clientsCard :{
   alignItems : 'center',
   height : 100,
   width : '90%',
-  borderRadius: 40,
+  borderRadius: 60,
   backgroundColor:'#BCCDB6',
   shadowColor: "#000",
     shadowOffset: {
@@ -156,5 +187,8 @@ centerCardOrientation:{
   height : '80%',
   justifyContent: 'space-around',
   alignItems : 'center',
+},
+subCard:{
+  fontFamily: 'NunitoSans',
 }
 });

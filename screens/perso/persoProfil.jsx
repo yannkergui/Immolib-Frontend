@@ -5,12 +5,19 @@ import {
   View,
   TouchableOpacity,
   SafeAreaView,
+  Image,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { LinearGradient } from "expo-linear-gradient";
 
 export default function PersoProfil({ navigation }) {
   //Il faudra rajouter les components ={nomducomposant} dans les Tab.Screen pour rendre la navigation fonctionnelle.
+  const handleRecherche = () => {
+    navigation.navigate("PersoMonDossier1");
+  };
+  const handleDocuments = () => {
+    navigation.navigate("PersoMonDossier3Loc");
+  };
 
   return (
     <View style={styles.container}>
@@ -24,10 +31,59 @@ export default function PersoProfil({ navigation }) {
           <View style={styles.Titre}>
             <Text style={styles.Titre}>Mon Profil</Text>
           </View>
-
-          
+          <View style={styles.logoutBtnContainer}>
+            <FontAwesome
+            name="sign-out"
+            style={styles.logoutBtn}
+            size={30}
+            />
+          </View>
           <View style={styles.InfosProfil}>
-        
+            <View style={styles.photoContainer}>
+              <FontAwesome
+                name="facebook"
+                size={30}
+                style={styles.photoProfil}
+              />
+              {/* <Image alt="photoContainer"></Image> */}
+              <Text>Ajoute une photo</Text>
+            </View>
+            <View style={styles.caractProfil}>
+              <Text style={styles.caract}>Nom</Text>
+
+              <Text style={styles.caract}>Prénom</Text>
+
+              <Text style={styles.caractEmail}>Email</Text>
+            </View>
+          </View>
+
+          <View style={styles.monDossierContainer}>
+            <Text style={styles.monDossierTitre}> Mon dossier</Text>
+
+            <View style={styles.dossierCompletion}>
+              <Text style={styles.pourcentageCompletion}>
+                Ton profil est complet à ... %
+              </Text>
+
+              <Text style={styles.msgIncomplet}>
+                Complète le pour ne plus rater de bien 😉
+              </Text>
+            </View>
+
+            <View style={styles.BtnContainer}>
+              <TouchableOpacity
+                style={styles.Btn}
+                onPress={() => handleRecherche()}
+              >
+                <Text style={styles.texteBtn}>Modifer ma recherche</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.Btn}
+                onPress={() => handleDocuments()}
+              >
+                <Text style={styles.texteBtn}>Compléter mes documents</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </SafeAreaView>
       </LinearGradient>
@@ -51,5 +107,116 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     fontSize: 40,
     fontWeight: "bold",
+  },
+  logoutBtnContainer:{
+    position:"absolute",
+    right:30,
+    top:60,
+    
+  },
+  logoutBtn:{
+    // size:60,
+  },
+  InfosProfil: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  photoContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 15,
+  },
+  photoProfil: {
+    borderRadius: "50%",
+    // backgroundColor:"red",
+    size: 20,
+    padding: 20,
+  },
+  caractProfil: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    flexWrap: "wrap",
+    width: 225,
+  },
+  caract: {
+    marginHorizontal: 10,
+    marginVertical: 6,
+    fontSize: 15,
+    width: 80,
+    borderWidth: 2,
+    padding: 5,
+    borderRadius: 10,
+    borderColor: "#0E2321",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  caractEmail: {
+    marginHorizontal: 10,
+    marginVertical: 6,
+    fontSize: 15,
+    width: 180,
+    borderWidth: 2,
+    padding: 5,
+    borderRadius: 10,
+    borderColor: "#0E2321",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  monDossierContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 15,
+    marginTop: 50,
+  },
+  monDossierTitre: {
+    fontSize: 30,
+    marginBottom: 20,
+  },
+  dossierCompletion: {
+    marginBottom: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexWrap: "wrap",
+    borderBottomWidth: 1,
+    paddingBottom: 20,
+    marginBottom:50,
+  },
+  pourcentageCompletion: {
+    fontSize: 14,
+    width: 210,
+   
+    padding: 10,
+    borderRadius: 10,
+    marginRight: 20,
+  },
+  msgIncomplet: {
+    width: 120,
+    fontSize: 10,
+  // 
+  },
+
+  BtnContainer: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+  },
+  Btn: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: 270,
+    height: 70,
+    backgroundColor: "#0E2321",
+    borderColor: "white",
+    borderWidth: 1,
+    borderRadius: 25,
+    marginVertical: 15,
+  },
+  texteBtn: {
+    color: "white",
+
+    letterSpacing: 1,
   },
 });
