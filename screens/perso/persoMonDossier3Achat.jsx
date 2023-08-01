@@ -14,6 +14,7 @@ import SwitchSelector from "react-native-switch-selector";
 import { useState } from "react";
 
 export default function PersoMonDossier3Achat({ navigation }) {
+
   // 3 Etats relatif au bien recherché choisie (utile au changement de couleur du choix et au push en BDD)
 
   const [maisonChoice, setMaisonChoice] = useState(false);
@@ -65,41 +66,38 @@ export default function PersoMonDossier3Achat({ navigation }) {
   const saveBudgetToDatabase = () => {
     // Enregistrez 'budget' dans la base de données ici.
   };
-  
+
   const saveSurfaceToDatabase = () => {
     // Enregistrez 'budget' dans la base de données ici.
   };
-  
+
   const saveNbPieceToDatabase = () => {
     // Enregistrez 'budget' dans la base de données ici.
   };
-  
+
   //navigation en cliquant sur "Etape suivante":
   const handleEtapeSuivante = () => {
     navigation.navigate("PersoHome");
   };
-  
+
   //mise en place des options pour le switch selector du Primo Accédant :
   const [valuePrimo, setValuePrimo] = useState(false);
-  
+
   const optionsPrimo = [
-    { label: "Non", valuePrimo: false },
-    { label: "Oui", valuePrimo: true },
+    { label: "Non", value: false },
+    { label: "Oui", value: true },
   ];
-  function vérif() {
-    // console.log(optionsPrimo[0].valuePrimo);
-    setValuePrimo(!valuePrimo)
-    // console.log(valuePrimo);
-    
-  }
+  const handlePrimo = (value) => {
+    setValuePrimo(value);
+  };
   console.log(valuePrimo);
   //mise en place des options pour le switch selector du type d'investissement :
   const [valueTypeInvest, setValueTypeInvest] = useState("principale");
 
   const optionsTypeInvest = [
-    { label: "Résidence principale", valueTypeInvest: "principale" },
-    { label: "Résidence secondaire", valueTypeInvest: "secondaire" },
-    { label: "Autre", valueTypeInvest: "autre" },
+    { label: "Résidence principale", value: "principale" },
+    { label: "Résidence secondaire", value: "secondaire" },
+    { label: "Autre", value: "autre" },
   ];
 
   //mise en place des options pour le switch selector du type d'investissement :
@@ -107,17 +105,17 @@ export default function PersoMonDossier3Achat({ navigation }) {
     useState("pretbancaire");
 
   const optionsTypeFinancement = [
-    { label: "Prêt bancaire", valueTypeFinancement: "pretbancaire" },
-    { label: "Fonds propres", valueTypeFinancement: "fondspropres" },
-    { label: "Prêt relais", valueTypeFinancement: "pretrelais" },
+    { label: "Prêt bancaire", value: "pretbancaire" },
+    { label: "Fonds propres", value: "fondspropres" },
+    { label: "Prêt relais", value: "pretrelais" },
   ];
 
   //mise en place des options pour le switch selector du pré-accord bancaire  :
   const [valuePreAccord, setValuePreAccord] = useState(false);
 
   const optionsPreAccord = [
-    { label: "Non", valuePreAccord: false },
-    { label: "Oui", valuePreAccord: true },
+    { label: "Non", value: false },
+    { label: "Oui", value: true },
   ];
 
   return (
@@ -158,8 +156,9 @@ export default function PersoMonDossier3Achat({ navigation }) {
               <Text style={styles.sousTitre}>Primo accédant ?</Text>
               <SwitchSelector
                 options={optionsPrimo}
+                value={false}
                 initial={0}
-                onPress={() => vérif()}
+                onPress={(value) => handlePrimo(value)}
                 valuePadding={2.5}
                 hasPadding
                 buttonMargin={1.5}

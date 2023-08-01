@@ -17,6 +17,7 @@ import MonDossierPro from "./screens/pro/monDossierpro"
 import ProConnectionScreen from "./screens/pro/proConnectionScreen";
 import ProPreferences from "./screens/pro/proPreferences";
 import FirstScreen from "./screens/firstScreen";
+import GrosTest from "./screens/perso/test";
 
 import ConnectionScreen from "./screens/perso/connectionScreen";
 import PersoHome from "./screens/perso/persoHome";
@@ -193,12 +194,12 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
+          <Stack.Screen name="ProVisites" component={PersoMonDossier3Achat} />
               <Stack.Screen
               name="TabNavigatorPro"
               component={TabNavigatorPro}
               style={styles.tabNavigator}
             />
-            <Stack.Screen name="ProVisites" component={ProVisites} />
             <Stack.Screen name="PageTests" component={PageTests} />
             <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
             <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
