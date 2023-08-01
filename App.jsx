@@ -197,6 +197,7 @@ export default function App() {
   return (
     <Provider store={store}>
         <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
             <Stack.Screen name="PageTests" component={ConnectionScreen} />
             <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
             <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
@@ -219,7 +220,6 @@ export default function App() {
             <Stack.Screen name="ProTchats" component={ProTchats} />
             <Stack.Screen name="ProVisites" component={ProVisites} />
             <Stack.Screen name="FirstScreen" component={FirstScreen} />
-            <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
               <Stack.Screen
               name="TabNavigatorPro"
               component={TabNavigatorPro}
