@@ -3,20 +3,35 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import SwitchSelector from "react-native-switch-selector";
 
 export default function PersoVisites() {
+
+  // constante relative au switch de changement de page 
+  const page = [
+    { label: "en attente de validation", value: "en attente" },
+    { label: "confirmées", value: "confirmées" },
+    { label: "passées", value: "passées" },
+  ];
+
+  // Etat relatif au changement de page via le switch
+
+  const [activPage, setActivePage] = useState("en attente");
+
+  // visiteData (en dur pour le moment, sera par la suite un fetch de la BDD)
+
   const visitesPerso = [
     {
       nom: "Appartement 3 pièces",
       adresse: "77 rue victor hugo, 75000 Paris",
       date: "21/09/2023",
-      statut: "en attente de validation",
+      statut: "en attente",
     },
     {
       nom: "Maison 160m²",
       adresse: "77 rue victor hugo, 75000 Paris",
       date: "24/12/2023",
-      statut: "en attente de validation",
+      statut: "en attente",
     },
     {
       nom: "studio 20 m²",
@@ -28,7 +43,7 @@ export default function PersoVisites() {
       nom: "Villa 220 m²",
       adresse: "77 rue victor hugo, 75000 Paris",
       date: "21/09/2023",
-      statut: "en attente de validation",
+      statut: "en attente",
     },
     {
       nom: "Chateau ",
@@ -38,73 +53,73 @@ export default function PersoVisites() {
     },
   ];
 
-  const [activPage, setActivPage] = useState('');
+  // 1er map relatif aux visites en attente 
 
   const visiteEnAttente = visitesPerso.map((data) => {
-    
-    if (data.statut === "en attente de validation") {
+    if (data.statut === "en attente") {
       return (
         <View style={styles.clientsCard}>
-            <View style={styles.lineCard}>
-              <Text> Le {data.date} </Text>
-              <TouchableOpacity>
-                <FontAwesome name="edit" size={30} color="#1F2937" />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.lineCard}>
-              <Text> {data.adresse}</Text>
-              <TouchableOpacity>
-                <FontAwesome name="remove" size={30} color="#1F2937" />
-              </TouchableOpacity>
-            </View>
+          <View style={styles.lineCard}>
+            <Text> Le {data.date} </Text>
+            <TouchableOpacity>
+              <FontAwesome name="edit" size={30} color="#1F2937" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.lineCard}>
+            <Text> {data.adresse}</Text>
+            <TouchableOpacity>
+              <FontAwesome name="remove" size={30} color="#1F2937" />
+            </TouchableOpacity>
+          </View>
         </View>
       );
-    } 
+    }
   });
 
+  // 2iem map relatif aux visites passées
+
   const visitePassees = visitesPerso.map((data) => {
-    
     if (data.statut === "passées") {
       return (
         <View style={styles.clientsCard}>
-            <View style={styles.lineCard}>
-              <Text> Le {data.date} </Text>
-              <TouchableOpacity>
-                <FontAwesome name="edit" size={30} color="#1F2937" />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.lineCard}>
-              <Text> {data.adresse}</Text>
-              <TouchableOpacity>
-                <FontAwesome name="remove" size={30} color="#1F2937" />
-              </TouchableOpacity>
-            </View>
-
+          <View style={styles.lineCard}>
+            <Text> Le {data.date} </Text>
+            <TouchableOpacity>
+              <FontAwesome name="edit" size={30} color="#1F2937" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.lineCard}>
+            <Text> {data.adresse}</Text>
+            <TouchableOpacity>
+              <FontAwesome name="remove" size={30} color="#1F2937" />
+            </TouchableOpacity>
+          </View>
         </View>
       );
-    } 
+    }
   });
 
+  // 3iem map relatif aux visites confirmées
+
   const visiteConfirmees = visitesPerso.map((data) => {
-    
     if (data.statut === "confirmées") {
       return (
         <View style={styles.clientsCard}>
-            <View style={styles.lineCard}>
-              <Text> Le {data.date} </Text>
-              <TouchableOpacity>
-                <FontAwesome name="edit" size={30} color="#1F2937" />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.lineCard}>
-              <Text> {data.adresse}</Text>
-              <TouchableOpacity>
-                <FontAwesome name="remove" size={30} color="#1F2937" />
-              </TouchableOpacity>
-            </View>
+          <View style={styles.lineCard}>
+            <Text> Le {data.date} </Text>
+            <TouchableOpacity>
+              <FontAwesome name="edit" size={30} color="#1F2937" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.lineCard}>
+            <Text> {data.adresse}</Text>
+            <TouchableOpacity>
+              <FontAwesome name="remove" size={30} color="#1F2937" />
+            </TouchableOpacity>
+          </View>
         </View>
       );
-    } 
+    }
   });
 
   return (
@@ -118,18 +133,23 @@ export default function PersoVisites() {
       >
         <Text style={styles.title}>Mon Dossier</Text>
         <View style={styles.pageContainer}>
-          <View style={styles.pageActive}>
-            <Text>En attente</Text>
-          </View>
-          <View style={styles.page}>
-            <Text>Confirmées</Text>
-          </View>
-          <View style={styles.page}>
-            <Text>Passées</Text>
-          </View>
+          <SwitchSelector
+            options={page}
+            initial={0}
+            onPress={(value) => setActivePage(value)}
+            valuePadding={2.5}
+            hasPadding
+            style={styles.SwitchSelector3choix}
+            buttonColor="#47AFA5"
+            buttonMargin={1.5}
+            animationDuration={250}
+            height={45}
+          />
         </View>
         <View style={styles.cardContainer}>
-          {visiteEnAttente}
+          {activPage === "en attente" && visiteEnAttente}
+          {activPage === "passées" && visitePassees}
+          {activPage === "confirmées" && visiteConfirmees}
         </View>
       </LinearGradient>
     </View>
@@ -147,12 +167,8 @@ const styles = StyleSheet.create({
   pageContainer: {
     flexDirection: "row",
     borderColor: "#47AFA5",
-    borderWidth: 2,
-    borderRadius: 15,
     width: "90%",
-    height: "8%",
-    alignItems: "center",
-    justifyContent: "space-between",
+    height: "10%",
     marginTop: 20,
   },
 
@@ -196,7 +212,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     // alignItems: "center",
     height: 150,
-    width: '90%',
+    width: "90%",
     borderRadius: 40,
     backgroundColor: "#BCCDB6",
     shadowColor: "#000",
@@ -212,6 +228,9 @@ const styles = StyleSheet.create({
   lineCard: {
     flexDirection: "row",
     justifyContent: "space-between",
-    margin: 15
+    margin: 15,
+  },
+  SwitchSelector3choix: {
+    width: "100%",
   },
 });
