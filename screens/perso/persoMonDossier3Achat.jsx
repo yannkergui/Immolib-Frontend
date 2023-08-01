@@ -65,59 +65,57 @@ export default function PersoMonDossier3Achat({ navigation }) {
   const saveBudgetToDatabase = () => {
     // Enregistrez 'budget' dans la base de données ici.
   };
-  
+
   const saveSurfaceToDatabase = () => {
     // Enregistrez 'budget' dans la base de données ici.
   };
-  
+
   const saveNbPieceToDatabase = () => {
     // Enregistrez 'budget' dans la base de données ici.
   };
-  
-  //navigation en cliquant sur "Etape suivante":
+
+  //navigations en cliquant sur "Etape suivante", ou 1/3 et 2/3:
   const handleEtapeSuivante = () => {
     navigation.navigate("PersoHome");
   };
-  
-  //mise en place des options pour le switch selector du Primo Accédant :
+  const handlePage1 = () => {
+    navigation.navigate("PersoMonDossier1");
+  };
+  const handlePage2 = () => {
+    navigation.navigate("PersoMonDossier2Achat");
+  };
+
+  //mise en place des options pour les switchs selectors :
   const [valuePrimo, setValuePrimo] = useState(false);
-  
-  const optionsPrimo = [
-    { label: "Non", valuePrimo: false },
-    { label: "Oui", valuePrimo: true },
-  ];
-  function vérif() {
-    // console.log(optionsPrimo[0].valuePrimo);
-    setValuePrimo(!valuePrimo)
-    // console.log(valuePrimo);
-    
-  }
-  console.log(valuePrimo);
-  //mise en place des options pour le switch selector du type d'investissement :
   const [valueTypeInvest, setValueTypeInvest] = useState("principale");
-
-  const optionsTypeInvest = [
-    { label: "Résidence principale", valueTypeInvest: "principale" },
-    { label: "Résidence secondaire", valueTypeInvest: "secondaire" },
-    { label: "Autre", valueTypeInvest: "autre" },
-  ];
-
-  //mise en place des options pour le switch selector du type d'investissement :
   const [valueTypeFinancement, setValueTypeFinancement] =
     useState("pretbancaire");
+  const [valuePreAccord, setValuePreAccord] = useState(false);
 
+  //mise en place des options pour le switch selector du primo accédant :
+  const optionsPrimo = [
+    { label: "Non", value: false },
+    { label: "Oui", value: true },
+  ];
+
+  //mise en place des options pour le switch selector du type d'investissement :
+  const optionsTypeInvest = [
+    { label: "Résidence principale", value: "principale" },
+    { label: "Résidence secondaire", value: "secondaire" },
+    { label: "Autre", value: "autre" },
+  ];
+
+  //mise en place des options pour le switch selector du type d'investissement :
   const optionsTypeFinancement = [
-    { label: "Prêt bancaire", valueTypeFinancement: "pretbancaire" },
-    { label: "Fonds propres", valueTypeFinancement: "fondspropres" },
-    { label: "Prêt relais", valueTypeFinancement: "pretrelais" },
+    { label: "Prêt bancaire", value: "pretbancaire" },
+    { label: "Fonds propres", value: "fondspropres" },
+    { label: "Prêt relais", value: "pretrelais" },
   ];
 
   //mise en place des options pour le switch selector du pré-accord bancaire  :
-  const [valuePreAccord, setValuePreAccord] = useState(false);
-
   const optionsPreAccord = [
-    { label: "Non", valuePreAccord: false },
-    { label: "Oui", valuePreAccord: true },
+    { label: "Non", value: false },
+    { label: "Oui", value: true },
   ];
 
   return (
@@ -142,12 +140,18 @@ export default function PersoMonDossier3Achat({ navigation }) {
           <Text style={styles.title}> Mon Dossier</Text>
 
           <View style={styles.pageContainer}>
-            <View style={styles.pageNumber}>
+            <TouchableOpacity
+              onPress={() => handlePage1()}
+              style={styles.pageNumber}
+            >
               <Text>1/3</Text>
-            </View>
-            <View style={styles.pageNumber}>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => handlePage2()}
+              style={styles.pageNumber}
+            >
               <Text>2/3</Text>
-            </View>
+            </TouchableOpacity>
             <View style={styles.pageNumberActive}>
               <Text>3/3</Text>
             </View>
@@ -158,8 +162,9 @@ export default function PersoMonDossier3Achat({ navigation }) {
               <Text style={styles.sousTitre}>Primo accédant ?</Text>
               <SwitchSelector
                 options={optionsPrimo}
+                value={false}
                 initial={0}
-                onPress={() => vérif()}
+                onPress={(value) => setValuePrimo(value)}
                 valuePadding={2.5}
                 hasPadding
                 buttonMargin={1.5}
@@ -174,7 +179,7 @@ export default function PersoMonDossier3Achat({ navigation }) {
               <SwitchSelector
                 options={optionsTypeInvest}
                 initial={0}
-                onPress={() => setValueTypeInvest(valueTypeInvest)}
+                onPress={(value) => setValueTypeInvest(value)}
                 valuePadding={2.5}
                 hasPadding
                 style={styles.SwitchSelector3choix}
@@ -190,7 +195,7 @@ export default function PersoMonDossier3Achat({ navigation }) {
               <SwitchSelector
                 options={optionsTypeFinancement}
                 initial={0}
-                onPress={setValueTypeFinancement}
+                onPress={(value) => setValueTypeFinancement(value)}
                 valuePadding={2.5}
                 hasPadding
                 style={styles.SwitchSelector3choix}
@@ -206,7 +211,7 @@ export default function PersoMonDossier3Achat({ navigation }) {
               <SwitchSelector
                 options={optionsPreAccord}
                 initial={0}
-                onPress={setValuePreAccord}
+                onPress={(value) => setValuePreAccord(value)}
                 valuePadding={2.5}
                 hasPadding
                 style={styles.SwitchSelector}

@@ -5,7 +5,9 @@ import { useState } from "react";
 import { useDispatch } from 'react-redux';
 import {userDatas} from '../../reducers/user'
 
-export default function ConnectionScreen({ navigation }) {
+const urlPerso = ""
+
+export default function ProConnectionScreen({ navigation }) {
 
    //Etats pour récupérer les inputs utilisateur
    const [email, setEmail]=useState('');
@@ -37,7 +39,7 @@ export default function ConnectionScreen({ navigation }) {
     // Si correspondance avec la REXEXP EMAIL
     if (EMAIL_REGEX.test(email) && mdp) {
       //Récupération des données de l'utilisateur de la BDD
-      fetch('http://192.168.10.171:3000/users/signin', {
+      fetch('http://192.168.10.184:3000/users/signin', {
       method : 'POST',
       headers : {'Content-Type' : 'application/json'},
       body : JSON.stringify({email : email, motDePasse: mdp})
@@ -52,6 +54,7 @@ export default function ConnectionScreen({ navigation }) {
                             tel : data.data.tel,
                             token : data.data.token,
                             motDePasse : data.data.motDePasse}));
+          setModalConnexion(false);
           navigation.navigate('TabNavigatorPerso', { screen: 'Home' });
           setEmail('');
           setEmailError(false);
@@ -73,10 +76,10 @@ export default function ConnectionScreen({ navigation }) {
     setModalInscription(true);
   }
 
-    // 2eme bouton "S'inscrire" qui qui redirige vers la homePage
+    // 2eme bouton "S'inscrire" qui redirige vers la homePage
     const handleInscriptionBis = () => {
         if (EMAIL_REGEX.test(email) && TEL_REGEX.test(tel)) {
-          fetch('http://192.168.10.171:3000/users/signup', {
+          fetch('http://192.168.10.184:3000/users/signup', {
             method : 'POST',
             headers : {'Content-Type' : 'application/json'},
             body : JSON.stringify({prenom : prenom, nom: nom, email : email, tel : tel, motDePasse: mdp})
@@ -90,10 +93,12 @@ export default function ConnectionScreen({ navigation }) {
                   tel : data.data.tel,
                   token : data.data.token,
                   motDePasse : data.data.motDePasse}));
+                setModalInscription(false);
                 navigation.navigate('TabNavigatorPerso', { screen: 'Home' });
                 setEmail('');
                 setEmailError(false);
                 setTelError(false);
+                
               } 
             })  
         } else {
@@ -131,7 +136,8 @@ export default function ConnectionScreen({ navigation }) {
         style={styles.background}
       >    
         <View style={styles.container}>  
-                <Image style={styles.image} source={require('../../assets/IMMOLIB.png')} />         
+                <Image style={styles.image} source={require('../../assets/IMMOLIB.png')} /> 
+                <Text style={styles.text}>Programme tes visites et gère tes clients en toute simplicité</Text>        
                 <View style={styles.btnContainer}>
                     <TouchableOpacity style={styles.button} onPress={()=>handleConnexion()}>
                         <Text style={styles.textButton}>Se connecter</Text>
@@ -174,11 +180,11 @@ export default function ConnectionScreen({ navigation }) {
                             <View style={styles.modalContainer}>
                               <View style={styles.inputsEtDelete}>
                                 <View style={styles.inputs}>
-                                    <TextInput placeholder="Prénom" style={styles.inputModal} onChangeText={(value) => setPrenom(value)} value={prenom}/>
-                                    <TextInput placeholder="nom" style={styles.inputModal} onChangeText={(value) => setNom(value)} value={nom}/>
-                                    <TextInput placeholder="email" style={styles.inputModal} onChangeText={(value) => setEmail(value)} value={email}/>
-                                    <TextInput placeholder="Mot de passe" style={styles.inputModal} onChangeText={(value) => setMdp(value)} value={mdp}/> 
-                                    <TextInput placeholder="numéro de téléphone" style={styles.inputModal} onChangeText={(value) => setTel(value)} value={tel}/>           
+                                    <TextInput placeholder="Prénom" style={styles.inputModal} autoComplete={"given-name"} onChangeText={(value) => setPrenom(value)} value={prenom}/>
+                                    <TextInput placeholder="nom" style={styles.inputModal} autoComplete={"family-name"} onChangeText={(value) => setNom(value)} value={nom}/>
+                                    <TextInput placeholder="email" style={styles.inputModal} keyboardType={"email-address"} autoCorrect={false} autoComplete={"email"} autoCapitalize={'none'} onChangeText={(value) => setEmail(value)} value={email}/>
+                                    <TextInput placeholder="Mot de passe" style={styles.inputModal} autoCapitalize={'none'} autoCorrect={false} onChangeText={(value) => setMdp(value)} value={mdp}/> 
+                                    <TextInput placeholder="numéro de téléphone" style={styles.inputModal} keyboardType={"phone-pad"} onChangeText={(value) => setTel(value)} value={tel}/>           
                                 </View>
                                 <View style={styles.deleteModal}>
                                     <TouchableOpacity  onPress={()=>closeModal()}>
@@ -215,6 +221,17 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
   },
+  text : {
+    color: "#ffffff",
+    width: 300,
+    fontWeight: "600",
+    fontSize: 18,
+    // borderColor : 'black',
+    // borderWidth : 1,
+    textAlign:'center',
+    paddingTop:3,
+    fontSize: 20,
+  },
   image : {
     // borderColor : 'black',
     // borderWidth : 1,
@@ -234,7 +251,7 @@ const styles = StyleSheet.create({
     height: "8%",
     backgroundColor: "#47AFA5",
     borderRadius: 10,
-    marginBottom: "25%",
+    marginBottom: "15%",
 
     // paramètrage de l'ombre des boutons. utiliser : (https://ethercreative.github.io/react-native-shadow-generator/) si besoin
 

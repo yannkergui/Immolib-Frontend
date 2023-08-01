@@ -17,9 +17,8 @@ import WelcomeScreenPro from "./screens/pro/WelcomeScreenPro";
 import MonDossierPro from "./screens/pro/monDossierpro"
 import ProConnectionScreen from "./screens/pro/proConnectionScreen";
 import ProPreferences from "./screens/pro/proPreferences";
-import FirstScreen from "./screens/firstScreen";
 
-import ConnectionScreen from "./screens/perso/persoConnectionScreen";
+import PersoConnectionScreen from "./screens/perso/persoConnectionScreen";
 import PersoHome from "./screens/perso/persoHome";
 import PersoProfil from "./screens/perso/persoProfil";
 import PersoVisites from "./screens/perso/persoVisites";
@@ -30,7 +29,10 @@ import PersoMonDossier2Loc from "./screens/perso/persoMonDossier2Loc";
 import PersoMonDossier3Loc from "./screens/perso/persoMonDossier3Loc";
 import PersoMonDossier2Achat from "./screens/perso/persoMonDossier2Achat";
 import PersoMonDossier3Achat from "./screens/perso/persoMonDossier3Achat";
+
 import PageTests from "./screens/pageTests";
+import FirstScreen from "./screens/firstScreen";
+
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 import { Provider } from "react-redux";
@@ -189,33 +191,40 @@ const TabNavigatorPerso = () => {
   );
 };
 
-
 export default function App() {
   return (
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
+<<<<<<< HEAD
+=======
+              <Stack.Screen name="PageTests" component={ProConnectionScreen} />
+              <Stack.Screen name="PersoProfil" component={PersoProfil} />
+>>>>>>> 8e6ce89ec130277ff1f9a9a07d1dcd51806638a9
               <Stack.Screen
                 name="TabNavigatorPro"
                 component={TabNavigatorPro}
                 style={styles.tabNavigator}
               />
+<<<<<<< HEAD
               <Stack.Screen name="FicheClient" component={FicheClient} />
               <Stack.Screen name="ProPreferences" component={ProPreferences} />
               <Stack.Screen name="MonDossierpro" component={MonDossierPro} />
               <Stack.Screen name="FirstScreen" component={FirstScreen} />
               <Stack.Screen name="PageTests" component={ProPreferences} />
+=======
+              <Stack.Screen name="PersoConnexionScreen" component={PersoConnectionScreen} />
+>>>>>>> 8e6ce89ec130277ff1f9a9a07d1dcd51806638a9
               <Stack.Screen name="ProVisites" component={ProVisites} />
               <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
               <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
-              <Stack.Screen name="ConnectionScreen" component={ConnectionScreen} />
               <Stack.Screen name="PersoHome" component={PersoHome}/>
               <Stack.Screen name="PersoMonDossier1" component={PersoMonDossier1} />
               <Stack.Screen name="PersoMonDossier2Loc" component={PersoMonDossier2Loc} />
               <Stack.Screen name="PersoMonDossier3Loc" component={PersoMonDossier3Loc} />
               <Stack.Screen name="PersoMonDossier2Achat" component={PersoMonDossier2Achat} />
               <Stack.Screen name="PersoMonDossier3Achat" component={PersoMonDossier3Achat} />
-              <Stack.Screen name="PersoProfil" component={PersoProfil} />
+              
               <Stack.Screen name="PersoVisites" component={PersoVisites} />
               <Stack.Screen name="ProAnnonces" component={ProAnnonces} />
               <Stack.Screen name="ProClients" component={ProClients} />
