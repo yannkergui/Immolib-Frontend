@@ -1,9 +1,12 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput, KeyboardAvoidingView, Image } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput, KeyboardAvoidingView,Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
+import { useDispatch } from 'react-redux';
+import {newUser} from '../../reducers/user'
 
 export default function ConnectionScreen({ navigation }) {
+
    //Etats pour récupérer les inputs utilisateur
    const [email, setEmail]=useState('');
    const [mdp, setMdp]=useState('');
@@ -21,6 +24,8 @@ export default function ConnectionScreen({ navigation }) {
   // Etats pour création des modales de connexion et d'inscription  
   const [modalConnexion, setModalConnexion]=useState(false);
   const [modalInscription, setModalInscription]=useState(false);
+
+  const dispatch = useDispatch();
 
   // Premier bouton "Se connecter" qui ouvre la modale
   const handleConnexion = () => {
@@ -40,7 +45,13 @@ export default function ConnectionScreen({ navigation }) {
       .then(response => response.json())
       .then(data => {
         if (data.result) {
-          // dispatch(updateEmail(email));
+          console.log('data récupéré : ', data),
+          dispatch(newUser({prenom : data.data.prenom,
+                            nom : data.data.nom, 
+                            email : data.data.email, 
+                            tel : data.data.tel,
+                            token : data.data.token,
+                            motDePasse : data.data.motDePasse}));
           navigation.navigate('TabNavigatorPerso', { screen: 'Home' });
           setEmail('');
           setEmailError(false);
@@ -101,6 +112,8 @@ export default function ConnectionScreen({ navigation }) {
     setNom('');
     setMdp('');
     setEmailError(false);
+    setTelError(false);
+    setErrorEmpty(false);
   }
 
   return (
@@ -201,6 +214,7 @@ const styles = StyleSheet.create({
     // borderColor : 'black',
     // borderWidth : 1,
     // paddingTop : 50,
+    height : '28%',
   },
   btnContainer : {
     //flex: 1,
