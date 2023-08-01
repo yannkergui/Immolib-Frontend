@@ -14,11 +14,11 @@ function changePhoto (){}
   const [restrict, setRestrict] = useState(false);
   const [restrictColor, setRestrictColor] = useState("grey");
   const restrictOptions = [
-    { label: "N", restrict: false },
-    { label: "O", restrict: true },
+    { label: "N", value: false },
+    { label: "O", value: true },
   ];
-  function restrictBackground () {
-    if (restrict) {
+  function restrictBackground (value) {
+    if (value) {
       setRestrictColor("green")
     } else {
       setRestrictColor("grey")
@@ -29,11 +29,11 @@ function changePhoto (){}
   const [valid, setValid] = useState(false);
   const [validColor, setValidColor] = useState("grey");
   const validOptions = [
-    { label: "N", restrict: false },
-    { label: "O", restrict: true },
+    { label: "N", value: false },
+    { label: "O", value: true },
   ];
-  function validBackground () {
-    if (valid) {
+  function validBackground (value) {
+    if (value) {
       setValidColor("green")
     } else {
       setValidColor("grey")
@@ -44,11 +44,11 @@ function changePhoto (){}
   const [notif, setNotif] = useState(false);
   const [notifColor, setNotifColor] = useState("grey");
   const notifOptions = [
-    { label: "N", restrict: false },
-    { label: "O", restrict: true },
+    { label: "N", value: false },
+    { label: "O", value: true },
   ];
-  function notifBackground () {
-    if (notif) {
+  function notifBackground (value) {
+    if (value) {
       setNotifColor("green")
     } else {
       setNotifColor("grey")
@@ -100,10 +100,10 @@ function changePhoto (){}
                   <SwitchSelector
                       options={restrictOptions}
                       initial={0}
-                      onPress={()=>
+                      onPress={(value)=>
                         {
-                        setRestrict(!restrict)
-                        restrictBackground()
+                        setRestrict(value)
+                        restrictBackground(value)
                         }
                       }
                       valuePadding={2.5}
@@ -113,7 +113,7 @@ function changePhoto (){}
                       height={30} 
                       backgroundColor={restrictColor}
                       borderWidth={0}
-                      //"#ff0000" Changer la couleur de fond ici (par exemple, rouge) 
+                      textColor= 'rgba(245, 40, 145, 0)'
                   />
                 </View>
                 <View style = {styles.prefLine}>
@@ -121,10 +121,10 @@ function changePhoto (){}
                   <SwitchSelector
                       options={validOptions}
                       initial={0}
-                      onPress={()=>
+                      onPress={(value)=>
                         {
-                        setValid(!valid)
-                        validBackground()
+                        setValid(value)
+                        validBackground(value)
                         }
                       }
                       valuePadding={2.5}
@@ -134,6 +134,7 @@ function changePhoto (){}
                       height={30} 
                       backgroundColor={validColor}
                       borderWidth={0}
+                      textColor= 'rgba(245, 40, 145, 0)'
                       //"#ff0000" Changer la couleur de fond ici (par exemple, rouge) 
                   />
                 </View>
@@ -142,10 +143,10 @@ function changePhoto (){}
                   <SwitchSelector
                       options={notifOptions}
                       initial={0}
-                      onPress={()=>
+                      onPress={(value)=>
                         {
-                        setNotif(!notif)
-                        notifBackground()
+                        setNotif(value)
+                        notifBackground(value)
                         }
                       }
                       valuePadding={2.5}
@@ -155,6 +156,7 @@ function changePhoto (){}
                       height={30} 
                       backgroundColor={notifColor}
                       borderWidth={0}
+                      textColor= 'rgba(245, 40, 145, 0)'
                       //"#ff0000" Changer la couleur de fond ici (par exemple, rouge) 
                   />
                 </View>
