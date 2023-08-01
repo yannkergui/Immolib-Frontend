@@ -1,6 +1,5 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -37,7 +36,6 @@ import { Provider } from "react-redux";
 import user from "./reducers/user";
 
 import { configureStore } from "@reduxjs/toolkit";
-
 
 const store = configureStore({
   reducer: { user },
@@ -118,7 +116,6 @@ const TabNavigatorPro = () => {
   );
 };
 
-
 const TabNavigatorPerso = () => {
   return (
     <Tab.Navigator
@@ -196,11 +193,11 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
-            <Stack.Screen name="PageTests" component={ConnectionScreen} />
+            <Stack.Screen name="PageTests" component={PersoMonDossier3Achat} />
             <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
             <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
             <Stack.Screen name="ConnectionScreen" component={ConnectionScreen} />
-            <Stack.Screen name="PersoHome" component={PersoHome} />
+            <Stack.Screen name="PersoHome" component={PersoHome}/>
             <Stack.Screen name="PersoMonDossier1" component={PersoMonDossier1} />
             <Stack.Screen name="PersoMonDossier2Loc" component={PersoMonDossier2Loc} />
             <Stack.Screen name="PersoMonDossier3Loc" component={PersoMonDossier3Loc} />
