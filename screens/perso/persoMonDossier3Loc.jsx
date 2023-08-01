@@ -10,6 +10,7 @@ import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import { useState } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import * as DocumentPicker from "expo-document-picker";
+import SwitchSelector from "react-native-switch-selector";
 
 export default function PersoMonDossier3Loc() {
   //Etat relatif au revenu renseigné (util au push en BDD)
@@ -19,20 +20,15 @@ export default function PersoMonDossier3Loc() {
   //3 Etats relatifs à la situation pro renseignée (util au push en BDD)
 
   const [situationAutre, setSituationAutre] = useState("");
-  const [isCdi, setIsCdi] = useState(false);
-  const [isCdd, setIsCdd] = useState(false);
+  const [contrat, setContrat] = useState("cdi");
+  
+  const SwitchContrat = [
+    { label: "CDI", value: "cdi" },
+    { label: "CDD", value: "cdd" },
+  ];
 
-  // fonctions relatives au type de bien (changement du booléens et du style)
+ 
 
-  const handleCdi = () => {
-    setIsCdi(!isCdi);
-    setIsCdd(false);
-  };
-
-  const handleCdd = () => {
-    setIsCdd(!isCdd);
-    setIsCdi(false);
-  };
 
   // fonction relative à l'upload des fichiers au clique sur l'icone 
 
@@ -95,18 +91,18 @@ export default function PersoMonDossier3Loc() {
           </View>
           <View style={styles.lineContainer}>
             <Text>Situation Pro</Text>
-            <TouchableOpacity
-              style={isCdi ? styles.buttonSelected : styles.button}
-              onPress={() => handleCdi()}
-            >
-              <Text>CDI</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={isCdd ? styles.buttonSelected : styles.button}
-              onPress={() => handleCdd()}
-            >
-              <Text>CDD</Text>
-            </TouchableOpacity>
+            <SwitchSelector
+                options={SwitchContrat}
+                initial={0}
+                onPress={(value) => setContrat(value)}
+                valuePadding={2.5}
+                hasPadding
+                style={styles.SwitchSelector}
+                buttonColor="#47AFA5"
+                buttonMargin={1.5}
+                animationDuration={250}
+                height={45}
+              />
             <TextInput
               style={styles.input}
               keyboardType="numeric"
@@ -266,5 +262,8 @@ const styles = StyleSheet.create({
     height: 40,
     alignItems: "center",
     justifyContent: "center",
+  },
+  SwitchSelector: {
+    width: "50%",
   },
 });

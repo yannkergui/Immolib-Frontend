@@ -9,18 +9,17 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import { useState } from "react";
+import SwitchSelector from "react-native-switch-selector";
 
-export default function PersoMonDossier2Loc() {
-
+export default function PersoMonDossier2Loc({ navigation }) {
   //Etat relatif au budget renseigné (util au push en BDD)
 
   const [monBudget, setMonBudget] = useState(0);
 
-  // 3 Etats relatifs au bien recherché choisie (util au changement de couleur du choix et au push en BDD)
+  // les 2 etats mis à jour au clique sur le switch
 
-  const [maisonChoice, setMaisonChoice] = useState(false);
-  const [appartementChoice, setAppartementChoice] = useState(false);
-  const [autreChoice, setAutreChoice] = useState(false);
+  const [bienRecherche, setBienRecherche] = useState("locataire");
+  const [bienMeuble, setBienMeuble] = useState("achat");
 
   //  Etat relatif à la surface minimum (util au push en BDD)
 
@@ -34,49 +33,24 @@ export default function PersoMonDossier2Loc() {
 
   const [nbLocataire, setNbLocataire] = useState(0);
 
-  // 3 Etats relatifs au bien recherché choisie (util au changement de couleur du choix et au push en BDD)
+  // 2 constantes composants les switchs
 
-  const [bienMeuble, setBienMeuble] = useState(false);
-  const [bienNonMeuble, setBienNonMeuble] = useState(false);
-  const [indifferent, setIndifferent] = useState(false);
+  const SwitchBienRecherche = [
+    { label: "Maison", value: "maison" },
+    { label: "Appartement", value: "appartement" },
+    { label: "autre", value: "autre" },
+  ];
 
-  // fonctions relatives au type de bien (changement du booléens et du style)
+  const SwitchBienMeuble = [
+    { label: "Oui", value: "oui" },
+    { label: "Non", value: "non" },
+    { label: "Indifférent", value: "indifferent" },
+  ];
 
-  const handleMaison = () => {
-    setMaisonChoice(!maisonChoice);
-    setAppartementChoice(false);
-    setAutreChoice(false);
-  };
+  //fonction changement de page
 
-  const handleAppartement = () => {
-    setAppartementChoice(!appartementChoice);
-    setMaisonChoice(false);
-    setAutreChoice(false);
-  };
-
-  const handleAutre = () => {
-    setAutreChoice(!autreChoice);
-    setAppartementChoice(false);
-    setMaisonChoice(false);
-  };
-
-  // fonctions relatives au bien meublé (changement du booléens et du style)
-  const handleMeuble = () => {
-    setBienMeuble(!bienMeuble);
-    setBienNonMeuble(false);
-    setIndifferent(false);
-  };
-
-  const handleNonMeuble = () => {
-    setBienNonMeuble(!bienNonMeuble);
-    setBienMeuble(false);
-    setIndifferent(false);
-  };
-
-  const handleIndifferent = () => {
-    setIndifferent(!indifferent);
-    setBienNonMeuble(false);
-    setBienMeuble(false);
+  const handleEtapeSuivante = () => {
+    navigation.navigate("PersoMonDossier3Loc");
   };
 
   return (
@@ -120,26 +94,18 @@ export default function PersoMonDossier2Loc() {
             </View>
             <View style={styles.lineContainer}>
               <Text>Bien recherché</Text>
-              <TouchableOpacity
-                style={maisonChoice ? styles.buttonSelected : styles.button}
-                onPress={() => handleMaison()}
-              >
-                <Text>Maison</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={
-                  appartementChoice ? styles.buttonSelected : styles.button
-                }
-                onPress={() => handleAppartement()}
-              >
-                <Text>Appartement</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={autreChoice ? styles.buttonSelected : styles.button}
-                onPress={() => handleAutre()}
-              >
-                <Text>Autre</Text>
-              </TouchableOpacity>
+              <SwitchSelector
+                options={SwitchBienRecherche}
+                initial={0}
+                onPress={(value) => setBienRecherche(value)}
+                valuePadding={2.5}
+                hasPadding
+                style={styles.SwitchSelector}
+                buttonColor="#47AFA5"
+                buttonMargin={1.5}
+                animationDuration={250}
+                height={45}
+              />
             </View>
             <View style={styles.lineContainer}>
               <Text>Surface minimum</Text>
@@ -173,31 +139,28 @@ export default function PersoMonDossier2Loc() {
             </View>
             <View style={styles.lineContainer}>
               <Text>Bien meublé</Text>
-              <TouchableOpacity
-                style={bienMeuble ? styles.buttonSelected : styles.button}
-                onPress={() => handleMeuble()}
-              >
-                <Text>Oui</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={bienNonMeuble ? styles.buttonSelected : styles.button}
-                onPress={() => handleNonMeuble()}
-              >
-                <Text>Non</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={indifferent ? styles.buttonSelected : styles.button}
-                onPress={() => handleIndifferent()}
-              >
-                <Text>Indifférent</Text>
-              </TouchableOpacity>
+              <SwitchSelector
+                options={SwitchBienMeuble}
+                initial={0}
+                onPress={(value) => setBienMeuble(value)}
+                valuePadding={2.5}
+                hasPadding
+                style={styles.SwitchSelector}
+                buttonColor="#47AFA5"
+                buttonMargin={1.5}
+                animationDuration={250}
+                height={45}
+              />
             </View>
           </View>
           <View style={styles.nextBtnContainer}>
             <TouchableOpacity style={styles.skip}>
               <Text>Passer cette étape</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.next}>
+            <TouchableOpacity
+              style={styles.next}
+              onPress={() => handleEtapeSuivante()}
+            >
               <Text>Etape suivante</Text>
             </TouchableOpacity>
           </View>
@@ -325,6 +288,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 20,
+    width: "100%",
   },
 
   input: {
@@ -355,5 +319,8 @@ const styles = StyleSheet.create({
     height: 40,
     alignItems: "center",
     justifyContent: "center",
+  },
+  SwitchSelector: {
+    width: "72%",
   },
 });

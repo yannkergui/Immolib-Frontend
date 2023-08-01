@@ -174,10 +174,10 @@ const handleEtapeSuivante =()=>{
           </View>
           <View style={styles.nextBtnContainer}>
             <TouchableOpacity style={styles.skip}>
-              <Text>Passer cette étape</Text>
+              <Text style={styles.texteBtn}>Passer cette étape</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.next} onPress={()=> handleEtapeSuivante()}>
-              <Text>Etape suivante</Text>
+              <Text style={styles.texteBtn}>Etape suivante</Text>
             </TouchableOpacity>
           </View>
         </SafeAreaView>
@@ -263,8 +263,8 @@ const styles = StyleSheet.create({
 
   nextBtnContainer: {
     flexDirection: "row",
-    borderColor: "#47AFA5",
-    borderWidth: 2,
+    // borderColor: "#47AFA5",
+    // borderWidth: 2,
     borderRadius: 10,
     width: "80%",
     height: "10%",
@@ -277,25 +277,26 @@ const styles = StyleSheet.create({
   skip: {
     alignItems: "center",
     justifyContent: "center",
-    width: "40%",
-    height: "80%",
-    backgroundColor: "transparent",
+    width: 170,
+    height:60,
+    backgroundColor: "#414042",
     borderColor: "white",
     borderWidth: 1,
-    borderRadius: 10,
-    marginRight: 3,
+    borderRadius: 25,
+    borderRadius: 15,
+    marginRight:25,
   },
-
   next: {
     alignItems: "center",
     justifyContent: "center",
-    width: "40%",
-    height: "80%",
-    backgroundColor: "#47AFA5",
+    width: 170,
+    height:60,
+    backgroundColor: "#414042",
     borderColor: "white",
     borderWidth: 1,
-    borderRadius: 10,
-    marginRight: 3,
+    borderRadius: 25,
+    borderRadius: 15,
+    marginLeft: 25,
   },
 
   formContainer: {
@@ -342,5 +343,10 @@ const styles = StyleSheet.create({
     height: 40,
     alignItems: "center",
     justifyContent: "center",
+  },
+  texteBtn: {
+    color: "white",
+    fontSize: 15,
+    letterSpacing: 1,
   },
 });
