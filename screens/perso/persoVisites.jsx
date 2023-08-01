@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function persoVisites() {
+export default function PersoVisites() {
   return (
     <View style={styles.container}>
       <Text>Page PERSO visites</Text>

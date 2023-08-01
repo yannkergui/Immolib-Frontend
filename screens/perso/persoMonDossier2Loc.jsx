@@ -10,7 +10,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import { useState } from "react";
 
-export default function persoMonDossier2Loc() {
+export default function PersoMonDossier2Loc() {
 
   //Etat relatif au budget renseigné (util au push en BDD)
 

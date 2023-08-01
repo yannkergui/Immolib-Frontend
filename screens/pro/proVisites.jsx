@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 
-export default function proVisites() {
+export default function ProVisites() {
 
 
   

@@ -9,7 +9,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import { useState } from "react";
 
-export default function persoMonDossier3Loc() {
+export default function PersoMonDossier3Loc() {
   //Etat relatif au revenu renseigné (util au push en BDD)
 
   const [monRevenu, setMonRevenu] = useState(0);

@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 
-export default function firstScreen({navigation}) {
+export default function FirstScreen({navigation}) {
   const handleToParticulier = () => {
     navigation.navigate("WelcomeScreenPerso");
   };

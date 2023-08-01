@@ -2,7 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import { useState } from "react";
 
-export default function monDossierPro() {
+export default function MonDossierPro() {
   // 3 Etats relatif à la situation actuelle  choisie (util au changement de couleur du choix)
   const [locataireChoice, setLocatairechoice] = useState(false);
   const [proprietaireChoice, setProprietaireChoice] = useState(false);
