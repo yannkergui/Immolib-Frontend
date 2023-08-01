@@ -10,7 +10,7 @@ export default function ProClients() {
     {nom: 'theBest', prénom: 'Adrien', prochainevisite : '21/09/2023'},
     {nom: 'Beauty', prénom: 'thibaut', prochainevisite : '24/12/2023'},
     {nom: 'Queen', prénom: 'Alice', prochainevisite : '11/01/2024'},
-    {nom: 'Ugly', prénom:' Yann-Erwan', prochainevisite : '21/09/2023'},
+    {nom: 'Awesome', prénom:' Yann-Erwan', prochainevisite : '21/09/2023'},
     {nom: 'Teacher', prénom: 'Amine', prochainevisite : ''},
   ]
 
