@@ -12,12 +12,77 @@ import {
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import { useState } from "react";
 
-export default function PersoMonDossier2Achat() {
+export default function PersoMonDossier2Achat({navigation}) {
   // 3 Etats relatif au bien recherché choisie (utile au changement de couleur du choix et au push en BDD)
 
   const [maisonChoice, setChoice] = useState(false);
   const [appartementChoice, setAppartementChoice] = useState(false);
   const [autreChoice, setAutreChoice] = useState(false);
+
+  //  Etat relatif à la surface minimum (util au push en BDD)
+
+  const [nbPiece, setNbPiece] = useState(0);
+
+  // fonctions relatives au type de bien (changement du booléens et du style)
+
+  const handleMaison = () => {
+    setMaisonChoice(!maisonChoice);
+    setAppartementChoice(false);
+    setAutreChoice(false);
+  };
+
+  const handleAppartement = () => {
+    setAppartementChoice(!appartementChoice);
+    setMaisonChoice(false);
+    setAutreChoice(false);
+  };
+
+  const handleAutre = () => {
+    setAutreChoice(!autreChoice);
+    setAppartementChoice(false);
+    setMaisonChoice(false);
+  };
+
+  //Gestion des inputs qui ne doivent recevoir que des nombres (alors que c'est un TextInput, donc il faut appliquer une Regex) :
+  const [inputBudget, setInputBudget] = useState("");
+  const [inputSurface, setInputSurface] = useState("");
+  const [inputNbPiece, setInputNbPiece] = useState("");
+
+  const handleBudgetChange = (text) => {
+    const formattedText = text.replace(/[^0-9]/g, ""); // élimine tous les caractères non numériques
+    setInputBudget(formattedText);
+  };
+
+  const handleSurfaceChange = (text) => {
+    const formattedText = text.replace(/[^0-9]/g, ""); // élimine tous les caractères non numériques
+    setInputSurface(formattedText);
+  };
+
+  const handleNbPieceChange = (text) => {
+    const formattedText = text.replace(/[^0-9]/g, ""); // élimine tous les caractères non numériques
+    setInputNbPiece(formattedText);
+  };
+
+  //préparation des fonctions pour envoyer en base de données les inputs de budget, surface, nbPiece retravaillés:
+
+  const saveBudgetToDatabase = () => {
+    // Enregistrez 'budget' dans la base de données ici.
+  };
+
+  const saveSurfaceToDatabase = () => {
+    // Enregistrez 'budget' dans la base de données ici.
+  };
+
+  const saveNbPieceToDatabase = () => {
+    // Enregistrez 'budget' dans la base de données ici.
+  };
+
+
+//navigation en cliquant sur "Etape suivante":
+const handleEtapeSuivante =()=>{
+  navigation.navigate('persoMonDossier3Achat');
+}
+
 
   return (
     <View style={styles.container}>
@@ -55,20 +120,36 @@ export default function PersoMonDossier2Achat() {
           <View style={styles.formContainer}>
             <View style={styles.lineContainer}>
               <Text>Budget Maximum</Text>
-              <TextInput style={styles.input} keyboardType={"numeric"}>
-                /€
+              <TextInput
+                style={styles.input}
+                keyboardType="numeric"
+                value={inputBudget}
+                onChangeText={handleBudgetChange}
+              >
+                <Text>/€</Text>
               </TextInput>
             </View>
             <View style={styles.lineContainer}>
               <Text>Bien recherché</Text>
               <View style={styles.choixBien}>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity
+                  style={maisonChoice ? styles.buttonSelected : styles.button}
+                  onPress={() => handleMaison()}
+                >
                   <Text>Maison</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity
+                  style={
+                    appartementChoice ? styles.buttonSelected : styles.button
+                  }
+                  onPress={() => handleAppartement()}
+                >
                   <Text>Appartement</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity
+                  style={autreChoice ? styles.buttonSelected : styles.button}
+                  onPress={() => handleAutre()}
+                >
                   <Text>Autre</Text>
                 </TouchableOpacity>
               </View>
@@ -77,21 +158,28 @@ export default function PersoMonDossier2Achat() {
               <Text>Surface minimum</Text>
               <TextInput
                 style={styles.input}
-                keyboardType={"numeric"}
+                keyboardType="numeric"
+                placeholder="9m²"
+                onChangeText={handleSurfaceChange}
+                value={inputSurface}
               ></TextInput>
             </View>
             <View style={styles.lineContainer}>
               <Text>Nombre de pièces minimum</Text>
-              <TextInput style={styles.input} keyboardType={"numeric"}>
-                0
-              </TextInput>
+              <TextInput
+                style={styles.input}
+                keyboardType={"numeric"}
+                placeholder="0"
+                onChangeText={handleNbPieceChange}
+                value={inputNbPiece}
+              ></TextInput>
             </View>
           </View>
           <View style={styles.nextBtnContainer}>
             <TouchableOpacity style={styles.skip}>
               <Text>Passer cette étape</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.next}>
+            <TouchableOpacity style={styles.next} onPress={()=> handleEtapeSuivante()}>
               <Text>Etape suivante</Text>
             </TouchableOpacity>
           </View>
@@ -247,5 +335,15 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     marginVertical: 15,
+  },
+  buttonSelected: {
+    borderColor: "black",
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderRadius: 10,
+    width: 60,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
