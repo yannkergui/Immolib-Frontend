@@ -19,7 +19,7 @@ export default function PersoMonDossier2Achat({navigation}) {
   const [appartementChoice, setAppartementChoice] = useState(false);
   const [autreChoice, setAutreChoice] = useState(false);
 
-  //  Etat relatif à la surface minimum (util au push en BDD)
+  //  Etat relatif à la surface minimum (utile au push en BDD)
 
   const [nbPiece, setNbPiece] = useState(0);
 
