@@ -1,49 +1,37 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import { useState } from "react";
+import SwitchSelector from "react-native-switch-selector";
 
-export default function PersoMonDossier1() {
-  // 3 Etats relatif à la situation actuelle  choisie (util au changement de couleur du choix)
-  const [locataireChoice, setLocataireChoice] = useState(false);
-  const [proprietaireChoice, setProprietaireChoice] = useState(false);
-  const [hebergeChoice, setHebergeChoice] = useState(false);
+export default function PersoMonDossier1({ navigation }) {
+  
+  // les 2 etats mis à jour au clique sur le switch
 
-  // 2 Etats relatifs à la recherche de l'utilisateur
+  const [situationActuelle, setSituationActuelle] = useState("locataire");
+  const [recherche, setRecherche] = useState("achat");
 
-  const [locationSearch, setLocationSearch] = useState(false);
-  const [achatSearch, setAchatSearch] = useState(false);
+  // 2 constantes composants des switchs
 
-  // les trois fonction appelée au clique sur la situation actuelle, utile pour le changement de style du boutton et en push en BDD.
+  const SwitchSituation = [
+    { label: "Locataire", value: "locataire" },
+    { label: "Propriétaire", value: "proprietaire" },
+    { label: "Hébergé", value: "heberge" },
+  ];
 
-  const handleLocataire = () => {
-    setLocataireChoice(!locataireChoice);
-    setProprietaireChoice(false);
-    setHebergeChoice(false);
+  const SwitchRecherche = [
+    { label: "Achat", value: "achat" },
+    { label: "Location", value: "location" },
+  ];
+
+  const handleEtapeSuivante = () => {
+    if (recherche ==="achat") {
+      navigation.navigate("PersoMonDossier2Achat");
+    } else {
+      navigation.navigate("PersoMonDossier2Loc");
+    }
   };
 
-  const handleProprietaire = () => {
-    setProprietaireChoice(!proprietaireChoice);
-    setLocataireChoice(false);
-    setHebergeChoice(false);
-  };
-
-  const handleHeberge = () => {
-    setHebergeChoice(!hebergeChoice);
-    setLocataireChoice(false);
-    setProprietaireChoice(false);
-  };
-
-  // Les 2 fonctions appelées au clique sur je recherche, utiles au changement de style du boutton et au push en BDD.
-
-  const handLocationSearch = () => {
-    setLocationSearch(!locationSearch);
-    setAchatSearch(false);
-  };
-
-  const handAchatSearch = () => {
-    setAchatSearch(!achatSearch);
-    setLocationSearch(false);
-  };
+  console.log(recherche)
 
   return (
     <View style={styles.container}>
@@ -72,45 +60,42 @@ export default function PersoMonDossier1() {
         </View>
         <Text style={styles.title}>Situation Actuelle</Text>
         <View style={styles.situationContainer}>
-          <TouchableOpacity
-            onPress={() => handleLocataire()}
-            style={locataireChoice ? styles.selectorActiv : styles.selector}
-          >
-            <Text>Locataire</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleProprietaire()}
-            style={proprietaireChoice ? styles.selectorActiv : styles.selector}
-          >
-            <Text>Propriétaire</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleHeberge()}
-            style={hebergeChoice ? styles.selectorActiv : styles.selector}
-          >
-            <Text>Hébergé</Text>
-          </TouchableOpacity>
+          <SwitchSelector
+            options={SwitchSituation}
+            initial={0}
+            onPress={(value) => setSituationActuelle(value)}
+            valuePadding={2.5}
+            hasPadding
+            style={styles.SwitchSelector}
+            buttonColor="#47AFA5"
+            buttonMargin={1.5}
+            animationDuration={250}
+            height={45}
+          />
         </View>
         <Text style={styles.title}>Je recherche</Text>
         <View style={styles.searchContainer}>
-          <TouchableOpacity
-            onPress={() => handLocationSearch()}
-            style={locationSearch ? styles.selectorActiv : styles.selector}
-          >
-            <Text>Locatation</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handAchatSearch()}
-            style={achatSearch ? styles.selectorActiv : styles.selector}
-          >
-            <Text>Achat</Text>
-          </TouchableOpacity>
+          <SwitchSelector
+            options={SwitchRecherche}
+            initial={0}
+            onPress={(value) => setRecherche(value)}
+            valuePadding={2.5}
+            hasPadding
+            style={styles.SwitchSelector}
+            buttonColor="#47AFA5"
+            buttonMargin={1.5}
+            animationDuration={250}
+            height={45}
+          />
         </View>
         <View style={styles.nextBtnContainer}>
           <TouchableOpacity style={styles.skip}>
             <Text>Passer cette étape</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.next}>
+          <TouchableOpacity
+            style={styles.next}
+            onPress={() => handleEtapeSuivante()}
+          >
             <Text>Etape suivante</Text>
           </TouchableOpacity>
         </View>
@@ -184,14 +169,7 @@ const styles = StyleSheet.create({
   },
 
   situationContainer: {
-    flexDirection: "row",
-    borderColor: "#47AFA5",
-    borderWidth: 2,
-    borderRadius: 10,
     width: "80%",
-    height: "7%",
-    alignItems: "center",
-    justifyContent: "space-around",
     marginTop: 40,
   },
 
@@ -266,5 +244,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     marginRight: 3,
+  },
+
+  SwitchSelector: {
+    width: "100%",
   },
 });
