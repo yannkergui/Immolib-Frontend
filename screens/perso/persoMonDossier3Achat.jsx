@@ -14,7 +14,6 @@ import SwitchSelector from "react-native-switch-selector";
 import { useState } from "react";
 
 export default function PersoMonDossier3Achat({ navigation }) {
-
   // 3 Etats relatif au bien recherché choisie (utile au changement de couleur du choix et au push en BDD)
 
   const [maisonChoice, setMaisonChoice] = useState(false);
@@ -79,21 +78,20 @@ export default function PersoMonDossier3Achat({ navigation }) {
   const handleEtapeSuivante = () => {
     navigation.navigate("PersoHome");
   };
-
-  //mise en place des options pour le switch selector du Primo Accédant :
+  
+  //mise en place des options pour les switchs selectors :
   const [valuePrimo, setValuePrimo] = useState(false);
+  const [valueTypeInvest, setValueTypeInvest] = useState("principale");
+  const [valueTypeFinancement, setValueTypeFinancement] =useState("pretbancaire");
+  const [valuePreAccord, setValuePreAccord] = useState(false);
 
+  //mise en place des options pour le switch selector du primo accédant :
   const optionsPrimo = [
     { label: "Non", value: false },
     { label: "Oui", value: true },
   ];
-  const handlePrimo = (value) => {
-    setValuePrimo(value);
-  };
-  console.log(valuePrimo);
-  //mise en place des options pour le switch selector du type d'investissement :
-  const [valueTypeInvest, setValueTypeInvest] = useState("principale");
 
+  //mise en place des options pour le switch selector du type d'investissement :
   const optionsTypeInvest = [
     { label: "Résidence principale", value: "principale" },
     { label: "Résidence secondaire", value: "secondaire" },
@@ -101,9 +99,6 @@ export default function PersoMonDossier3Achat({ navigation }) {
   ];
 
   //mise en place des options pour le switch selector du type d'investissement :
-  const [valueTypeFinancement, setValueTypeFinancement] =
-    useState("pretbancaire");
-
   const optionsTypeFinancement = [
     { label: "Prêt bancaire", value: "pretbancaire" },
     { label: "Fonds propres", value: "fondspropres" },
@@ -111,12 +106,17 @@ export default function PersoMonDossier3Achat({ navigation }) {
   ];
 
   //mise en place des options pour le switch selector du pré-accord bancaire  :
-  const [valuePreAccord, setValuePreAccord] = useState(false);
-
   const optionsPreAccord = [
     { label: "Non", value: false },
     { label: "Oui", value: true },
   ];
+
+  console.log(
+    valuePrimo,
+    valueTypeInvest,
+    valueTypeFinancement,
+    valuePreAccord
+  );
 
   return (
     <View style={styles.container}>
@@ -158,7 +158,7 @@ export default function PersoMonDossier3Achat({ navigation }) {
                 options={optionsPrimo}
                 value={false}
                 initial={0}
-                onPress={(value) => handlePrimo(value)}
+                onPress={(value) => setValuePrimo(value)}
                 valuePadding={2.5}
                 hasPadding
                 buttonMargin={1.5}
@@ -173,7 +173,7 @@ export default function PersoMonDossier3Achat({ navigation }) {
               <SwitchSelector
                 options={optionsTypeInvest}
                 initial={0}
-                onPress={() => setValueTypeInvest(valueTypeInvest)}
+                onPress={(value) => setValueTypeInvest(value)}
                 valuePadding={2.5}
                 hasPadding
                 style={styles.SwitchSelector3choix}
@@ -189,7 +189,7 @@ export default function PersoMonDossier3Achat({ navigation }) {
               <SwitchSelector
                 options={optionsTypeFinancement}
                 initial={0}
-                onPress={setValueTypeFinancement}
+                onPress={(value) => setValueTypeFinancement(value)}
                 valuePadding={2.5}
                 hasPadding
                 style={styles.SwitchSelector3choix}
@@ -205,7 +205,7 @@ export default function PersoMonDossier3Achat({ navigation }) {
               <SwitchSelector
                 options={optionsPreAccord}
                 initial={0}
-                onPress={setValuePreAccord}
+                onPress={(value) => setValuePreAccord(value)}
                 valuePadding={2.5}
                 hasPadding
                 style={styles.SwitchSelector}

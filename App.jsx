@@ -194,7 +194,7 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
-          <Stack.Screen name="ProVisites" component={PersoMonDossier3Achat} />
+          <Stack.Screen name="PersoMonDossier3Achat" component={PersoMonDossier3Achat} />
               <Stack.Screen name="PageTests" component={ProPreferences} />
               <Stack.Screen
                 name="TabNavigatorPro"
@@ -210,7 +210,7 @@ export default function App() {
               <Stack.Screen name="PersoMonDossier2Loc" component={PersoMonDossier2Loc} />
               <Stack.Screen name="PersoMonDossier3Loc" component={PersoMonDossier3Loc} />
               <Stack.Screen name="PersoMonDossier2Achat" component={PersoMonDossier2Achat} />
-              <Stack.Screen name="PersoMonDossier3Achat" component={PersoMonDossier3Achat} />
+              
               <Stack.Screen name="PersoProfil" component={PersoProfil} />
               <Stack.Screen name="PersoVisites" component={PersoVisites} />
               <Stack.Screen name="MonDossierpro" component={MonDossierPro} />
