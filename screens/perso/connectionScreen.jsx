@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput, KeyboardAvo
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import { useDispatch } from 'react-redux';
-import {newUser} from '../../reducers/user'
+import {userDatas} from '../../reducers/user'
 
 export default function ConnectionScreen({ navigation }) {
 
@@ -46,7 +46,7 @@ export default function ConnectionScreen({ navigation }) {
       .then(data => {
         if (data.result) {
           console.log('data récupéré : ', data),
-          dispatch(newUser({prenom : data.data.prenom,
+          dispatch(userDatas({prenom : data.data.prenom,
                             nom : data.data.nom, 
                             email : data.data.email, 
                             tel : data.data.tel,
@@ -84,7 +84,12 @@ export default function ConnectionScreen({ navigation }) {
             .then(response => response.json())
             .then(data => {
               if (data.result) {
-                // dispatch(updateEmail(email));
+                dispatch(userDatas({prenom : data.data.prenom,
+                  nom : data.data.nom, 
+                  email : data.data.email, 
+                  tel : data.data.tel,
+                  token : data.data.token,
+                  motDePasse : data.data.motDePasse}));
                 navigation.navigate('TabNavigatorPerso', { screen: 'Home' });
                 setEmail('');
                 setEmailError(false);

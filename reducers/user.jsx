@@ -18,11 +18,11 @@ export const userSlice = createSlice({
     // profilage : (state, action) => {
     //   state.value.profil = action.payload;
     // },
-    newUser : (state, action) => {
+    userDatas : (state, action) => {
       state.value = action.payload
     }
   },
 });
 
-export const { newUser } = userSlice.actions;
+export const { userSatas } = userSlice.actions;
 export default userSlice.reducer;
