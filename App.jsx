@@ -106,11 +106,11 @@ const TabNavigatorPro = () => {
       })}
     >
       
-      <Tab.Screen name="Home" component={proHome} />
-      <Tab.Screen name="Mes tchats" component={proTchats} />
-      <Tab.Screen name="Mes annonces" component={proAnnonces} />
-      <Tab.Screen name="Mes visites" component={proVisites} />
-      <Tab.Screen name="Mes clients" component={proClients} />
+      <Tab.Screen name="Home" component={ProHome} />
+      <Tab.Screen name="Mes tchats" component={ProTchats} />
+      <Tab.Screen name="Mes annonces" component={ProAnnonces} />
+      <Tab.Screen name="Mes visites" component={ProVisites} />
+      <Tab.Screen name="Mes clients" component={ProClients} />
     </Tab.Navigator>
   );
 };
@@ -152,10 +152,10 @@ const TabNavigatorPerso = () => {
       })}
     >
       <View style={styles.navbar}>
-      <Tab.Screen name="Home" component={persoHome} />
-      <Tab.Screen name="Mes tchats" component={persoTchats} />
-      <Tab.Screen name="Mes visites" component={persoVisites} />
-      <Tab.Screen name="Mon profil" component={persoProfil} />
+      <Tab.Screen name="Home" component={PersoHome} />
+      <Tab.Screen name="Mes tchats" component={PersoTchats} />
+      <Tab.Screen name="Mes visites" component={PersoVisites} />
+      <Tab.Screen name="Mon profil" component={PersoProfil} />
 
       </View>
     </Tab.Navigator>
