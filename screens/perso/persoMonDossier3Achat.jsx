@@ -74,15 +74,22 @@ export default function PersoMonDossier3Achat({ navigation }) {
     // Enregistrez 'budget' dans la base de données ici.
   };
 
-  //navigation en cliquant sur "Etape suivante":
+  //navigations en cliquant sur "Etape suivante", ou 1/3 et 2/3:
   const handleEtapeSuivante = () => {
     navigation.navigate("PersoHome");
   };
-  
+  const handlePage1 = () => {
+    navigation.navigate("PersoMonDossier1");
+  };
+  const handlePage2 = () => {
+    navigation.navigate("PersoMonDossier2Achat");
+  };
+
   //mise en place des options pour les switchs selectors :
   const [valuePrimo, setValuePrimo] = useState(false);
   const [valueTypeInvest, setValueTypeInvest] = useState("principale");
-  const [valueTypeFinancement, setValueTypeFinancement] =useState("pretbancaire");
+  const [valueTypeFinancement, setValueTypeFinancement] =
+    useState("pretbancaire");
   const [valuePreAccord, setValuePreAccord] = useState(false);
 
   //mise en place des options pour le switch selector du primo accédant :
@@ -111,13 +118,6 @@ export default function PersoMonDossier3Achat({ navigation }) {
     { label: "Oui", value: true },
   ];
 
-  console.log(
-    valuePrimo,
-    valueTypeInvest,
-    valueTypeFinancement,
-    valuePreAccord
-  );
-
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -140,12 +140,18 @@ export default function PersoMonDossier3Achat({ navigation }) {
           <Text style={styles.title}> Mon Dossier</Text>
 
           <View style={styles.pageContainer}>
-            <View style={styles.pageNumber}>
+            <TouchableOpacity
+              onPress={() => handlePage1()}
+              style={styles.pageNumber}
+            >
               <Text>1/3</Text>
-            </View>
-            <View style={styles.pageNumber}>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => handlePage2()}
+              style={styles.pageNumber}
+            >
               <Text>2/3</Text>
-            </View>
+            </TouchableOpacity>
             <View style={styles.pageNumberActive}>
               <Text>3/3</Text>
             </View>
