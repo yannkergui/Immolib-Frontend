@@ -188,13 +188,12 @@ const TabNavigatorPerso = () => {
 };
 
 
-
-
 export default function App() {
   return (
     <Provider store={store}>
         <NavigationContainer>
-            <Stack.Screen name="PageTests" component={ProPreferences} />
+        <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
+            <Stack.Screen name="PageTests" component={PageTests} />
             <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
             <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
             <Stack.Screen name="ConnectionScreen" component={ConnectionScreen} />
@@ -206,7 +205,6 @@ export default function App() {
             <Stack.Screen name="PersoMonDossier3Achat" component={PersoMonDossier3Achat} />
             <Stack.Screen name="PersoProfil" component={PersoProfil} />
             <Stack.Screen name="PersoVisites" component={PersoVisites} />
-            <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
             <Stack.Screen name="MonDossierpro" component={MonDossierPro} />
             <Stack.Screen name="ProAnnonces" component={ProAnnonces} />
             <Stack.Screen name="ProClients" component={ProClients} />
@@ -216,7 +214,6 @@ export default function App() {
             <Stack.Screen name="ProTchats" component={ProTchats} />
             <Stack.Screen name="ProVisites" component={ProVisites} />
             <Stack.Screen name="FirstScreen" component={FirstScreen} />
-            <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
               <Stack.Screen
               name="TabNavigatorPro"
               component={TabNavigatorPro}
