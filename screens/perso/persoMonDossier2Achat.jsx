@@ -13,15 +13,12 @@ import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import { useState } from "react";
 
 export default function PersoMonDossier2Achat({navigation}) {
+  
   // 3 Etats relatif au bien recherché choisie (utile au changement de couleur du choix et au push en BDD)
 
   const [maisonChoice, setChoice] = useState(false);
   const [appartementChoice, setAppartementChoice] = useState(false);
   const [autreChoice, setAutreChoice] = useState(false);
-
-  //  Etat relatif à la surface minimum (utile au push en BDD)
-
-  const [nbPiece, setNbPiece] = useState(0);
 
   // fonctions relatives au type de bien (changement du booléens et du style)
 
@@ -80,7 +77,7 @@ export default function PersoMonDossier2Achat({navigation}) {
 
 //navigation en cliquant sur "Etape suivante":
 const handleEtapeSuivante =()=>{
-  navigation.navigate('persoMonDossier3Achat');
+  navigation.navigate('PersoMonDossier3Achat');
 }
 
 
