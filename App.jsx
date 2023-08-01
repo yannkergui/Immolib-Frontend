@@ -167,7 +167,7 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
-            <Stack.Screen name="PageTests" component={ConnectionScreen} />
+            <Stack.Screen name="PageTests" component={PersoMonDossier2Achat} />
             <Stack.Screen
             name="TabNavigatorPro"
             component={TabNavigatorPro}
