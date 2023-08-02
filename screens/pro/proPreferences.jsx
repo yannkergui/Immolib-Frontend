@@ -69,7 +69,7 @@ function changePhoto (){}
           <Text style={styles.title}>Mon profil</Text>
           <View style = {styles.accredit}>
                   <View style = {styles.accreditImage}>
-                    <Image source={{ uri : '.../assets/welcomepage.jpg' }} style={styles.photo}/>
+                    <Image source={{ uri : '../../../assets/welcomepage.jpg' }} style={styles.photo}/>
                     <TouchableOpacity
                       style={styles.buttonSelected}
                       onPress={() => changePhoto()}

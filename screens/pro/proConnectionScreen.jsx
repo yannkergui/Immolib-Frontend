@@ -1,11 +1,12 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput, KeyboardAvoidingView,Image } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput, KeyboardAvoidingView,Image, ScrollView, Keyboard, TouchableWithoutFeedback } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import { useDispatch } from 'react-redux';
 import {proDatas} from '../../reducers/pro';
 
-const myURL = '192.168.10.184:3000'
+
+const myURL = '192.168.10.155:3000'
 
 export default function ProConnectionScreen({ navigation }) {
 
@@ -18,9 +19,10 @@ export default function ProConnectionScreen({ navigation }) {
    const [raisonSociale, setRaisonSociale]=useState('');
    const [siret, setSiret]=useState(null);
 
-   const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  //desactivation du regex pour les tests /^(?:(?:(?:\+|00)33\s?|0)[67]\s?\d{8})$/
-   const TEL_REGEX = /06[0-9]{1}/
+  //desactivation du regex réel pour les tests /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+   const EMAIL_REGEX = /[a-z]/
+  //desactivation du regex réel pour les tests /^(?:(?:(?:\+|00)33\s?|0)[67]\s?\d{8})$/
+   const TEL_REGEX = /[0-9]{1}/
    const [emailError, setEmailError] = useState(false);
    const [telError, setTelError] = useState(false);
    // Etat pour gérer les champs vides
@@ -42,7 +44,8 @@ export default function ProConnectionScreen({ navigation }) {
     // Si correspondance avec la REGEXP EMAIL
     if (EMAIL_REGEX.test(email) && mdp) {
       //Récupération des données de l'utilisateur de la BDD
-      fetch('http://192.168.10.184:3000/pros/signin', {
+      fetch(`http://${myURL}/pros/signin`, {
+        
       method : 'POST',
       headers : {'Content-Type' : 'application/json'},
       body : JSON.stringify({email : email, motDePasse: mdp})
@@ -50,15 +53,16 @@ export default function ProConnectionScreen({ navigation }) {
       .then(response => response.json())
       .then(data => {
         if (data.result) {
-          console.log('data récupéré : ', data),
-          dispatch(userDatas({prenom : data.data.prenom,
-                            nom : data.data.nom, 
-                            email : data.data.email, 
-                            tel : data.data.tel,
-                            token : data.data.token,
-                            motDePasse : data.data.motDePasse}));
+          //console.log('data récupéré : ', data),
+        let { prenom, nom, email, tel, token, motDePasse } = data.pro
+          dispatch(userDatas({prenom : prenom,
+                            nom : nom, 
+                            email : email, 
+                            tel : tel,
+                            token : token,
+                            motDePasse : motDePasse}));
           setModalConnexion(false);
-          navigation.navigate('TabNavigatorPerso', { screen: 'Home' });
+          navigation.navigate('ProHome');
           setEmail('');
           setEmailError(false);
         }
@@ -90,18 +94,19 @@ export default function ProConnectionScreen({ navigation }) {
             .then(response => response.json())
             .then(data => {
               if (data.result) {
-                let pro=data.pro
+                let {raisonSociale, siret, prenom, nom, email, tel, token, motDePasse} = data.pro
                 dispatch(proDatas({
-                  raisonSociale : pro.raisonSociale,
-                  siret : pro.siret,
-                  prenom : pro.prenom,
-                  nom : pro.nom, 
-                  email : pro.email, 
-                  tel : pro.tel,
-                  token : data.data.token,
-                  motDePasse : data.data.motDePasse}));
+                  raisonSociale : raisonSociale,
+                  siret : siret,
+                  prenom : prenom,
+                  nom : nom, 
+                  email : email, 
+                  tel : tel,
+                  token : token,
+                  motDePasse : motDePasse}));
+                  console.log("test2");
                 setModalInscription(false);
-                navigation.navigate('TabNavigatorPerso', { screen: 'Home' });
+                navigation.navigate('ProHome');
                 setEmail('');
                 setEmailError(false);
                 setTelError(false);
@@ -157,59 +162,67 @@ export default function ProConnectionScreen({ navigation }) {
                     </TouchableOpacity>
                     <View style={styles.modalView}>
                         <Modal style={styles.modalConnect} visible={modalConnexion} animationType="fade" transparent>
-                            <View style={styles.centeredView}>                  
-                                <View style={styles.modalContainer}>
-                                  <View style={styles.inputsEtDelete}>
-                                    <View style={styles.inputs}>
-                                          <TextInput placeholder="email" style={styles.inputModal} onChangeText={(value) => setEmail(value)} value={email}/>
-                                          <TextInput placeholder="Mot de passe" style={styles.inputModal} onChangeText={(value) => setMdp(value)} value={mdp}/>  
-                                                
+                          <KeyboardAvoidingView behavior={"padding"} style={styles.container}>
+                            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                                <View style={styles.centeredView}>                  
+                                    <View style={styles.modalContainer}>
+                                      <View style={styles.inputsEtDelete}>
+                                        <View style={styles.inputs}>
+                                              <TextInput placeholder="email" style={styles.inputModal} keyboardType={"email-address"} autoCorrect={false} autoComplete={"email"} autoCapitalize={'none'} onChangeText={(value) => setEmail(value)} value={email}/>
+                                              <TextInput placeholder="Mot de passe" style={styles.inputModal} autoCapitalize={'none'} autoCorrect={false} onChangeText={(value) => setMdp(value)} value={mdp}/>  
+                                                    
+                                          </View>
+                                          <View style={styles.deleteModal}>
+                                              <TouchableOpacity style={styles.btnDeleteModal} onPress={()=>closeModal()}>
+                                                  <Text style={styles.textDelete}>X</Text>
+                                              </TouchableOpacity>
+                                          </View>
                                       </View>
-                                      <View style={styles.deleteModal}>
-                                          <TouchableOpacity style={styles.btnDeleteModal} onPress={()=>closeModal()}>
-                                              <Text style={styles.textDelete}>X</Text>
-                                          </TouchableOpacity>
-                                      </View>
-                                  </View>
-                                    <TouchableOpacity style={styles.btnSeConnecter} onPress={()=>handleConnexionBis()}>
-                                      <Text style={styles.textButton}>Se connecter</Text>
-                                    </TouchableOpacity>
-                                        {emailError && <Text style={styles.error}>Adresse mail invalide ou inéxistante</Text>}
-                                        {telError && <Text style={styles.error}>numéro de téléphone invalide</Text>}
-                                        {errorEmpty && <Text style={styles.error}>Tous les champs ne sont pas complétés</Text>}    
+                                        <TouchableOpacity style={styles.btnSeConnecter} onPress={()=>handleConnexionBis()}>
+                                          <Text style={styles.textButton}>Se connecter</Text>
+                                        </TouchableOpacity>
+                                            {emailError && <Text style={styles.error}>Adresse mail invalide ou inéxistante</Text>}
+                                            {telError && <Text style={styles.error}>numéro de téléphone invalide</Text>}
+                                            {errorEmpty && <Text style={styles.error}>Tous les champs ne sont pas complétés</Text>}    
+                                    </View>
                                 </View>
-                            </View>
+                              </TouchableWithoutFeedback>
+                            </KeyboardAvoidingView>
                         </Modal>  
                     </View>
 
-                   <Modal style={styles.modalInscription} visible={modalInscription} animationType="fade" transparent>
-                        <View style={styles.centeredView}>
-                            <View style={styles.modalContainer}>
-                              <View style={styles.inputsEtDelete}>
-                                <View style={styles.inputs}>
-                                    <TextInput placeholder="Raison sociale" style={styles.inputModal} onChangeText={(value) => setRaisonSociale(value)} value={raisonSociale}/>
-                                    <TextInput placeholder="n° Siret" style={styles.inputModal} onChangeText={(value) => setSiret(value)} value={siret}/>
-                                    <TextInput placeholder="Prénom" style={styles.inputModal} autoComplete={"given-name"} onChangeText={(value) => setPrenom(value)} value={prenom}/>
-                                    <TextInput placeholder="nom" style={styles.inputModal} autoComplete={"family-name"} onChangeText={(value) => setNom(value)} value={nom}/>
-                                    <TextInput placeholder="email" style={styles.inputModal} keyboardType={"email-address"} autoCorrect={false} autoComplete={"email"} autoCapitalize={'none'} onChangeText={(value) => setEmail(value)} value={email}/>
-                                    <TextInput placeholder="Mot de passe" style={styles.inputModal} autoCapitalize={'none'} autoCorrect={false} onChangeText={(value) => setMdp(value)} value={mdp}/> 
-                                    <TextInput placeholder="numéro de téléphone" style={styles.inputModal} keyboardType={"phone-pad"} onChangeText={(value) => setTel(value)} value={tel}/>           
+                        <Modal style={styles.modalInscription} visible={modalInscription} animationType="fade" transparent>
+                          <KeyboardAvoidingView behavior={"padding"} style={styles.container}>
+                            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                          <View style={styles.centeredView}>
+                              <View style={styles.modalContainer}>
+                                <View style={styles.inputsEtDelete}>
+                                  <View style={styles.inputs}>
+                                      <TextInput placeholder="Raison sociale" style={styles.inputModal} onChangeText={(value) => setRaisonSociale(value)} value={raisonSociale}/>
+                                      <TextInput placeholder="n° Siret" style={styles.inputModal} onChangeText={(value) => setSiret(value)} value={siret}/>
+                                      <TextInput placeholder="Prénom" style={styles.inputModal} autoComplete={"given-name"} onChangeText={(value) => setPrenom(value)} value={prenom}/>
+                                      <TextInput placeholder="nom" style={styles.inputModal} autoComplete={"family-name"} onChangeText={(value) => setNom(value)} value={nom}/>
+                                      <TextInput placeholder="email" style={styles.inputModal} keyboardType={"email-address"} autoCorrect={false} autoComplete={"email"} autoCapitalize={'none'} onChangeText={(value) => setEmail(value)} value={email}/>
+                                      <TextInput placeholder="Mot de passe" style={styles.inputModal} autoCapitalize={'none'} autoCorrect={false} onChangeText={(value) => setMdp(value)} value={mdp}/> 
+                                      <TextInput placeholder="numéro de téléphone" style={styles.inputModal} keyboardType={"phone-pad"} onChangeText={(value) => setTel(value)} value={tel}/>           
+                                  </View>
+                                  <View style={styles.deleteModal}>
+                                      <TouchableOpacity  onPress={()=>closeModal()}>
+                                          <Text style={styles.textDelete}>X</Text>
+                                      </TouchableOpacity>
+                                  </View>
                                 </View>
-                                <View style={styles.deleteModal}>
-                                    <TouchableOpacity  onPress={()=>closeModal()}>
-                                        <Text style={styles.textDelete}>X</Text>
-                                    </TouchableOpacity>
-                                </View>
+                                  <TouchableOpacity style={styles.btnInscription} onPress={()=>handleInscriptionBis()}>
+                                        <Text style={styles.textButton}>S'inscrire</Text>
+                                  </TouchableOpacity> 
+                                    {emailError && <Text style={styles.error}>Adresse mail invalide</Text>} 
+                                    {telError && <Text style={styles.error}>numéro de téléphone invalide</Text>}
+                                    {errorEmpty && <Text style={styles.error}>Tous les champs ne sont pas complétés</Text>}   
                               </View>
-                                <TouchableOpacity style={styles.btnInscription} onPress={()=>handleInscriptionBis()}>
-                                      <Text style={styles.textButton}>S'inscrire</Text>
-                                </TouchableOpacity> 
-                                  {emailError && <Text style={styles.error}>Adresse mail invalide</Text>} 
-                                  {telError && <Text style={styles.error}>numéro de téléphone invalide</Text>}
-                                  {errorEmpty && <Text style={styles.error}>Tous les champs ne sont pas complétés</Text>}   
-                            </View>
-                        </View>
-                   </Modal>
+                          </View>
+                            </TouchableWithoutFeedback>
+                          </KeyboardAvoidingView>
+                        </Modal>
                 </View>
           <StatusBar style="auto" />
         </View>
