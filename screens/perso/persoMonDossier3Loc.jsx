@@ -27,7 +27,13 @@ export default function PersoMonDossier3Loc() {
     { label: "CDD", value: "cdd" },
   ];
 
- 
+  const [ficheDePaie1, setFicheDePaie1] = useState("");
+  const [ficheDePaie2, setFicheDePaie2] = useState("");
+  const [ficheDePaie3, setFicheDePaie3] = useState("");
+  const [avisImpot, setAvisImpot] = useState("");
+  const [bilan, setBilan] = useState("");
+  const [Autre, setAutre] = useState("");
+
 
 
   // fonction relative à l'upload des fichiers au clique sur l'icone 
@@ -36,13 +42,15 @@ export default function PersoMonDossier3Loc() {
     try {
       const result = await DocumentPicker.getDocumentAsync({
         type: 'image/*',
+        
       });
-
+      
       if (result.type === 'success') {
         // Le fichier a été sélectionné avec succès
         console.log('Chemin du fichier sélectionné : ', result.uri);
       } else {
         // L'utilisateur a annulé la sélection du fichier
+        console.log(result)
         console.log('Sélection annulée');
       }
     } catch (err) {
@@ -113,8 +121,52 @@ export default function PersoMonDossier3Loc() {
           </View>
           <View style={styles.lineContainer}>
             <Text>Je charge mes documents</Text>
+          </View>
+          <View style={styles.lineContainer}>
+            <Text>Fiche de paie 1</Text>
             <TouchableOpacity onPress={handleUploadPhoto}>
-              <FontAwesome name="cloud-upload" size={50} color="#ffffff" />
+              <FontAwesome name="cloud-upload" size={30} color="#ffffff" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.lineContainer}>
+            <Text>Fiche de paie 2</Text>
+            <TouchableOpacity onPress={handleUploadPhoto}>
+              <FontAwesome name="cloud-upload" size={30} color="#ffffff" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.lineContainer}>
+            <Text>Fiche de paie 3</Text>
+            <TouchableOpacity onPress={handleUploadPhoto}>
+              <FontAwesome name="cloud-upload" size={30} color="#ffffff" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.lineContainer}>
+            <Text>Dernier avis d'imposition</Text>
+            <TouchableOpacity onPress={handleUploadPhoto}>
+              <FontAwesome name="cloud-upload" size={30} color="#ffffff" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.lineContainer}>
+            <Text>Bilans</Text>
+            <TouchableOpacity onPress={handleUploadPhoto}>
+              <FontAwesome name="cloud-upload" size={30} color="#ffffff" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.lineContainer}>
+            <Text>Autre document</Text>
+            <TouchableOpacity onPress={handleUploadPhoto}>
+              <FontAwesome name="cloud-upload" size={30} color="#ffffff" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.nextBtnContainer}>
+            <TouchableOpacity style={styles.skip}>
+              <Text>Passer cette étape</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.next}
+              onPress={() => handleEtapeSuivante()}
+            >
+              <Text>Etape suivante</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -139,7 +191,7 @@ const styles = StyleSheet.create({
     height: "8%",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 20,
+    marginTop: 10,
   },
 
   smallTextContainer: {
@@ -159,7 +211,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontStyle: "normal",
     fontWeight: "600",
-    marginTop: "7%",
+    marginTop: 10,
   },
 
   pageNumberActive: {
@@ -265,5 +317,41 @@ const styles = StyleSheet.create({
   },
   SwitchSelector: {
     width: "50%",
+  },
+
+  nextBtnContainer: {
+    flexDirection: "row",
+    borderColor: "#47AFA5",
+    borderWidth: 2,
+    borderRadius: 10,
+    width: "80%",
+    height: "10%",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: 10,
+  },
+
+  skip: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: "40%",
+    height: "80%",
+    backgroundColor: "transparent",
+    borderColor: "white",
+    borderWidth: 1,
+    borderRadius: 10,
+    marginRight: 3,
+  },
+
+  next: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: "40%",
+    height: "80%",
+    backgroundColor: "#47AFA5",
+    borderColor: "white",
+    borderWidth: 1,
+    borderRadius: 10,
+    marginRight: 3,
   },
 });
