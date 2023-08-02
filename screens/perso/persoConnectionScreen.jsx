@@ -15,7 +15,7 @@ export default function PersoConnectionScreen({ navigation }) {
    const [tel, setTel]=useState('');
 
    const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-   const TEL_REGEX = /^(?:(?:(?:\+|00)33\s?|0)[67]\s?\d{8})$/
+   const TEL_REGEX = /^(?:(?:(?:\+|00)33\s?|0)[0-9]\s?\d{8})$/
    const [emailError, setEmailError] = useState(false);
    const [telError, setTelError] = useState(false);
    // Etat pour gérer les champs vides
@@ -32,12 +32,15 @@ export default function PersoConnectionScreen({ navigation }) {
     setModalConnexion(true);
   }
 
+  // Adresse IP à modifier si besoin
+  const IPAdress='192.168.10.188';
+
   // 2eme boutton "Se connecter" qui redirige vers la homePage
   const handleConnexionBis = () => {
     // Si correspondance avec la REXEXP EMAIL
     if (EMAIL_REGEX.test(email) && mdp) {
       //Récupération des données de l'utilisateur de la BDD
-      fetch('http://192.168.10.171:3000/users/signin', {
+      fetch(`http://${IPAdress}:3000/users/signin`, {
       method : 'POST',
       headers : {'Content-Type' : 'application/json'},
       body : JSON.stringify({email : email, motDePasse: mdp})
@@ -56,6 +59,7 @@ export default function PersoConnectionScreen({ navigation }) {
           navigation.navigate('TabNavigatorPerso', { screen: 'Home' });
           setEmail('');
           setEmailError(false);
+          setMdp('');
         }
       })  
      // Si PAS de correspondances avec la REXEXP EMAIL  
@@ -77,7 +81,7 @@ export default function PersoConnectionScreen({ navigation }) {
     // 2eme bouton "S'inscrire" qui redirige vers la homePage
     const handleInscriptionBis = () => {
         if (EMAIL_REGEX.test(email) && TEL_REGEX.test(tel)) {
-          fetch('http://192.168.10.171:3000/users/signup', {
+          fetch(`http://${IPAdress}:3000/users/signup`, {
             method : 'POST',
             headers : {'Content-Type' : 'application/json'},
             body : JSON.stringify({prenom : prenom, nom: nom, email : email, tel : tel, motDePasse: mdp})
@@ -96,6 +100,7 @@ export default function PersoConnectionScreen({ navigation }) {
                 setEmail('');
                 setEmailError(false);
                 setTelError(false);
+                setMdp('');
               } 
             })  
         } else {
@@ -245,7 +250,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: "80%",
-    height: "8%",
+    height: "10%",
     backgroundColor: "#47AFA5",
     borderRadius: 10,
     marginBottom: "15%",
@@ -286,7 +291,7 @@ const styles = StyleSheet.create({
     alignItems : 'center',
   },
   modalContainer : {
-    backgroundColor : 'rgba(255, 255, 255, 0.7)',
+    backgroundColor : 'rgba(255, 255, 255, 0.8)',
     width : '80%',
     padding : 10,
     borderRadius : 10, 
