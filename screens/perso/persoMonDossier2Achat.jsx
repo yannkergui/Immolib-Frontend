@@ -14,7 +14,6 @@ import { useState } from "react";
 import SwitchSelector from "react-native-switch-selector";
 
 export default function PersoMonDossier2Achat({ navigation }) {
-
   //Gestion des inputs qui ne doivent recevoir que des nombres (alors que c'est un TextInput, donc il faut appliquer une Regex) :
   const [monBudget, setMonBudget] = useState(0);
   const [inputSurface, setInputSurface] = useState("");
@@ -61,7 +60,11 @@ export default function PersoMonDossier2Achat({ navigation }) {
   //navigation en cliquant sur "Etape suivante":
   const handleEtapeSuivante = () => {
     navigation.navigate("PersoMonDossier3Achat");
-    
+  };
+
+  const handlePasserCetteEtape = () => {
+    navigation.navigate("PersoMonDossier3Achat");
+    setValueTypeBien("");
   };
 
   return (
@@ -145,7 +148,10 @@ export default function PersoMonDossier2Achat({ navigation }) {
             </View>
           </View>
           <View style={styles.nextBtnContainer}>
-            <TouchableOpacity style={styles.skip}>
+            <TouchableOpacity
+              style={styles.skip}
+              onPress={() => handlePasserCetteEtape()}
+            >
               <Text style={styles.texteBtn}>Passer cette étape</Text>
             </TouchableOpacity>
             <TouchableOpacity

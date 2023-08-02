@@ -53,12 +53,21 @@ export default function PersoMonDossier3Achat({ navigation }) {
   const handleEtapeSuivante = () => {
     navigation.navigate("PersoHome");
   };
-  const handlePage1 = () => {
-    navigation.navigate("PersoMonDossier1");
+
+  const handlePasserCetteEtape = () => {
+    navigation.navigate("PersoHome");
+    setValueTypeInvest("");
+    setValueTypeFinancement(""); 
   };
-  const handlePage2 = () => {
-    navigation.navigate("PersoMonDossier2Achat");
-  };
+
+  // à voir si nous laissons la possibilité à l'utilisateur de revenir en arrière dans le tunnel de complétude (à duscuter)
+
+  // const handlePage1 = () => {
+  //   navigation.navigate("PersoMonDossier1");
+  // };
+  // const handlePage2 = () => {
+  //   navigation.navigate("PersoMonDossier2Achat");
+  // };
 
   //mise en place des options pour les switchs selectors :
   const [valuePrimo, setValuePrimo] = useState(false);
@@ -115,13 +124,13 @@ export default function PersoMonDossier3Achat({ navigation }) {
 
           <View style={styles.pageContainer}>
             <TouchableOpacity
-              onPress={() => handlePage1()}
+              // onPress={() => handlePage1()}
               style={styles.pageNumber}
             >
               <Text>1/3</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => handlePage2()}
+              // onPress={() => handlePage2()}
               style={styles.pageNumber}
             >
               <Text>2/3</Text>
@@ -197,7 +206,8 @@ export default function PersoMonDossier3Achat({ navigation }) {
             </View>
           </View>
           <View style={styles.nextBtnContainer}>
-            <TouchableOpacity style={styles.skip}>
+            <TouchableOpacity style={styles.skip}
+            onPress={() => handlePasserCetteEtape()}>
               <Text>Passer cette étape</Text>
             </TouchableOpacity>
             <TouchableOpacity
