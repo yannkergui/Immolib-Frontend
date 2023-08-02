@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput, KeyboardAvoidingView,Image } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput, KeyboardAvoidingView,Image, Keyboard, TouchableWithoutFeedback } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import { useDispatch } from 'react-redux';
@@ -14,8 +14,11 @@ export default function PersoConnectionScreen({ navigation }) {
    const [nom, setNom]=useState('');
    const [tel, setTel]=useState('');
 
-   const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-   const TEL_REGEX = /^(?:(?:(?:\+|00)33\s?|0)[0-9]\s?\d{8})$/
+   //désactivation du regex réel pour les tests /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+   const EMAIL_REGEX = /[a-z]/
+  //désactivation du regex réel pour les tests /^(?:(?:(?:\+|00)33\s?|0)[0-9]\s?\d{8})$/
+   const TEL_REGEX = /[0-9]{1}/
+
    const [emailError, setEmailError] = useState(false);
    const [telError, setTelError] = useState(false);
    // Etat pour gérer les champs vides
@@ -33,14 +36,14 @@ export default function PersoConnectionScreen({ navigation }) {
   }
 
   // Adresse IP à modifier si besoin
-  const IPAdress='192.168.10.188';
+  const myIPAdress='192.168.10.188';
 
   // 2eme boutton "Se connecter" qui redirige vers la homePage
   const handleConnexionBis = () => {
-    // Si correspondance avec la REXEXP EMAIL
+    // Si correspondance avec la REGEX EMAIL
     if (EMAIL_REGEX.test(email) && mdp) {
       //Récupération des données de l'utilisateur de la BDD
-      fetch(`http://${IPAdress}:3000/users/signin`, {
+      fetch(`http://${myIPAdress}:3000/users/signin`, {
       method : 'POST',
       headers : {'Content-Type' : 'application/json'},
       body : JSON.stringify({email : email, motDePasse: mdp})
@@ -62,7 +65,7 @@ export default function PersoConnectionScreen({ navigation }) {
           setMdp('');
         }
       })  
-     // Si PAS de correspondances avec la REXEXP EMAIL  
+     // Si PAS de correspondances avec la REGEX EMAIL  
     } else {
       if (!EMAIL_REGEX.test(email))   {
         setEmailError(true);
@@ -81,7 +84,7 @@ export default function PersoConnectionScreen({ navigation }) {
     // 2eme bouton "S'inscrire" qui redirige vers la homePage
     const handleInscriptionBis = () => {
         if (EMAIL_REGEX.test(email) && TEL_REGEX.test(tel)) {
-          fetch(`http://${IPAdress}:3000/users/signup`, {
+          fetch(`http://${myIPAdress}:3000/users/signup`, {
             method : 'POST',
             headers : {'Content-Type' : 'application/json'},
             body : JSON.stringify({prenom : prenom, nom: nom, email : email, tel : tel, motDePasse: mdp})
@@ -137,56 +140,62 @@ export default function PersoConnectionScreen({ navigation }) {
         end={{ x: 1, y: 1 }} // End point of the gradient
         style={styles.background}
       >    
-        <View style={styles.container}>  
-                <Image style={styles.image} source={require('../../assets/IMMOLIB.png')} />       
-                <Text style={styles.text}>Programme ta visite en toute simplicité pour visiter un bien </Text>
-                <View style={styles.btnContainer}>
-                    <TouchableOpacity style={styles.button} onPress={()=>handleConnexion()}>
-                        <Text style={styles.textButton}>Se connecter</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={()=>handleInscription()}>
-                        <Text style={styles.textButton}>S'inscrire</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button}>
-                        <Text style={styles.textButton}>Poursuivre sans inscription</Text>
-                    </TouchableOpacity>
-                    <View style={styles.modalView}>
-                        <Modal style={styles.modalConnect} visible={modalConnexion} animationType="fade" transparent>
-                            <View style={styles.centeredView}>                  
-                                <View style={styles.modalContainer}>
-                                  <View style={styles.inputsEtDelete}>
-                                    <View style={styles.inputs}>
-                                          <TextInput placeholder="email" style={styles.inputModal} onChangeText={(value) => setEmail(value)} value={email}/>
-                                          <TextInput placeholder="Mot de passe" style={styles.inputModal} onChangeText={(value) => setMdp(value)} value={mdp}/>  
-                                                
-                                      </View>
-                                      <View style={styles.deleteModal}>
-                                          <TouchableOpacity style={styles.btnDeleteModal} onPress={()=>closeModal()}>
-                                              <Text style={styles.textDelete}>X</Text>
-                                          </TouchableOpacity>
-                                      </View>
-                                  </View>
-                                    <TouchableOpacity style={styles.btnSeConnecter} onPress={()=>handleConnexionBis()}>
-                                      <Text style={styles.textButton}>Se connecter</Text>
-                                    </TouchableOpacity>
-                                        {emailError && <Text style={styles.error}>Adresse mail invalide ou inéxistante</Text>}
-                                        {telError && <Text style={styles.error}>numéro de téléphone invalide</Text>}
-                                        {errorEmpty && <Text style={styles.error}>Tous les champs ne sont pas complétés</Text>}    
-                                </View>
-                            </View>
-                        </Modal>  
-                    </View>
+          <View style={styles.container}>  
+              <Image style={styles.image} source={require('../../assets/IMMOLIB.png')} />       
+              <Text style={styles.text}>Programme ta visite en toute simplicité pour visiter un bien </Text>
+              <View style={styles.btnContainer}>
 
-                   <Modal style={styles.modalInscription} visible={modalInscription} animationType="fade" transparent>
+                  <TouchableOpacity style={styles.button} onPress={()=>handleConnexion()}>
+                      <Text style={styles.textButton}>Se connecter</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.button} onPress={()=>handleInscription()}>
+                      <Text style={styles.textButton}>S'inscrire</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.button}>
+                      <Text style={styles.textButton}>Poursuivre sans inscription</Text>
+                  </TouchableOpacity>
+
+                  <Modal style={styles.modalConnect} visible={modalConnexion} animationType="fade" transparent>
+                    <KeyboardAvoidingView behavior={"padding"} style={styles.container}>
+                        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                          <View style={styles.centeredView}>                  
+                              <View style={styles.modalContainer}>
+                                <View style={styles.inputsEtDelete}>
+                                  <View style={styles.inputs}>
+                                        <TextInput placeholder="email" style={styles.inputModal} keyboardType={"email-address"} autoCorrect={false} autoComplete={"email"} autoCapitalize={'none'} onChangeText={(value) => setEmail(value)} value={email}/>
+                                        <TextInput placeholder="Mot de passe" style={styles.inputModal} autoCapitalize={'none'} autoCorrect={false} onChangeText={(value) => setMdp(value)} value={mdp}/>  
+                                              
+                                  </View>
+                                  <View style={styles.deleteModal}>
+                                        <TouchableOpacity style={styles.btnDeleteModal} onPress={()=>closeModal()}>
+                                            <Text style={styles.textDelete}>X</Text>
+                                        </TouchableOpacity>
+                                  </View>
+                                </View>
+                                <TouchableOpacity style={styles.btnSeConnecter} onPress={()=>handleConnexionBis()}>
+                                  <Text style={styles.textButton}>Se connecter</Text>
+                                </TouchableOpacity>
+                                      {emailError && <Text style={styles.error}>Adresse mail invalide ou inéxistante</Text>}
+                                      {telError && <Text style={styles.error}>numéro de téléphone invalide</Text>}
+                                      {errorEmpty && <Text style={styles.error}>Tous les champs ne sont pas complétés</Text>}    
+                              </View>
+                          </View>
+                        </TouchableWithoutFeedback>
+                      </KeyboardAvoidingView>
+                  </Modal>
+
+                  <Modal style={styles.modalInscription} visible={modalInscription} animationType="fade" transparent>
+                    <KeyboardAvoidingView behavior={"padding"} style={styles.container}>
+                      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
                         <View style={styles.centeredView}>
                             <View style={styles.modalContainer}>
                               <View style={styles.inputsEtDelete}>
                                 <View style={styles.inputs}>
-                                    <TextInput placeholder="Prénom" style={styles.inputModal} onChangeText={(value) => setPrenom(value)} value={prenom}/>
-                                    <TextInput placeholder="nom" style={styles.inputModal} onChangeText={(value) => setNom(value)} value={nom}/>
-                                    <TextInput placeholder="email" style={styles.inputModal} onChangeText={(value) => setEmail(value)} value={email}/>
-                                    <TextInput placeholder="Mot de passe" style={styles.inputModal} onChangeText={(value) => setMdp(value)} value={mdp}/> 
-                                    <TextInput placeholder="numéro de téléphone" style={styles.inputModal} onChangeText={(value) => setTel(value)} value={tel}/>           
+                                    <TextInput placeholder="Prénom" style={styles.inputModal}  autoComplete={"given-name"} onChangeText={(value) => setPrenom(value)} value={prenom}/>
+                                    <TextInput placeholder="nom" style={styles.inputModal} autoComplete={"family-name"} onChangeText={(value) => setNom(value)} value={nom}/>
+                                    <TextInput placeholder="email" style={styles.inputModal} keyboardType={"email-address"} autoCorrect={false} autoComplete={"email"} autoCapitalize={'none'} onChangeText={(value) => setEmail(value)} value={email}/>
+                                    <TextInput placeholder="Mot de passe" style={styles.inputModal} autoCapitalize={'none'} autoCorrect={false} onChangeText={(value) => setMdp(value)} value={mdp}/> 
+                                    <TextInput placeholder="numéro de téléphone" style={styles.inputModal} keyboardType={"phone-pad"} onChangeText={(value) => setTel(value)} value={tel}/>           
                                 </View>
                                 <View style={styles.deleteModal}>
                                     <TouchableOpacity  onPress={()=>closeModal()}>
@@ -202,10 +211,12 @@ export default function PersoConnectionScreen({ navigation }) {
                                   {errorEmpty && <Text style={styles.error}>Tous les champs ne sont pas complétés</Text>}   
                             </View>
                         </View>
-                   </Modal>
-                </View>
-          <StatusBar style="auto" />
-        </View>
+                      </TouchableWithoutFeedback>
+                    </KeyboardAvoidingView>
+                  </Modal>
+
+              </View>
+          </View>
       </LinearGradient>
     </View>
   </KeyboardAvoidingView>
