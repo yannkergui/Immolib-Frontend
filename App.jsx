@@ -197,7 +197,6 @@ export default function App() {
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
               <Stack.Screen name="test" component={PersoConnectionScreen} />
               <Stack.Screen name="FirstScreen" component={FirstScreen} />
-              <Stack.Screen name="PersoMonDossier2Achat" component={PersoMonDossier2Achat} />
               <Stack.Screen
                 name="TabNavigatorPro"
                 component={TabNavigatorPro}
