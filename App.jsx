@@ -184,7 +184,7 @@ const TabNavigatorPerso = () => {
       })}
     >
       
-      <Tab.Screen name="Home" component={PersoHome} />
+      <Tab.Screen name="PersoHome" component={PersoHome} />
       <Tab.Screen name="Mes tchats" component={PersoTchats} />
       <Tab.Screen name="Mes visites" component={PersoVisites} />
       <Tab.Screen name="Mon profil" component={PersoProfil} />
@@ -197,9 +197,10 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
-              <Stack.Screen name="test" component={ProConnectionScreen} />
+              <Stack.Screen name="test" component={PersoMonDossier2Achat} />
               <Stack.Screen name="FirstScreen" component={FirstScreen} />
-              <Stack.Screen name="PersoMonDossier2Achat" component={PersoMonDossier2Achat} />
+              
+              <Stack.Screen name="FirstScreen" component={FirstScreen} />
               <Stack.Screen
                 name="TabNavigatorPro"
                 component={TabNavigatorPro}

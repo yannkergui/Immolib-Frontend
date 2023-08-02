@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
  value: { raisonSociale : '',
-          Siret: null,
+          siret: null,
           prenom : '',
           nom: '',
           email: '',
