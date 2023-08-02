@@ -90,7 +90,7 @@ export default function ProConnectionScreen({ navigation }) {
             .then(response => response.json())
             .then(data => {
               if (data.result) {
-                let pro={data.pro}
+                let pro=data.pro
                 dispatch(proDatas({
                   raisonSociale : pro.raisonSociale,
                   siret : pro.siret,
