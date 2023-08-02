@@ -31,7 +31,11 @@ export default function PersoMonDossier1({ navigation }) {
     }
   };
 
-  console.log(recherche)
+  // Boutton passer cette étape pour le moment, pour des sujet de mis à jour sur les creens suivants (a discuter)
+
+  // const handlePasserCetteEtape = () => {
+  //   navigation.navigate("PersoHome")
+  // };
 
   return (
     <View style={styles.container}>
@@ -89,9 +93,13 @@ export default function PersoMonDossier1({ navigation }) {
           />
         </View>
         <View style={styles.nextBtnContainer}>
-          <TouchableOpacity style={styles.skip}>
+
+{/* Boutton passer cette étape pour le moment, pour des sujet de mis à jour sur les creens suivants (a discuter) */}
+
+          {/* <TouchableOpacity style={styles.skip}
+          onPress={() => handlePasserCetteEtape()}>
             <Text>Passer cette étape</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity
             style={styles.next}
             onPress={() => handleEtapeSuivante()}

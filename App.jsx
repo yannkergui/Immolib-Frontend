@@ -37,11 +37,12 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Provider } from "react-redux";
 import user from "./reducers/user";
 import pro from "./reducers/pro";
+import monClient from "./reducers/monClient";
 
 import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
-  reducer: { user, pro },
+  reducer: { user, pro, monClient },
 });
 
 const TabNavigatorPro = () => {
@@ -195,7 +196,7 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
-              <Stack.Screen name="test" component={PersoConnectionScreen} />
+              <Stack.Screen name="test" component={FicheClient} />
               <Stack.Screen name="FirstScreen" component={FirstScreen} />
               <Stack.Screen
                 name="TabNavigatorPro"

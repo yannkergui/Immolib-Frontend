@@ -10,11 +10,11 @@ import { useDispatch, useSelector } from 'react-redux';
 export default function FicheClient({navigation}) {
 
   const [switchValue, setSwitchValue] = useState(false);
-  const user = useSelector((state) => state.userData.value);
+  const user = useSelector((state) => state.monClient.value);
 
-  const handleSubmit = () => {
-    navigation.navigate('FirstScreen')
-  }
+  // const handleSubmit = () => {
+  //   navigation.navigate('ProAnnonces')
+  // }
 
     const [fontsLoaded] = useFonts({
         Nunitobold: require('../../assets/fonts/Nunito/static/Nunito-Bold.ttf'),

@@ -53,6 +53,13 @@ export default function PersoMonDossier2Loc({ navigation }) {
     navigation.navigate("PersoMonDossier3Loc");
   };
 
+  const handlePasserCetteEtape = () => {
+    navigation.navigate("PersoMonDossier3Loc")
+    setBienRecherche("")
+    setBienMeuble("")
+  };
+  
+
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -154,7 +161,8 @@ export default function PersoMonDossier2Loc({ navigation }) {
             </View>
           </View>
           <View style={styles.nextBtnContainer}>
-            <TouchableOpacity style={styles.skip}>
+            <TouchableOpacity style={styles.skip}
+            onPress={() => handlePasserCetteEtape()}>
               <Text>Passer cette étape</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -253,7 +261,7 @@ const styles = StyleSheet.create({
     height: "10%",
     alignItems: "center",
     justifyContent: "space-around",
-    marginTop: 70,
+    marginTop: 30,
   },
 
   skip: {
