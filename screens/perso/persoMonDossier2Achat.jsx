@@ -21,7 +21,7 @@ export default function PersoMonDossier2Achat({ navigation }) {
   const [inputNbPiece, setInputNbPiece] = useState("");
 
   const handleBudgetChange = (text) => {
-    const formattedText = text.replace(/[^0-9]/g, ""); // élimine tous les caractères non numériques
+    // const formattedText = text.replace(/[^0-9]/g, ""); // élimine tous les caractères non numériques
     setInputBudget(formattedText);
   };
 
@@ -103,8 +103,8 @@ export default function PersoMonDossier2Achat({ navigation }) {
               <TextInput
                 style={styles.input}
                 keyboardType="numeric"
+                onChangeText={(value) => setInputBudget(value)}
                 value={inputBudget}
-                onChangeText={handleBudgetChange}
               >
                 <Text>/€</Text>
               </TextInput>
