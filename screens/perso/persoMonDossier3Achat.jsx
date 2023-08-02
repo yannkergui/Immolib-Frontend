@@ -88,8 +88,7 @@ export default function PersoMonDossier3Achat({ navigation }) {
   //mise en place des options pour les switchs selectors :
   const [valuePrimo, setValuePrimo] = useState(false);
   const [valueTypeInvest, setValueTypeInvest] = useState("principale");
-  const [valueTypeFinancement, setValueTypeFinancement] =
-    useState("pretbancaire");
+  const [valueTypeFinancement, setValueTypeFinancement] =useState("pretbancaire");
   const [valuePreAccord, setValuePreAccord] = useState(false);
 
   //mise en place des options pour le switch selector du primo accédant :
