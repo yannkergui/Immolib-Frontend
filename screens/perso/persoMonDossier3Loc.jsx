@@ -21,7 +21,7 @@ export default function PersoMonDossier3Loc() {
 
   const [situationAutre, setSituationAutre] = useState("");
   const [contrat, setContrat] = useState("cdi");
-  
+
   const SwitchContrat = [
     { label: "CDI", value: "cdi" },
     { label: "CDD", value: "cdd" },
@@ -34,28 +34,59 @@ export default function PersoMonDossier3Loc() {
   const [bilan, setBilan] = useState("");
   const [Autre, setAutre] = useState("");
 
+  // fonction relative à l'upload des fichiers au clique sur l'icone
 
+  const UploadFicheDePaie1 = async () => {
+    const result = await DocumentPicker.getDocumentAsync({
+      type: "image/*",
+    });
+    for (let i = 0; i < result.assets.length; i++) {
+      setFicheDePaie1(result.assets[i].uri);
+    }
+  };
 
-  // fonction relative à l'upload des fichiers au clique sur l'icone 
+  const UploadFicheDePaie2 = async () => {
+    const result = await DocumentPicker.getDocumentAsync({
+      type: "image/*",
+    });
+    for (let i = 0; i < result.assets.length; i++) {
+      setFicheDePaie2(result.assets[i].uri);
+    }
+  };
 
-  const handleUploadPhoto = async () => {
-    try {
-      const result = await DocumentPicker.getDocumentAsync({
-        type: 'image/*',
-        
-      });
-      
-      if (result.type === 'success') {
-        // Le fichier a été sélectionné avec succès
-        console.log('Chemin du fichier sélectionné : ', result.uri);
-      } else {
-        // L'utilisateur a annulé la sélection du fichier
-        console.log(result)
-        console.log('Sélection annulée');
-      }
-    } catch (err) {
-      // Une erreur s'est produite lors de la sélection du fichier
-      console.log('Erreur lors de la sélection du fichier : ', err);
+  const UploadFicheDePaie3 = async () => {
+    const result = await DocumentPicker.getDocumentAsync({
+      type: "image/*",
+    });
+    for (let i = 0; i < result.assets.length; i++) {
+      setFicheDePaie3(result.assets[i].uri);
+    }
+  };
+
+  const UploadAvisImpot = async () => {
+    const result = await DocumentPicker.getDocumentAsync({
+      type: "image/*",
+    });
+    for (let i = 0; i < result.assets.length; i++) {
+      setAvisImpot(result.assets[i].uri);
+    }
+  };
+
+  const UploadBilan = async () => {
+    const result = await DocumentPicker.getDocumentAsync({
+      type: "image/*",
+    });
+    for (let i = 0; i < result.assets.length; i++) {
+      setBilan(result.assets[i].uri);
+    }
+  };
+
+  const UploadAutre = async () => {
+    const result = await DocumentPicker.getDocumentAsync({
+      type: "image/*",
+    });
+    for (let i = 0; i < result.assets.length; i++) {
+      setAutre(result.assets[i].uri);
     }
   };
 
@@ -100,17 +131,17 @@ export default function PersoMonDossier3Loc() {
           <View style={styles.lineContainer}>
             <Text>Situation Pro</Text>
             <SwitchSelector
-                options={SwitchContrat}
-                initial={0}
-                onPress={(value) => setContrat(value)}
-                valuePadding={2.5}
-                hasPadding
-                style={styles.SwitchSelector}
-                buttonColor="#47AFA5"
-                buttonMargin={1.5}
-                animationDuration={250}
-                height={45}
-              />
+              options={SwitchContrat}
+              initial={0}
+              onPress={(value) => setContrat(value)}
+              valuePadding={2.5}
+              hasPadding
+              style={styles.SwitchSelector}
+              buttonColor="#47AFA5"
+              buttonMargin={1.5}
+              animationDuration={250}
+              height={45}
+            />
             <TextInput
               style={styles.input}
               keyboardType="numeric"
@@ -124,51 +155,69 @@ export default function PersoMonDossier3Loc() {
           </View>
           <View style={styles.lineContainer}>
             <Text>Fiche de paie 1</Text>
-            <TouchableOpacity onPress={handleUploadPhoto}>
+            {ficheDePaie1 !== "" ? (
+              <FontAwesome name="check" size={30} color="green" />
+            ) : ''}
+            <TouchableOpacity onPress={UploadFicheDePaie1}>
               <FontAwesome name="cloud-upload" size={30} color="#ffffff" />
             </TouchableOpacity>
           </View>
           <View style={styles.lineContainer}>
             <Text>Fiche de paie 2</Text>
-            <TouchableOpacity onPress={handleUploadPhoto}>
+            {ficheDePaie2 !== "" ? (
+              <FontAwesome name="check" size={30} color="green" />
+            ) : ''}
+            <TouchableOpacity onPress={UploadFicheDePaie2}>
               <FontAwesome name="cloud-upload" size={30} color="#ffffff" />
             </TouchableOpacity>
           </View>
           <View style={styles.lineContainer}>
             <Text>Fiche de paie 3</Text>
-            <TouchableOpacity onPress={handleUploadPhoto}>
+            {ficheDePaie3 !== "" ? (
+              <FontAwesome name="check" size={30} color="green" />
+            ) : ''}
+            <TouchableOpacity onPress={UploadFicheDePaie3}>
               <FontAwesome name="cloud-upload" size={30} color="#ffffff" />
             </TouchableOpacity>
           </View>
           <View style={styles.lineContainer}>
             <Text>Dernier avis d'imposition</Text>
-            <TouchableOpacity onPress={handleUploadPhoto}>
+            {avisImpot !== "" ? (
+              <FontAwesome name="check" size={30} color="green" />
+            ) : ''}
+            <TouchableOpacity onPress={UploadAvisImpot}>
               <FontAwesome name="cloud-upload" size={30} color="#ffffff" />
             </TouchableOpacity>
           </View>
           <View style={styles.lineContainer}>
             <Text>Bilans</Text>
-            <TouchableOpacity onPress={handleUploadPhoto}>
+            {bilan !== "" ? (
+              <FontAwesome name="check" size={30} color="green" />
+            ) : ''}
+            <TouchableOpacity onPress={UploadBilan}>
               <FontAwesome name="cloud-upload" size={30} color="#ffffff" />
             </TouchableOpacity>
           </View>
           <View style={styles.lineContainer}>
             <Text>Autre document</Text>
-            <TouchableOpacity onPress={handleUploadPhoto}>
+            {Autre !== "" ? (
+              <FontAwesome name="check" size={30} color="green" />
+            ) : ''}
+            <TouchableOpacity onPress={UploadAutre}>
               <FontAwesome name="cloud-upload" size={30} color="#ffffff" />
             </TouchableOpacity>
           </View>
-          <View style={styles.nextBtnContainer}>
-            <TouchableOpacity style={styles.skip}>
-              <Text>Passer cette étape</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.next}
-              onPress={() => handleEtapeSuivante()}
-            >
-              <Text>Etape suivante</Text>
-            </TouchableOpacity>
-          </View>
+        </View>
+        <View style={styles.nextBtnContainer}>
+          <TouchableOpacity style={styles.skip}>
+            <Text>Passer cette étape</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.next}
+            onPress={() => handleEtapeSuivante()}
+          >
+            <Text>Etape suivante</Text>
+          </TouchableOpacity>
         </View>
       </LinearGradient>
     </View>
@@ -202,7 +251,7 @@ const styles = StyleSheet.create({
     height: "4%",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 35,
+    marginTop: 20,
   },
 
   title: {
@@ -328,7 +377,7 @@ const styles = StyleSheet.create({
     height: "10%",
     alignItems: "center",
     justifyContent: "space-between",
-    marginTop: 10,
+    marginTop: 5,
   },
 
   skip: {
