@@ -184,7 +184,7 @@ const TabNavigatorPerso = () => {
       })}
     >
       
-      <Tab.Screen name="Home" component={PersoHome} />
+      <Tab.Screen name="PersoHome" component={PersoHome} />
       <Tab.Screen name="Mes tchats" component={PersoTchats} />
       <Tab.Screen name="Mes visites" component={PersoVisites} />
       <Tab.Screen name="Mon profil" component={PersoProfil} />
