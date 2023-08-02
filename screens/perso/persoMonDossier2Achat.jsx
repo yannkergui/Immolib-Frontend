@@ -16,12 +16,12 @@ import SwitchSelector from "react-native-switch-selector";
 export default function PersoMonDossier2Achat({ navigation }) {
 
   //Gestion des inputs qui ne doivent recevoir que des nombres (alors que c'est un TextInput, donc il faut appliquer une Regex) :
-  const [inputBudget, setInputBudget] = useState("");
+  const [monBudget, setMonBudget] = useState(0);
   const [inputSurface, setInputSurface] = useState("");
   const [inputNbPiece, setInputNbPiece] = useState("");
 
   const handleBudgetChange = (text) => {
-    // const formattedText = text.replace(/[^0-9]/g, ""); // élimine tous les caractères non numériques
+    const formattedText = text.replace(/[^0-9]/g, ""); // élimine tous les caractères non numériques
     setInputBudget(formattedText);
   };
 
@@ -103,11 +103,10 @@ export default function PersoMonDossier2Achat({ navigation }) {
               <TextInput
                 style={styles.input}
                 keyboardType="numeric"
-                onChangeText={(value) => setInputBudget(value)}
-                value={inputBudget}
-              >
-                <Text>/€</Text>
-              </TextInput>
+                placeholder="/€"
+                onChangeText={(value) => setMonBudget(value)}
+                value={monBudget}
+              ></TextInput>
             </View>
             <View style={styles.lineContainer}>
               <Text style={styles.sousTitre}>Bien recherché</Text>

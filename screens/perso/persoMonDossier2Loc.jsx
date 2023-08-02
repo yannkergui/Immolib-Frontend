@@ -53,6 +53,14 @@ export default function PersoMonDossier2Loc({ navigation }) {
     navigation.navigate("PersoMonDossier3Loc");
   };
 
+  const handlePasserCetteEtape = () => {
+    navigation.navigate("PersoMonDossier3Loc")
+    setBienRecherche("")
+    setBienMeuble("")
+    console.log(bienRecherche)
+    console.log(bienMeuble)
+  };
+
   return (
     <View style={styles.container}>
       <LinearGradient
