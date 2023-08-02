@@ -196,14 +196,13 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
-              <Stack.Screen name="PersoProfil" component={PersoProfil} />
-              <Stack.Screen name="FirstScreen" component={FirstScreen} />
-              <Stack.Screen name="PersoMonDossier2Achat" component={PersoMonDossier2Achat} />
               <Stack.Screen
                 name="TabNavigatorPro"
                 component={TabNavigatorPro}
                 style={styles.tabNavigator}
               />
+              <Stack.Screen name="FirstScreen" component={FirstScreen} />
+              <Stack.Screen name="PersoMonDossier2Achat" component={PersoMonDossier2Achat} />
               <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
               <Stack.Screen name="PersoConnexionScreen" component={PersoConnectionScreen} />
               <Stack.Screen name="ProVisites" component={ProVisites} />
