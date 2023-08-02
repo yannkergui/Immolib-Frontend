@@ -214,7 +214,7 @@ export default function PersoConnectionScreen({ navigation }) {
                       </TouchableWithoutFeedback>
                     </KeyboardAvoidingView>
                   </Modal>
-
+                  
               </View>
           </View>
       </LinearGradient>
