@@ -30,20 +30,18 @@ import PersoMonDossier3Loc from "./screens/perso/persoMonDossier3Loc";
 import PersoMonDossier2Achat from "./screens/perso/persoMonDossier2Achat";
 import PersoMonDossier3Achat from "./screens/perso/persoMonDossier3Achat";
 
-import PageTests from "./screens/pageTests";
 import FirstScreen from "./screens/firstScreen";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 import { Provider } from "react-redux";
 import user from "./reducers/user";
-import userData from "./reducers/monclient";
 import pro from "./reducers/pro";
 
 import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
-  reducer: { user, userData, pro },
+  reducer: { user, pro },
 });
 
 const TabNavigatorPro = () => {
@@ -112,7 +110,7 @@ const TabNavigatorPro = () => {
       })}
     >
       
-      <Tab.Screen name="Home" component={ProHome} />
+      <Tab.Screen name="ProHome" component={ProHome} />
       <Tab.Screen name="Mes tchats" component={ProTchats} />
       <Tab.Screen name="Mes annonces" component={ProAnnonces} />
       <Tab.Screen name="Mes visites" component={ProVisites} />
@@ -197,9 +195,7 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
-              <Stack.Screen name="test" component={PersoMonDossier2Achat} />
-              <Stack.Screen name="FirstScreen" component={FirstScreen} />
-              
+              <Stack.Screen name="test" component={PersoConnectionScreen} />
               <Stack.Screen name="FirstScreen" component={FirstScreen} />
               <Stack.Screen
                 name="TabNavigatorPro"
