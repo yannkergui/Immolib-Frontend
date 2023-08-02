@@ -14,31 +14,6 @@ import SwitchSelector from "react-native-switch-selector";
 import { useState } from "react";
 
 export default function PersoMonDossier3Achat({ navigation }) {
-  // 3 Etats relatif au bien recherché choisie (utile au changement de couleur du choix et au push en BDD)
-
-  const [maisonChoice, setMaisonChoice] = useState(false);
-  const [appartementChoice, setAppartementChoice] = useState(false);
-  const [autreChoice, setAutreChoice] = useState(false);
-
-  // fonctions relatives au type de bien (changement du booléens et du style)
-
-  const handleMaison = () => {
-    setMaisonChoice(!maisonChoice);
-    setAppartementChoice(false);
-    setAutreChoice(false);
-  };
-
-  const handleAppartement = () => {
-    setAppartementChoice(!appartementChoice);
-    setMaisonChoice(false);
-    setAutreChoice(false);
-  };
-
-  const handleAutre = () => {
-    setAutreChoice(!autreChoice);
-    setAppartementChoice(false);
-    setMaisonChoice(false);
-  };
 
   //Gestion des inputs qui ne doivent recevoir que des nombres (alors que c'est un TextInput, donc il faut appliquer une Regex) :
   const [inputBudget, setInputBudget] = useState("");
