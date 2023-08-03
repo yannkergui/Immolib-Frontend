@@ -10,16 +10,22 @@ import {
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import { useState } from "react";
 import SwitchSelector from "react-native-switch-selector";
+import { useDispatch, useSelector } from 'react-redux';
+import {userDatas} from '../../reducers/user'
+
 
 export default function PersoMonDossier2Loc({ navigation }) {
   //Etat relatif au budget renseigné (util au push en BDD)
 
   const [monBudget, setMonBudget] = useState(0);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value);
+
 
   // les 2 etats mis à jour au clique sur le switch
 
-  const [bienRecherche, setBienRecherche] = useState("locataire");
-  const [bienMeuble, setBienMeuble] = useState("achat");
+  const [bienRecherche, setBienRecherche] = useState("");
+  const [bienMeuble, setBienMeuble] = useState("");
 
   //  Etat relatif à la surface minimum (util au push en BDD)
 
@@ -50,8 +56,16 @@ export default function PersoMonDossier2Loc({ navigation }) {
   //fonction changement de page
 
   const handleEtapeSuivante = () => {
-    navigation.navigate("PersoMonDossier3Loc");
+    navigation.navigate("PersoMonDossier3Loc")
+    dispatch(userDatas({budgetMois : monBudget, typeBienLoc : bienRecherche, minSurfaceLoc: surface, minPieceLoc: nbPiece, nbLoc: nbLocataire, meuble:bienMeuble }))
   };
+
+  const handlePasserCetteEtape = () => {
+    navigation.navigate("PersoMonDossier3Loc")
+    setBienRecherche("")
+    setBienMeuble("")
+  };
+  
 
   return (
     <View style={styles.container}>
@@ -154,7 +168,8 @@ export default function PersoMonDossier2Loc({ navigation }) {
             </View>
           </View>
           <View style={styles.nextBtnContainer}>
-            <TouchableOpacity style={styles.skip}>
+            <TouchableOpacity style={styles.skip}
+            onPress={() => handlePasserCetteEtape()}>
               <Text>Passer cette étape</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -253,7 +268,7 @@ const styles = StyleSheet.create({
     height: "10%",
     alignItems: "center",
     justifyContent: "space-around",
-    marginTop: 70,
+    marginTop: 30,
   },
 
   skip: {

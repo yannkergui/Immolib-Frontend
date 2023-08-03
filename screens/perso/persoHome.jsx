@@ -2,9 +2,12 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { LinearGradient } from "expo-linear-gradient";
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function PersoHome({ navigation }) {
   
+  const user = useSelector((state) => state.user.value);
+  console.log(user);
   //Il faudra rajouter les components ={nomducomposant} dans les Tab.Screen pour rendre la navigation fonctionnelle.
   return (
     <View style={styles.container}>

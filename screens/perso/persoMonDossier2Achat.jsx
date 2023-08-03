@@ -14,9 +14,8 @@ import { useState } from "react";
 import SwitchSelector from "react-native-switch-selector";
 
 export default function PersoMonDossier2Achat({ navigation }) {
-
   //Gestion des inputs qui ne doivent recevoir que des nombres (alors que c'est un TextInput, donc il faut appliquer une Regex) :
-  const [inputBudget, setInputBudget] = useState("");
+  const [monBudget, setMonBudget] = useState(0);
   const [inputSurface, setInputSurface] = useState("");
   const [inputNbPiece, setInputNbPiece] = useState("");
 
@@ -61,7 +60,11 @@ export default function PersoMonDossier2Achat({ navigation }) {
   //navigation en cliquant sur "Etape suivante":
   const handleEtapeSuivante = () => {
     navigation.navigate("PersoMonDossier3Achat");
-    
+  };
+
+  const handlePasserCetteEtape = () => {
+    navigation.navigate("PersoMonDossier3Achat");
+    setValueTypeBien("");
   };
 
   return (
@@ -103,11 +106,10 @@ export default function PersoMonDossier2Achat({ navigation }) {
               <TextInput
                 style={styles.input}
                 keyboardType="numeric"
-                value={inputBudget}
-                onChangeText={handleBudgetChange}
-              >
-                <Text>/€</Text>
-              </TextInput>
+                placeholder="/€"
+                onChangeText={(value) => setMonBudget(value)}
+                value={monBudget}
+              ></TextInput>
             </View>
             <View style={styles.lineContainer}>
               <Text style={styles.sousTitre}>Bien recherché</Text>
@@ -146,7 +148,10 @@ export default function PersoMonDossier2Achat({ navigation }) {
             </View>
           </View>
           <View style={styles.nextBtnContainer}>
-            <TouchableOpacity style={styles.skip}>
+            <TouchableOpacity
+              style={styles.skip}
+              onPress={() => handlePasserCetteEtape()}
+            >
               <Text style={styles.texteBtn}>Passer cette étape</Text>
             </TouchableOpacity>
             <TouchableOpacity

@@ -36,7 +36,7 @@ export default function PersoConnectionScreen({ navigation }) {
   }
 
   // Adresse IP à modifier si besoin
-  const myIPAdress='192.168.10.188';
+  const myIPAdress='192.168.10.157';
 
   // 2eme boutton "Se connecter" qui redirige vers la homePage
   const handleConnexionBis = () => {
@@ -99,7 +99,7 @@ export default function PersoConnectionScreen({ navigation }) {
                   token : data.data.token,
                   motDePasse : data.data.motDePasse}));
                 setModalInscription(false)
-                navigation.navigate('TabNavigatorPerso', { screen: 'Home' });
+                navigation.navigate("PersoMonDossier1")
                 setEmail('');
                 setEmailError(false);
                 setTelError(false);

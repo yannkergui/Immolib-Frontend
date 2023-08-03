@@ -2,9 +2,14 @@ import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import { useState } from "react";
 import SwitchSelector from "react-native-switch-selector";
+import { useDispatch, useSelector } from "react-redux";
+import { userDatas } from "../../reducers/user";
 
 export default function PersoMonDossier1({ navigation }) {
-  
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value);
+ 
+
   // les 2 etats mis à jour au clique sur le switch
 
   const [situationActuelle, setSituationActuelle] = useState("locataire");
@@ -24,14 +29,19 @@ export default function PersoMonDossier1({ navigation }) {
   ];
 
   const handleEtapeSuivante = () => {
-    if (recherche ==="achat") {
+    if (recherche === "achat") {
       navigation.navigate("PersoMonDossier2Achat");
     } else {
       navigation.navigate("PersoMonDossier2Loc");
     }
+    dispatch(userDatas({recherche : recherche, situation : situationActuelle}));
   };
 
-  console.log(recherche)
+  // Boutton passer cette étape pour le moment, pour des sujet de mis à jour sur les creens suivants (a discuter)
+
+  // const handlePasserCetteEtape = () => {
+  //   navigation.navigate("PersoHome")
+  // };
 
   return (
     <View style={styles.container}>
@@ -89,12 +99,15 @@ export default function PersoMonDossier1({ navigation }) {
           />
         </View>
         <View style={styles.nextBtnContainer}>
-          <TouchableOpacity style={styles.skip}>
+          {/* Boutton passer cette étape pour le moment, pour des sujet de mis à jour sur les creens suivants (a discuter) */}
+
+          {/* <TouchableOpacity style={styles.skip}
+          onPress={() => handlePasserCetteEtape()}>
             <Text>Passer cette étape</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity
             style={styles.next}
-            onPress={() => handleEtapeSuivante()}
+            onPress={(value) => handleEtapeSuivante(value)}
           >
             <Text>Etape suivante</Text>
           </TouchableOpacity>
