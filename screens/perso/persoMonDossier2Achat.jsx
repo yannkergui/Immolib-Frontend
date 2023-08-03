@@ -11,37 +11,11 @@ import {
 
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import { useState } from "react";
+import SwitchSelector from "react-native-switch-selector";
 
-export default function PersoMonDossier2Achat({navigation}) {
-  
-  // 3 Etats relatif au bien recherché choisie (utile au changement de couleur du choix et au push en BDD)
-
-  const [maisonChoice, setChoice] = useState(false);
-  const [appartementChoice, setAppartementChoice] = useState(false);
-  const [autreChoice, setAutreChoice] = useState(false);
-
-  // fonctions relatives au type de bien (changement du booléens et du style)
-
-  const handleMaison = () => {
-    setMaisonChoice(!maisonChoice);
-    setAppartementChoice(false);
-    setAutreChoice(false);
-  };
-
-  const handleAppartement = () => {
-    setAppartementChoice(!appartementChoice);
-    setMaisonChoice(false);
-    setAutreChoice(false);
-  };
-
-  const handleAutre = () => {
-    setAutreChoice(!autreChoice);
-    setAppartementChoice(false);
-    setMaisonChoice(false);
-  };
-
+export default function PersoMonDossier2Achat({ navigation }) {
   //Gestion des inputs qui ne doivent recevoir que des nombres (alors que c'est un TextInput, donc il faut appliquer une Regex) :
-  const [inputBudget, setInputBudget] = useState("");
+  const [monBudget, setMonBudget] = useState(0);
   const [inputSurface, setInputSurface] = useState("");
   const [inputNbPiece, setInputNbPiece] = useState("");
 
@@ -61,7 +35,6 @@ export default function PersoMonDossier2Achat({navigation}) {
   };
 
   //préparation des fonctions pour envoyer en base de données les inputs de budget, surface, nbPiece retravaillés:
-
   const saveBudgetToDatabase = () => {
     // Enregistrez 'budget' dans la base de données ici.
   };
@@ -74,12 +47,25 @@ export default function PersoMonDossier2Achat({navigation}) {
     // Enregistrez 'budget' dans la base de données ici.
   };
 
+  const [valueTypeBien, setValueTypeBien] = useState("maison");
 
-//navigation en cliquant sur "Etape suivante":
-const handleEtapeSuivante =()=>{
-  navigation.navigate('PersoMonDossier3Achat');
-}
+  const optionsTypeBien = [
+    { label: "Maison", value: "maison" },
+    { label: "Appartement", value: "appartement" },
+    { label: "Autre", value: "autre" },
+  ];
 
+  console.log(valueTypeBien);
+
+  //navigation en cliquant sur "Etape suivante":
+  const handleEtapeSuivante = () => {
+    navigation.navigate("PersoMonDossier3Achat");
+  };
+
+  const handlePasserCetteEtape = () => {
+    navigation.navigate("PersoMonDossier3Achat");
+    setValueTypeBien("");
+  };
 
   return (
     <View style={styles.container}>
@@ -116,43 +102,32 @@ const handleEtapeSuivante =()=>{
 
           <View style={styles.formContainer}>
             <View style={styles.lineContainer}>
-              <Text>Budget Maximum</Text>
+              <Text style={styles.sousTitre}>Budget Maximum</Text>
               <TextInput
                 style={styles.input}
                 keyboardType="numeric"
-                value={inputBudget}
-                onChangeText={handleBudgetChange}
-              >
-                <Text>/€</Text>
-              </TextInput>
+                placeholder="/€"
+                onChangeText={(value) => setMonBudget(value)}
+                value={monBudget}
+              ></TextInput>
             </View>
             <View style={styles.lineContainer}>
-              <Text>Bien recherché</Text>
-              <View style={styles.choixBien}>
-                <TouchableOpacity
-                  style={maisonChoice ? styles.buttonSelected : styles.button}
-                  onPress={() => handleMaison()}
-                >
-                  <Text>Maison</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={
-                    appartementChoice ? styles.buttonSelected : styles.button
-                  }
-                  onPress={() => handleAppartement()}
-                >
-                  <Text>Appartement</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={autreChoice ? styles.buttonSelected : styles.button}
-                  onPress={() => handleAutre()}
-                >
-                  <Text>Autre</Text>
-                </TouchableOpacity>
-              </View>
+              <Text style={styles.sousTitre}>Bien recherché</Text>
+              <SwitchSelector
+                options={optionsTypeBien}
+                initial={0}
+                onPress={(value) => setValueTypeBien(value)}
+                valuePadding={2.5}
+                hasPadding
+                style={styles.SwitchSelector3choix}
+                buttonColor="#47AFA5"
+                buttonMargin={1.5}
+                animationDuration={250}
+                height={45}
+              />
             </View>
             <View style={styles.lineContainer}>
-              <Text>Surface minimum</Text>
+              <Text style={styles.sousTitre}>Surface minimum</Text>
               <TextInput
                 style={styles.input}
                 keyboardType="numeric"
@@ -162,7 +137,7 @@ const handleEtapeSuivante =()=>{
               ></TextInput>
             </View>
             <View style={styles.lineContainer}>
-              <Text>Nombre de pièces minimum</Text>
+              <Text style={styles.sousTitre}>Nombre de pièces minimum</Text>
               <TextInput
                 style={styles.input}
                 keyboardType={"numeric"}
@@ -173,10 +148,16 @@ const handleEtapeSuivante =()=>{
             </View>
           </View>
           <View style={styles.nextBtnContainer}>
-            <TouchableOpacity style={styles.skip}>
+            <TouchableOpacity
+              style={styles.skip}
+              onPress={() => handlePasserCetteEtape()}
+            >
               <Text style={styles.texteBtn}>Passer cette étape</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.next} onPress={()=> handleEtapeSuivante()}>
+            <TouchableOpacity
+              style={styles.next}
+              onPress={() => handleEtapeSuivante()}
+            >
               <Text style={styles.texteBtn}>Etape suivante</Text>
             </TouchableOpacity>
           </View>
@@ -278,19 +259,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: 170,
-    height:60,
+    height: 60,
     backgroundColor: "#414042",
     borderColor: "white",
     borderWidth: 1,
     borderRadius: 25,
     borderRadius: 15,
-    marginRight:25,
+    marginRight: 25,
   },
   next: {
     alignItems: "center",
     justifyContent: "center",
     width: 170,
-    height:60,
+    height: 60,
     backgroundColor: "#414042",
     borderColor: "white",
     borderWidth: 1,
@@ -304,12 +285,18 @@ const styles = StyleSheet.create({
   },
 
   lineContainer: {
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 20,
+    alignItems: "flex-start",
+    marginVertical: 15,
+  },
+  SwitchSelector3choix: {
+    width: "100%",
   },
 
+  sousTitre: {
+    marginBottom: 10,
+  },
   input: {
     borderColor: "white",
     borderWidth: 2,

@@ -41,8 +41,8 @@ const initialState = {
         },
 };
 
-export const proData = createSlice({
-  name: 'userData',
+export const monClientSlice = createSlice({
+  name: 'monClient',
   initialState,
   reducers: {
     userDatas : (state, action) => {
@@ -51,5 +51,5 @@ export const proData = createSlice({
   },
 });
 
-export const { userDatas } = proData.actions;
-export default proData.reducer;
+export const { userDatas } = monClientSlice.actions;
+export default monClientSlice.reducer;

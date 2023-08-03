@@ -4,7 +4,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useFonts } from 'expo-font';
 import { useDispatch } from 'react-redux';
-import { userDatas } from '../../reducers/monclient';
+import { userDatas } from '../../reducers/monClient';
 
 
 export default function ProClients({navigation}) {

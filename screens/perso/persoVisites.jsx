@@ -58,7 +58,7 @@ export default function PersoVisites() {
   const visiteEnAttente = visitesPerso.map((data) => {
     if (data.statut === "en attente") {
       return (
-        <View style={styles.clientsCard}>
+        <View style={styles.visiteCard}>
           <View style={styles.lineCard}>
             <Text> Le {data.date} </Text>
             <TouchableOpacity>
@@ -81,7 +81,7 @@ export default function PersoVisites() {
   const visitePassees = visitesPerso.map((data) => {
     if (data.statut === "passées") {
       return (
-        <View style={styles.clientsCard}>
+        <View style={styles.visiteCard}>
           <View style={styles.lineCard}>
             <Text> Le {data.date} </Text>
             <TouchableOpacity>
@@ -104,7 +104,7 @@ export default function PersoVisites() {
   const visiteConfirmees = visitesPerso.map((data) => {
     if (data.statut === "confirmées") {
       return (
-        <View style={styles.clientsCard}>
+        <View style={styles.visiteCard}>
           <View style={styles.lineCard}>
             <Text> Le {data.date} </Text>
             <TouchableOpacity>
@@ -131,7 +131,7 @@ export default function PersoVisites() {
         end={{ x: 1, y: 1 }} // End point of the gradient
         style={styles.container}
       >
-        <Text style={styles.title}>Mon Dossier</Text>
+        <Text style={styles.title}>Mes visites</Text>
         <View style={styles.pageContainer}>
           <SwitchSelector
             options={page}
@@ -208,12 +208,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  clientsCard: {
+  visiteCard: {
     justifyContent: "space-between",
     // alignItems: "center",
     height: 150,
     width: "90%",
-    borderRadius: 40,
+    borderRadius: 25,
     backgroundColor: "#BCCDB6",
     shadowColor: "#000",
     shadowOffset: {

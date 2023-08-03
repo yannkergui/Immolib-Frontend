@@ -12,7 +12,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import * as DocumentPicker from "expo-document-picker";
 import SwitchSelector from "react-native-switch-selector";
 
-export default function PersoMonDossier3Loc() {
+export default function PersoMonDossier3Loc({navigation}) {
   //Etat relatif au revenu renseigné (util au push en BDD)
 
   const [monRevenu, setMonRevenu] = useState(0);
@@ -88,6 +88,15 @@ export default function PersoMonDossier3Loc() {
     for (let i = 0; i < result.assets.length; i++) {
       setAutre(result.assets[i].uri);
     }
+  };
+
+  const handleEtapeSuivante = () => {
+    navigation.navigate("PersoHome");
+  };
+
+  const handlePasserCetteEtape = () => {
+    navigation.navigate("PersoHome")
+    setContrat("")
   };
 
   return (
@@ -209,7 +218,8 @@ export default function PersoMonDossier3Loc() {
           </View>
         </View>
         <View style={styles.nextBtnContainer}>
-          <TouchableOpacity style={styles.skip}>
+          <TouchableOpacity style={styles.skip}
+          onPress={() => handlePasserCetteEtape()}>
             <Text>Passer cette étape</Text>
           </TouchableOpacity>
           <TouchableOpacity
