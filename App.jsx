@@ -196,7 +196,7 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
-              <Stack.Screen name="test" component={FicheClient} />
+              <Stack.Screen name="test" component={ProConnectionScreen} />
               <Stack.Screen name="FirstScreen" component={FirstScreen} />
               <Stack.Screen
                 name="TabNavigatorPro"
@@ -223,6 +223,7 @@ export default function App() {
                 name="TabNavigatorPerso"
                 component={TabNavigatorPerso}
               />
+              <Stack.Screen name="ProPreferences" component={ProPreferences} />
           </Stack.Navigator>
         </NavigationContainer>
     </Provider>
