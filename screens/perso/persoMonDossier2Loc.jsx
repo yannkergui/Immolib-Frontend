@@ -24,8 +24,8 @@ export default function PersoMonDossier2Loc({ navigation }) {
 
   // les 2 etats mis à jour au clique sur le switch
 
-  const [bienRecherche, setBienRecherche] = useState("");
-  const [bienMeuble, setBienMeuble] = useState("");
+  const [bienRecherche, setBienRecherche] = useState("maison");
+  const [bienMeuble, setBienMeuble] = useState("oui");
 
   //  Etat relatif à la surface minimum (util au push en BDD)
 
@@ -61,9 +61,8 @@ export default function PersoMonDossier2Loc({ navigation }) {
   };
 
   const handlePasserCetteEtape = () => {
-    navigation.navigate("PersoMonDossier3Loc")
-    setBienRecherche("")
-    setBienMeuble("")
+    navigation.navigate("PersoHome")
+    
   };
   
 
@@ -261,8 +260,6 @@ const styles = StyleSheet.create({
 
   nextBtnContainer: {
     flexDirection: "row",
-    borderColor: "#47AFA5",
-    borderWidth: 2,
     borderRadius: 10,
     width: "80%",
     height: "10%",
