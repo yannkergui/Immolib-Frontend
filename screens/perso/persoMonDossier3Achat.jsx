@@ -12,8 +12,12 @@ import {
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import SwitchSelector from "react-native-switch-selector";
 import { useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import {userDatasLoc} from '../../reducers/user'
 
 export default function PersoMonDossier3Achat({ navigation }) {
+
+  
 
   //Gestion des inputs qui ne doivent recevoir que des nombres (alors que c'est un TextInput, donc il faut appliquer une Regex) :
   const [inputBudget, setInputBudget] = useState("");
