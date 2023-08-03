@@ -203,8 +203,7 @@ export default function App() {
                 style={styles.tabNavigator}
               />
               <Stack.Screen name="test" component={ProConnectionScreen} />
-              <Stack.Screen name="FirstScreen" component={FirstScreen} />
-              <Stack.Screen name="PersoMonDossier2Achat" component={PersoMonDossier2Achat} />
+            <Stack.Screen name="PersoMonDossier1" component={PersoMonDossier1} />
               <Stack.Screen name="FirstScreen" component={FirstScreen} />
               <Stack.Screen name="PersoMonDossier2Achat" component={PersoMonDossier2Achat} />
               <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
@@ -212,7 +211,6 @@ export default function App() {
               <Stack.Screen name="ProVisites" component={ProVisites} />
               <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
               <Stack.Screen name="PersoHome" component={PersoHome}/>
-              <Stack.Screen name="PersoMonDossier1" component={PersoMonDossier1} />
               <Stack.Screen name="PersoMonDossier2Loc" component={PersoMonDossier2Loc} />
               <Stack.Screen name="PersoMonDossier3Loc" component={PersoMonDossier3Loc} />
               <Stack.Screen name="PersoMonDossier3Achat" component={PersoMonDossier3Achat} />
