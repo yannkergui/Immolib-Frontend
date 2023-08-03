@@ -1,11 +1,22 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useState } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import SwitchSelector from "react-native-switch-selector";
+import { useDispatch } from 'react-redux';
+import { useState, useEffect } from "react";
 
 export default function PersoVisites() {
+
+  const [visitesPerso, setVisitesPerso] = useState([]);
+
+  useEffect(() => {
+    fetch('http://192.168.10.138:3000/visites/user/64c7ad08d40e592879d3c844')
+      .then(response => response.json())
+      .then(data => {
+        setVisitesPerso(data.VisitesTrouvees);
+      })
+  }, []);
 
   // constante relative au switch de changement de page 
   const page = [
@@ -14,59 +25,65 @@ export default function PersoVisites() {
     { label: "passées", value: "passées" },
   ];
 
+
+
+
+
   // Etat relatif au changement de page via le switch
 
   const [activPage, setActivePage] = useState("en attente");
 
   // visiteData (en dur pour le moment, sera par la suite un fetch de la BDD)
 
-  const visitesPerso = [
-    {
-      nom: "Appartement 3 pièces",
-      adresse: "77 rue victor hugo, 75000 Paris",
-      date: "21/09/2023",
-      statut: "en attente",
-    },
-    {
-      nom: "Maison 160m²",
-      adresse: "77 rue victor hugo, 75000 Paris",
-      date: "24/12/2023",
-      statut: "en attente",
-    },
-    {
-      nom: "studio 20 m²",
-      adresse: "77 rue victor hugo, 75000 Paris",
-      date: "11/01/2024",
-      statut: "confirmées",
-    },
-    {
-      nom: "Villa 220 m²",
-      adresse: "77 rue victor hugo, 75000 Paris",
-      date: "21/09/2023",
-      statut: "en attente",
-    },
-    {
-      nom: "Chateau ",
-      adresse: "77 rue victor hugo, 75000 Paris",
-      date: "21/05/2023",
-      statut: "passées",
-    },
-  ];
+  // const visitesPerso = [
+  //   {
+  //     nom: "Appartement 3 pièces",
+  //     adresse: "77 rue victor hugo, 75000 Paris",
+  //     date: "21/09/2023",
+  //     statut: "en attente",
+  //   },
+  //   {
+  //     nom: "Maison 160m²",
+  //     adresse: "77 rue victor hugo, 75000 Paris",
+  //     date: "24/12/2023",
+  //     statut: "en attente",
+  //   },
+  //   {
+  //     nom: "studio 20 m²",
+  //     adresse: "77 rue victor hugo, 75000 Paris",
+  //     date: "11/01/2024",
+  //     statut: "confirmées",
+  //   },
+  //   {
+  //     nom: "Villa 220 m²",
+  //     adresse: "77 rue victor hugo, 75000 Paris",
+  //     date: "21/09/2023",
+  //     statut: "en attente",
+  //   },
+  //   {
+  //     nom: "Chateau ",
+  //     adresse: "77 rue victor hugo, 75000 Paris",
+  //     date: "21/05/2023",
+  //     statut: "passées",
+  //   },
+  // ];
 
   // 1er map relatif aux visites en attente 
 
   const visiteEnAttente = visitesPerso.map((data) => {
+    console.log(data.bienImmoId);
     if (data.statut === "en attente") {
       return (
         <View style={styles.visiteCard}>
           <View style={styles.lineCard}>
-            <Text> Le {data.date} </Text>
+            <Text> Le {data.date} à {data.startTimeVisit}</Text>
             <TouchableOpacity>
               <FontAwesome name="edit" size={30} color="#1F2937" />
             </TouchableOpacity>
           </View>
           <View style={styles.lineCard}>
-            <Text> {data.adresse}</Text>
+            <Text> {data.bienImmoId.numRue} {data.bienImmoId.rue} {data.bienImmoId.codePostal}</Text>
+            <Text> {data.bienImmoId.numRue} {data.bienImmoId.rue} {data.bienImmoId.codePostal}</Text>
             <TouchableOpacity>
               <FontAwesome name="remove" size={30} color="#1F2937" />
             </TouchableOpacity>
