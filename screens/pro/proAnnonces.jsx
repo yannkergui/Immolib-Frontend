@@ -97,7 +97,12 @@ const annoncesVente = annonces.map((data) => {
       end={{ x: 1, y: 1 }} // End point of the gradient
       style={styles.container}
     >
-       <Text style={styles.title}>Mes annonces</Text>
+        <View style={styles.header}> 
+        <Text style={styles.Title}>Mes Clients</Text>
+        <TouchableOpacity style={styles.iconcontainer}>
+          <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' />
+        </TouchableOpacity>
+        </View>
       <View style={styles.pageContainer}>
           <SwitchSelector
             options={page}
@@ -132,13 +137,41 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
   },
+  header: {
+    flexDirection: 'row',
+    width :'100%',
+    top: 40, 
+    alignItems: 'center', // Center the content horizontally
+    justifyContent: 'center'
+  },
+  iconcontainer :{
+  position :'absolute',
+  left : 330,
+  top : 0,
+  backgroundColor : 'white',
+  width : 50,
+  height: 50,
+  paddingLeft : 15,
+  paddingTop : 8.5,
+  borderRadius : 100
+  },
+
+  Title: {
+    fontFamily: 'Nunitobold',
+    color: 'white',
+    fontSize: 35,
+    fontStyle: 'normal',
+    fontWeight: '600', 
+    letterSpacing: -1.5, 
+    textAlign:'center',
+  },
   
   pageContainer: {
     flexDirection: "row",
     borderColor: "#47AFA5",
     width: "90%",
     height: "10%",
-    marginTop: 20,
+    marginTop: 60,
   },
   
   pageActive: {
@@ -163,14 +196,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginRight: 3,
   },
-  title: {
-    fontFamily: "Nunito",
-    color: "white",
-    fontSize: 40,
-    fontStyle: "normal",
-    fontWeight: "600",
-    marginTop: "10%",
-  },
+
   
   cardContainer: {
     width: "100%",

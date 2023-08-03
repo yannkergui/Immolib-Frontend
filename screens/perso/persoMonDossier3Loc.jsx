@@ -11,8 +11,14 @@ import { useState } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import * as DocumentPicker from "expo-document-picker";
 import SwitchSelector from "react-native-switch-selector";
+import { useDispatch, useSelector } from 'react-redux';
+import {userDatas} from '../../reducers/user'
 
 export default function PersoMonDossier3Loc({navigation}) {
+
+  const user = useSelector((state) => state.user.value);
+  const dispatch = useDispatch();
+
   //Etat relatif au revenu renseigné (util au push en BDD)
 
   const [monRevenu, setMonRevenu] = useState(0);
@@ -20,7 +26,7 @@ export default function PersoMonDossier3Loc({navigation}) {
   //3 Etats relatifs à la situation pro renseignée (util au push en BDD)
 
   const [situationAutre, setSituationAutre] = useState("");
-  const [contrat, setContrat] = useState("cdi");
+  const [contrat, setContrat] = useState("");
 
   const SwitchContrat = [
     { label: "CDI", value: "cdi" },
@@ -92,6 +98,7 @@ export default function PersoMonDossier3Loc({navigation}) {
 
   const handleEtapeSuivante = () => {
     navigation.navigate("PersoHome");
+    dispatch(userDatas({salaire : monRevenu, contrat : contrat }))
   };
 
   const handlePasserCetteEtape = () => {
