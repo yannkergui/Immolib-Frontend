@@ -13,16 +13,15 @@ import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import SwitchSelector from "react-native-switch-selector";
 import { useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import {userDatasLoc} from '../../reducers/user'
+import user, {userDatas} from '../../reducers/user'
 
 export default function PersoMonDossier3Achat({ navigation }) {
 
-  
+  const myIPAdress = "192.168.10.157";
 
-  //Gestion des inputs qui ne doivent recevoir que des nombres (alors que c'est un TextInput, donc il faut appliquer une Regex) :
-  const [inputBudget, setInputBudget] = useState("");
-  const [inputSurface, setInputSurface] = useState("");
-  const [inputNbPiece, setInputNbPiece] = useState("");
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value);
+
 
   const handleBudgetChange = (text) => {
     const formattedText = text.replace(/[^0-9]/g, ""); // élimine tous les caractères non numériques
@@ -39,29 +38,52 @@ export default function PersoMonDossier3Achat({ navigation }) {
     setInputNbPiece(formattedText);
   };
 
-  //préparation des fonctions pour envoyer en base de données les inputs de budget, surface, nbPiece retravaillés:
-
-  const saveBudgetToDatabase = () => {
-    // Enregistrez 'budget' dans la base de données ici.
-  };
-
-  const saveSurfaceToDatabase = () => {
-    // Enregistrez 'budget' dans la base de données ici.
-  };
-
-  const saveNbPieceToDatabase = () => {
-    // Enregistrez 'budget' dans la base de données ici.
-  };
+  
 
   //navigations en cliquant sur "Etape suivante", ou 1/3 et 2/3:
   const handleEtapeSuivante = () => {
+    dispatch(userDatas({primo : valuePrimo, typeInvest : valueTypeInvest, financement: valueTypeFinancement, accordBanque: valuePreAccord }))
+    fetch(`http://${myIPAdress}:3000/users/${user.email}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        primo: valuePrimo,
+        financement: valueTypeFinancement,
+        accordBanque: valuePreAccord,
+        achat : {
+          budgetMax : user.budgetMax,
+          typeBienAchat: user.typeBienAchat,
+          minSurfaceAchat: user.minSurfaceAchat,
+          minPieceAchat: user.minPieceAchat,
+          typeInvest : user.typeInvest,
+        },
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
     navigation.navigate("PersoHome");
   };
 
   const handlePasserCetteEtape = () => {
-    navigation.navigate("PersoHome");
-    setValueTypeInvest("");
-    setValueTypeFinancement(""); 
+    fetch(`http://${myIPAdress}:3000/users/${user.email}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        achat : {
+          budgetMax : user.budgetMax,
+          typeBienAchat: user.typeBienAchat,
+          minSurfaceAchat: user.minSurfaceAchat,
+          minPieceAchat: user.minPieceAchat,
+        },
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+    navigation.navigate("PersoHome"); 
   };
 
   // à voir si nous laissons la possibilité à l'utilisateur de revenir en arrière dans le tunnel de complétude (à duscuter)
@@ -304,8 +326,6 @@ const styles = StyleSheet.create({
 
   nextBtnContainer: {
     flexDirection: "row",
-    borderColor: "#47AFA5",
-    borderWidth: 2,
     borderRadius: 10,
     width: "80%",
     height: "10%",
