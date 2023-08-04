@@ -5,22 +5,24 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useFonts } from 'expo-font';
 import { useDispatch } from 'react-redux';
 import { useState, useEffect } from "react";
+import { maVisiteData } from '../../reducers/maVisite';
 import {Calendar,Calendarlist,Agenda, LocaleConfig} from 'react-native-calendars';
 
 
 export default function ProHome({navigation}) {
+
   
   const [dateVisite, setDateVisite] = useState([])
   const [items2, setItems2] = useState({});
 
   useEffect(() => {
-    fetch('http://192.168.10.138:3000/visites/user/64c773356d2e8188f9e877a7')
+    fetch('http://192.168.10.174:3000/visites/user/64cccd2e0fd39de6f4a550dd')
       .then(response => response.json())
-      .then(data => {
+      .then(data => {console.log(data.VisitesTrouvees);
         const updatedItems = {};
-        data.VisitesTrouvees.map(data => {
+        data.VisitesTrouvees.map(data => { 
           const visitedate = data.dateOfVisit;
-          const name = `${data.prosId.nom} ${data.prosId.prenom} - ${data.prosId.raisonSociale} - ${data.bienImmoId.titre}`;
+          const name = `${data.prosId.nom} ${data.prosId.prenom} - ${data.prosId.agence.denomination} - ${data.bienImmoId.titre}`;
           const time = `${data.startTimeVisit}`;
 
           if (!updatedItems[visitedate]) {
@@ -73,6 +75,7 @@ export default function ProHome({navigation}) {
     today: "Aujourd'hui"
   };
   LocaleConfig.defaultLocale = 'fr';
+
 
 
   const renderItem = (item) => {

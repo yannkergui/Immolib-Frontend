@@ -39,12 +39,13 @@ import { Provider } from "react-redux";
 import user from "./reducers/user";
 import pro from "./reducers/pro";
 import monClient from "./reducers/monClient";
-import maVisite from "./reducers/maVisite"
+import maVisite from "./reducers/maVisite";
+import maVille from "./reducers/maVille";
 
 import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
-  reducer: { user, pro, monClient, maVisite },
+  reducer: { user, pro, monClient, maVisite, maVille},
 });
 
 const TabNavigatorPro = () => {
