@@ -151,7 +151,7 @@ export default function PersoConnectionScreen({ navigation }) {
                   <TouchableOpacity style={styles.button} onPress={()=>handleInscription()}>
                       <Text style={styles.textButton}>S'inscrire</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.button}>
+                  <TouchableOpacity style={styles.button}onPress={()=> navigation.navigate("PersoHome")}>
                       <Text style={styles.textButton}>Poursuivre sans inscription</Text>
                   </TouchableOpacity>
 

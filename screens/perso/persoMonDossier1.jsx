@@ -213,8 +213,6 @@ const styles = StyleSheet.create({
 
   searchContainer: {
     flexDirection: "row",
-    borderColor: "#47AFA5",
-    borderWidth: 2,
     borderRadius: 10,
     width: "70%",
     height: "7%",
@@ -225,9 +223,6 @@ const styles = StyleSheet.create({
 
   nextBtnContainer: {
     flexDirection: "row",
-    borderColor: "#47AFA5",
-    borderWidth: 2,
-    borderRadius: 10,
     width: "80%",
     height: "10%",
     alignItems: "center",
