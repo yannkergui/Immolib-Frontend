@@ -12,16 +12,14 @@ import {
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import SwitchSelector from "react-native-switch-selector";
 import { useState } from "react";
-import { useDispatch, useSelector } from 'react-redux';
-import user, {userDatas} from '../../reducers/user'
+import { useDispatch, useSelector } from "react-redux";
+import user, { userDatas } from "../../reducers/user";
 
 export default function PersoMonDossier3Achat({ navigation }) {
-
-  const myIPAdress = "192.168.10.157";
+  const myIPAdress = "192.168.10.169";
 
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-
 
   const handleBudgetChange = (text) => {
     const formattedText = text.replace(/[^0-9]/g, ""); // élimine tous les caractères non numériques
@@ -38,31 +36,38 @@ export default function PersoMonDossier3Achat({ navigation }) {
     setInputNbPiece(formattedText);
   };
 
-  
-
   //navigations en cliquant sur "Etape suivante", ou 1/3 et 2/3:
   const handleEtapeSuivante = () => {
-    dispatch(userDatas({primo : valuePrimo, typeInvest : valueTypeInvest, financement: valueTypeFinancement, accordBanque: valuePreAccord }))
+    dispatch(
+      userDatas({
+        primo: valuePrimo,
+        typeInvest: valueTypeInvest,
+        financement: valueTypeFinancement,
+        accordBanque: valuePreAccord,
+      })
+    );
     fetch(`http://${myIPAdress}:3000/users/${user.email}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        primo: valuePrimo,
-        financement: valueTypeFinancement,
-        accordBanque: valuePreAccord,
-        achat : {
-          budgetMax : user.budgetMax,
+        recherche: user.recherche,
+        situation: user.situation,
+        achat: {
+          budgetMax: user.budgetMax,
           typeBienAchat: user.typeBienAchat,
           minSurfaceAchat: user.minSurfaceAchat,
           minPieceAchat: user.minPieceAchat,
-          typeInvest : user.typeInvest,
+          typeInvest: user.typeInvest,
+          primo: valuePrimo,
+          financement: valueTypeFinancement,
+          accordBanque: valuePreAccord,
         },
       }),
     })
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-      })
+      });
     navigation.navigate("PersoHome");
   };
 
@@ -71,8 +76,10 @@ export default function PersoMonDossier3Achat({ navigation }) {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        achat : {
-          budgetMax : user.budgetMax,
+        recherche: user.recherche,
+        situation: user.situation,
+        achat: {
+          budgetMax: user.budgetMax,
           typeBienAchat: user.typeBienAchat,
           minSurfaceAchat: user.minSurfaceAchat,
           minPieceAchat: user.minPieceAchat,
@@ -82,8 +89,8 @@ export default function PersoMonDossier3Achat({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-      })
-    navigation.navigate("PersoHome"); 
+      });
+    navigation.navigate("PersoHome");
   };
 
   // à voir si nous laissons la possibilité à l'utilisateur de revenir en arrière dans le tunnel de complétude (à duscuter)
@@ -98,7 +105,8 @@ export default function PersoMonDossier3Achat({ navigation }) {
   //mise en place des options pour les switchs selectors :
   const [valuePrimo, setValuePrimo] = useState(false);
   const [valueTypeInvest, setValueTypeInvest] = useState("principale");
-  const [valueTypeFinancement, setValueTypeFinancement] =useState("pretbancaire");
+  const [valueTypeFinancement, setValueTypeFinancement] =
+    useState("pretbancaire");
   const [valuePreAccord, setValuePreAccord] = useState(false);
 
   //mise en place des options pour le switch selector du primo accédant :
@@ -232,8 +240,10 @@ export default function PersoMonDossier3Achat({ navigation }) {
             </View>
           </View>
           <View style={styles.nextBtnContainer}>
-            <TouchableOpacity style={styles.skip}
-            onPress={() => handlePasserCetteEtape()}>
+            <TouchableOpacity
+              style={styles.skip}
+              onPress={() => handlePasserCetteEtape()}
+            >
               <Text>Passer cette étape</Text>
             </TouchableOpacity>
             <TouchableOpacity
