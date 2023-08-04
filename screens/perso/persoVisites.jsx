@@ -12,8 +12,10 @@ export default function PersoVisites({navigation}) {
 
   const dispatch = useDispatch();
 
+  // etat pour stocker les infos reçues du backend
   const [visitesPerso, setVisitesPerso] = useState([]);
 
+  // Fetch du backend au chargement de la page pour récupérer les visites liées au user
   useEffect(() => {
     fetch('http://192.168.10.138:3000/visites/user/64c773356d2e8188f9e877a7')
       .then(response => response.json())
@@ -31,9 +33,10 @@ export default function PersoVisites({navigation}) {
 
 
   // Etat relatif au changement de page via le switch
-
   const [activPage, setActivePage] = useState("en attente");
 
+  // fonction de click sur la Card visite pour dispatcher les infos dans le reducer afin de les afficher sur le screen suivant
+  // et naviguer vers l'écran perso ma visite
   const handleSubmit = (e) => {
     dispatch(maVisiteData(e));
     navigation.navigate('PersoMaVisite')
@@ -41,10 +44,9 @@ export default function PersoVisites({navigation}) {
   };
 
   // 1er map relatif aux visites en attente 
-
   const visiteEnAttente = visitesPerso.map((data) => {
     
-    
+    // fonction pour gérer les appels lorsqu'on clique sur le numéro de téléphone
     const onPressMobileNumberClick = (number) => {
 
       let phoneNumber = '';
