@@ -29,6 +29,7 @@ import PersoMonDossier2Loc from "./screens/perso/persoMonDossier2Loc";
 import PersoMonDossier3Loc from "./screens/perso/persoMonDossier3Loc";
 import PersoMonDossier2Achat from "./screens/perso/persoMonDossier2Achat";
 import PersoMonDossier3Achat from "./screens/perso/persoMonDossier3Achat";
+import PersoMaVisite from "./screens/perso/persoMaVisite"
 
 import FirstScreen from "./screens/firstScreen";
 
@@ -38,11 +39,13 @@ import { Provider } from "react-redux";
 import user from "./reducers/user";
 import pro from "./reducers/pro";
 import monClient from "./reducers/monClient";
+import maVisite from "./reducers/maVisite";
+import maVille from "./reducers/maVille";
 
 import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
-  reducer: { user, pro, monClient },
+  reducer: { user, pro, monClient, maVisite, maVille},
 });
 
 const TabNavigatorPro = () => {
@@ -111,7 +114,7 @@ const TabNavigatorPro = () => {
       })}
     >
       
-      <Tab.Screen name="ProHome" component={ProHome} />
+      <Tab.Screen name="Home" component={ProHome} />
       <Tab.Screen name="Mes tchats" component={ProTchats} />
       <Tab.Screen name="Mes annonces" component={ProAnnonces} />
       <Tab.Screen name="Mes visites" component={ProVisites} />
@@ -183,7 +186,7 @@ const TabNavigatorPerso = () => {
       })}
     >
       
-      <Tab.Screen name="PersoHome" component={PersoHome} />
+      <Tab.Screen name="Home" component={PersoHome} />
       <Tab.Screen name="Mes tchats" component={PersoTchats} />
       <Tab.Screen name="Mes visites" component={PersoVisites} />
       <Tab.Screen name="Mon profil" component={PersoProfil} />
@@ -196,19 +199,25 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
-              <Stack.Screen name="test" component={ProConnectionScreen} />
+            <Stack.Screen
+              name="TabNavigatorPerso"
+              component={TabNavigatorPerso}
+            />
+            <Stack.Screen
+              name="TabNavigatorPro"
+              component={TabNavigatorPro}
+              style={styles.tabNavigator}
+            />
+              <Stack.Screen name="PersoMaVisite" component={PersoMaVisite} />
+              <Stack.Screen name="test" component={FicheClient} />
               <Stack.Screen name="FirstScreen" component={FirstScreen} />
-              <Stack.Screen
-                name="TabNavigatorPro"
-                component={TabNavigatorPro}
-                style={styles.tabNavigator}
-              />
+              <Stack.Screen name="PersoMonDossier1" component={PersoMonDossier1} />
+              <Stack.Screen name="PersoMonDossier2Achat" component={PersoMonDossier2Achat} />
               <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
               <Stack.Screen name="PersoConnexionScreen" component={PersoConnectionScreen} />
               <Stack.Screen name="ProVisites" component={ProVisites} />
               <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
               <Stack.Screen name="PersoHome" component={PersoHome}/>
-              <Stack.Screen name="PersoMonDossier1" component={PersoMonDossier1} />
               <Stack.Screen name="PersoMonDossier2Loc" component={PersoMonDossier2Loc} />
               <Stack.Screen name="PersoMonDossier3Loc" component={PersoMonDossier3Loc} />
               <Stack.Screen name="PersoMonDossier3Achat" component={PersoMonDossier3Achat} />
@@ -219,11 +228,6 @@ export default function App() {
               <Stack.Screen name="ProConnectionScreen" component={ProConnectionScreen} />
               <Stack.Screen name="ProHome" component={ProHome} />
               <Stack.Screen name="ProTchats" component={ProTchats} />
-              <Stack.Screen
-                name="TabNavigatorPerso"
-                component={TabNavigatorPerso}
-              />
-              <Stack.Screen name="ProPreferences" component={ProPreferences} />
           </Stack.Navigator>
         </NavigationContainer>
     </Provider>

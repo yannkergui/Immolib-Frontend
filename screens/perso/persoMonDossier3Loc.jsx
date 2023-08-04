@@ -5,6 +5,7 @@ import {
   View,
   Image,
   TextInput,
+  ScrollView
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import { useState } from "react";
@@ -15,8 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { userDatas } from "../../reducers/user";
 
 export default function PersoMonDossier3Loc({ navigation }) {
-
-  const myIPAdress = "192.168.10.157";
+  const myIPAdress = "192.168.10.169";
 
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
@@ -28,13 +28,14 @@ export default function PersoMonDossier3Loc({ navigation }) {
   //3 Etats relatifs à la situation pro renseignée (util au push en BDD)
 
   const [situationAutre, setSituationAutre] = useState("");
-  const [contrat, setContrat] = useState("");
+  const [contrat, setContrat] = useState("cdi");
 
   const SwitchContrat = [
     { label: "CDI", value: "cdi" },
     { label: "CDD", value: "cdd" },
   ];
 
+  const [idDoc, setIdDoc] = useState("");
   const [ficheDePaie1, setFicheDePaie1] = useState("");
   const [ficheDePaie2, setFicheDePaie2] = useState("");
   const [ficheDePaie3, setFicheDePaie3] = useState("");
@@ -44,58 +45,158 @@ export default function PersoMonDossier3Loc({ navigation }) {
 
   // fonction relative à l'upload des fichiers au clique sur l'icone
 
+  const UploadDocId = async () => {
+    const result = await DocumentPicker.getDocumentAsync({
+      type: "image/*",
+    });
+    const formData = new FormData();
+
+    formData.append("photoFromFront", {
+      uri: result.assets[0].uri,
+      name: "idDoc",
+      type: "image/*",
+    });
+    fetch(`http://${myIPAdress}:3000/users/upload`, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setIdDoc("ok");
+        dispatch(userDatas({ idDoc: data.url }));
+      });
+  };
+
   const UploadFicheDePaie1 = async () => {
     const result = await DocumentPicker.getDocumentAsync({
       type: "image/*",
     });
-    for (let i = 0; i < result.assets.length; i++) {
-      setFicheDePaie1(result.assets[i].uri);
-    }
+    const formData = new FormData();
+
+    formData.append("photoFromFront", {
+      uri: result.assets[0].uri,
+      name: "salaire1",
+      type: "image/*",
+    });
+    fetch(`http://${myIPAdress}:3000/users/upload`, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setFicheDePaie1("ok");
+        dispatch(userDatas({ salaire1: data.url }));
+      });
   };
 
   const UploadFicheDePaie2 = async () => {
     const result = await DocumentPicker.getDocumentAsync({
       type: "image/*",
     });
-    for (let i = 0; i < result.assets.length; i++) {
-      setFicheDePaie2(result.assets[i].uri);
-    }
+    const formData = new FormData();
+
+    formData.append("photoFromFront", {
+      uri: result.assets[0].uri,
+      name: "salaire2",
+      type: "image/*",
+    });
+    fetch(`http://${myIPAdress}:3000/users/upload`, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setFicheDePaie2("ok");
+        dispatch(userDatas({ salaire2: data.url }));
+      });
   };
 
   const UploadFicheDePaie3 = async () => {
     const result = await DocumentPicker.getDocumentAsync({
       type: "image/*",
     });
-    for (let i = 0; i < result.assets.length; i++) {
-      setFicheDePaie3(result.assets[i].uri);
-    }
+    const formData = new FormData();
+
+    formData.append("photoFromFront", {
+      uri: result.assets[0].uri,
+      name: "salaire3",
+      type: "image/*",
+    });
+    fetch(`http://${myIPAdress}:3000/users/upload`, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setFicheDePaie3("ok");
+        dispatch(userDatas({ salaire3: data.url }));
+      });
   };
 
   const UploadAvisImpot = async () => {
     const result = await DocumentPicker.getDocumentAsync({
       type: "image/*",
     });
-    for (let i = 0; i < result.assets.length; i++) {
-      setAvisImpot(result.assets[i].uri);
-    }
+    const formData = new FormData();
+
+    formData.append("photoFromFront", {
+      uri: result.assets[0].uri,
+      name: "AvisImpot",
+      type: "image/*",
+    });
+    fetch(`http://${myIPAdress}:3000/users/upload`, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setAvisImpot("ok");
+        dispatch(userDatas({ impots: data.url }));
+      });
   };
 
   const UploadBilan = async () => {
     const result = await DocumentPicker.getDocumentAsync({
       type: "image/*",
     });
-    for (let i = 0; i < result.assets.length; i++) {
-      setBilan(result.assets[i].uri);
-    }
+    const formData = new FormData();
+
+    formData.append("photoFromFront", {
+      uri: result.assets[0].uri,
+      name: "AvisImpot",
+      type: "image/*",
+    });
+    fetch(`http://${myIPAdress}:3000/users/upload`, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setBilan("ok");
+        dispatch(userDatas({ bilan: data.url }));
+      });
   };
 
   const UploadAutre = async () => {
     const result = await DocumentPicker.getDocumentAsync({
       type: "image/*",
     });
-    for (let i = 0; i < result.assets.length; i++) {
-      setAutre(result.assets[i].uri);
-    }
+    const formData = new FormData();
+
+    formData.append("photoFromFront", {
+      uri: result.assets[0].uri,
+      name: "AvisImpot",
+      type: "image/*",
+    });
+    fetch(`http://${myIPAdress}:3000/users/upload`, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setAutre("ok");
+        dispatch(userDatas({ autres: data.url }));
+      });
   };
 
   const handleEtapeSuivante = () => {
@@ -116,12 +217,18 @@ export default function PersoMonDossier3Loc({ navigation }) {
           nbLoc: user.nbLocataire,
           meuble: user.meuble,
         },
+        documents: {
+          salaire1: user.salaire1,
+          salaire2: user.salaire2,
+          salaire3: user.salaire3,
+          impots: user.impots,
+          bilan: user.bilan,
+          autres: user.autres,
+        },
       }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-      })
+      .then((data) => {});
     navigation.navigate("PersoHome");
   };
 
@@ -143,11 +250,8 @@ export default function PersoMonDossier3Loc({ navigation }) {
       }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-      })
+      .then((data) => {});
     navigation.navigate("PersoHome");
-    
   };
 
   return (
@@ -165,6 +269,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
           <Text>15/03/2023 à 17h</Text>
           <Text>66 rue Victor Hugo, 75001 Paris</Text>
         </View>
+        
         <Text style={styles.title}>Mon Dossier</Text>
         <View style={styles.pageContainer}>
           <View style={styles.pageNumber}>
@@ -202,17 +307,22 @@ export default function PersoMonDossier3Loc({ navigation }) {
               animationDuration={250}
               height={45}
             />
-            {/* <TextInput
-              style={styles.input}
-              keyboardType="numeric"
-              placeholder="Autre"
-              onChangeText={(value) => setMonRevenu(value)}
-              value={monRevenu}
-            ></TextInput> */}
           </View>
           <View style={styles.lineContainer}>
             <Text>Je charge mes documents</Text>
           </View>
+          <View style={styles.lineContainer}>
+            <Text>Pièce d'identité</Text>
+            {idDoc !== "" ? (
+              <FontAwesome name="check" size={30} color="green" />
+            ) : (
+              ""
+            )}
+            <TouchableOpacity onPress={UploadDocId}>
+              <FontAwesome name="cloud-upload" size={30} color="#ffffff" />
+            </TouchableOpacity>
+          </View>
+
           <View style={styles.lineContainer}>
             <Text>Fiche de paie 1</Text>
             {ficheDePaie1 !== "" ? (
@@ -373,16 +483,6 @@ const styles = StyleSheet.create({
     marginTop: "5%",
   },
 
-  nextBtnContainer: {
-    flexDirection: "row",
-    borderRadius: 10,
-    width: "80%",
-    height: "10%",
-    alignItems: "center",
-    justifyContent: "space-around",
-    marginTop: 70,
-  },
-
   skip: {
     alignItems: "center",
     justifyContent: "center",
@@ -443,8 +543,6 @@ const styles = StyleSheet.create({
 
   nextBtnContainer: {
     flexDirection: "row",
-    borderColor: "#47AFA5",
-    borderWidth: 2,
     borderRadius: 10,
     width: "80%",
     height: "10%",

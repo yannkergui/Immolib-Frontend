@@ -1,100 +1,158 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Linking, Platform, ScrollView } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
-import { useState } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import SwitchSelector from "react-native-switch-selector";
+import { useDispatch } from 'react-redux';
+import { useState, useEffect } from "react";
+import { maVisiteData } from '../../reducers/maVisite';
+import { maVilleData } from '../../reducers/maVille';
 
-export default function PersoVisites() {
+
+export default function PersoVisites({navigation}) {
+
+  const dispatch = useDispatch();
+
+  // etat pour stocker les infos reçues du backend
+  const [visitesPerso, setVisitesPerso] = useState([]);
+
+  // Fetch du backend au chargement de la page pour récupérer les visites liées au user
+  useEffect(() => {
+    fetch('http://192.168.10.174:3000/visites/user/64cccd2e0fd39de6f4a550dd')
+      .then(response => response.json())
+      .then(data => {
+        setVisitesPerso(data.VisitesTrouvees);
+      })
+  }, []);
 
   // constante relative au switch de changement de page 
   const page = [
     { label: "en attente de validation", value: "en attente" },
-    { label: "confirmées", value: "confirmées" },
+    { label: "confirmées", value: "confirmé" },
     { label: "passées", value: "passées" },
   ];
 
-  // Etat relatif au changement de page via le switch
 
+  // Etat relatif au changement de page via le switch
   const [activPage, setActivePage] = useState("en attente");
 
-  // visiteData (en dur pour le moment, sera par la suite un fetch de la BDD)
+  // fonction de click sur la Card visite pour dispatcher les infos dans le reducer afin de les afficher sur le screen suivant
+  // et naviguer vers l'écran perso ma visite
+  const handleSubmit = (e) => {
+    dispatch(maVisiteData(e));
+    fetch (`https://api-adresse.data.gouv.fr/search/?q=${e.bienImmoId.numeroRue}+${e.bienImmoId.rue}+${e.bienImmoId.codePostal}`)
+    .then((response) => response.json())
+    .then((data) => {console.log(data.features[0]);
+      const newAdress = {
+        latitude:  data.features[0].geometry.coordinates[1],
+        longitude:  data.features[0].geometry.coordinates[0],
+      };
+      dispatch(maVilleData(newAdress))
+    
+    })
+    navigation.navigate('PersoMaVisite')
 
-  const visitesPerso = [
-    {
-      nom: "Appartement 3 pièces",
-      adresse: "77 rue victor hugo, 75000 Paris",
-      date: "21/09/2023",
-      statut: "en attente",
-    },
-    {
-      nom: "Maison 160m²",
-      adresse: "77 rue victor hugo, 75000 Paris",
-      date: "24/12/2023",
-      statut: "en attente",
-    },
-    {
-      nom: "studio 20 m²",
-      adresse: "77 rue victor hugo, 75000 Paris",
-      date: "11/01/2024",
-      statut: "confirmées",
-    },
-    {
-      nom: "Villa 220 m²",
-      adresse: "77 rue victor hugo, 75000 Paris",
-      date: "21/09/2023",
-      statut: "en attente",
-    },
-    {
-      nom: "Chateau ",
-      adresse: "77 rue victor hugo, 75000 Paris",
-      date: "21/05/2023",
-      statut: "passées",
-    },
-  ];
+  };
 
   // 1er map relatif aux visites en attente 
-
   const visiteEnAttente = visitesPerso.map((data) => {
-    if (data.statut === "en attente") {
+    
+    // fonction pour gérer les appels lorsqu'on clique sur le numéro de téléphone
+    const onPressMobileNumberClick = (number) => {
+
+      let phoneNumber = '';
+      if (Platform.OS === 'android') {
+        phoneNumber = `tel:${number}`;
+      } else {
+        phoneNumber = `telprompt:${number}`;
+      }
+  
+      Linking.openURL(phoneNumber);
+   }
+
+    if (data.statut === "en attente") { 
       return (
+    <TouchableOpacity style={styles.touchable} onPress={() => { handleSubmit(data) }}>
         <View style={styles.visiteCard}>
-          <View style={styles.lineCard}>
-            <Text> Le {data.date} </Text>
+          <View style={styles.lineCardheader}>
+            <View style={styles.lineheader}>
+            <FontAwesome name="calendar" size={25} color="white" />
+            <Text  style={styles.Textheader}> Le {data.dateOfVisit} à {data.startTimeVisit}</Text>
+            </View>
             <TouchableOpacity>
-              <FontAwesome name="edit" size={30} color="#1F2937" />
+              <FontAwesome name="edit" size={30} color="white" />
             </TouchableOpacity>
           </View>
           <View style={styles.lineCard}>
-            <Text> {data.adresse}</Text>
-            <TouchableOpacity>
-              <FontAwesome name="remove" size={30} color="#1F2937" />
-            </TouchableOpacity>
-          </View>
+            <View>
+              <Text> {data.bienImmoId.titre}</Text>
+              <Text>{data.bienImmoId.numRue} {data.bienImmoId.rue} {data.bienImmoId.codePostal}</Text>
+              <View style={styles.agenceDiv}>
+              <View style={styles.agence}>
+                <Text> {data.prosId.nom} {data.prosId.prenom}</Text>
+                {/* <TouchableOpacity style={styles.teltouchable} onPress={() => { onPressMobileNumberClick(data.prosId.tel)}}> */}
+                 <Text style={styles.tel}> {data.prosId.tel}</Text>
+                {/* </TouchableOpacity> */}
+              </View>
+              <View style={styles.iconCard}>
+              <TouchableOpacity style={styles.iconcontainer}  onPress={() => { onPressMobileNumberClick(data.prosId.tel)}}>
+                    <FontAwesome style={styles.icon} name='phone' size={30} color='#1F2937' />
+                </TouchableOpacity>
+              <TouchableOpacity style={styles.iconcontainer}>
+                <FontAwesome name="remove" size={30} color="#1F2937" />
+              </TouchableOpacity>
+              </View>
+              </View>
+            </View>
+          </View>    
         </View>
+    </TouchableOpacity>
+  
+        
       );
     }
   });
 
   // 2iem map relatif aux visites passées
 
-  const visitePassees = visitesPerso.map((data) => {
+  const visitePassees = visitesPerso.map((data) => { console.log(data);
     if (data.statut === "passées") {
       return (
-        <View style={styles.visiteCard}>
-          <View style={styles.lineCard}>
-            <Text> Le {data.date} </Text>
-            <TouchableOpacity>
-              <FontAwesome name="edit" size={30} color="#1F2937" />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.lineCard}>
-            <Text> {data.adresse}</Text>
-            <TouchableOpacity>
-              <FontAwesome name="remove" size={30} color="#1F2937" />
-            </TouchableOpacity>
-          </View>
-        </View>
+        <TouchableOpacity style={styles.touchable} onPress={() => { handleSubmit(data) }}>
+            <View style={styles.visiteCard}>
+              <View style={styles.lineCardheader}>
+                <View style={styles.lineheader}>
+                <FontAwesome name="calendar" size={25} color="white" />
+                <Text  style={styles.Textheader}> Le {data.dateOfVisit} à {data.startTimeVisit}</Text>
+                </View>
+                <TouchableOpacity>
+                  <FontAwesome name="edit" size={30} color="white" />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.lineCard}>
+                <View>
+                  <Text> {data.bienImmoId.titre}</Text>
+                  <Text>{data.bienImmoId.numRue} {data.bienImmoId.rue} {data.bienImmoId.codePostal}</Text>
+                  <View style={styles.agenceDiv}>
+                  <View style={styles.agence}>
+                    <Text> {data.prosId.nom} {data.prosId.prenom}</Text>
+                    <TouchableOpacity style={styles.teltouchable} onPress={() => { onPressMobileNumberClick(data.prosId.tel)}}>
+                     <Text style={styles.tel}> {data.prosId.tel}</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.iconCard}>
+                  <TouchableOpacity style={styles.iconcontainer}  onPress={() => { onPressMobileNumberClick(data.prosId.tel)}}>
+                        <FontAwesome style={styles.icon} name='phone' size={30} color='#1F2937' />
+                    </TouchableOpacity>
+                  <TouchableOpacity style={styles.iconcontainer}>
+                    <FontAwesome name="remove" size={30} color="#1F2937" />
+                  </TouchableOpacity>
+                  </View>
+                  </View>
+                </View>
+              </View>    
+            </View>
+        </TouchableOpacity>
       );
     }
   });
@@ -102,22 +160,43 @@ export default function PersoVisites() {
   // 3iem map relatif aux visites confirmées
 
   const visiteConfirmees = visitesPerso.map((data) => {
-    if (data.statut === "confirmées") {
+    if (data.statut === "confirmé") {
       return (
-        <View style={styles.visiteCard}>
-          <View style={styles.lineCard}>
-            <Text> Le {data.date} </Text>
-            <TouchableOpacity>
-              <FontAwesome name="edit" size={30} color="#1F2937" />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.lineCard}>
-            <Text> {data.adresse}</Text>
-            <TouchableOpacity>
-              <FontAwesome name="remove" size={30} color="#1F2937" />
-            </TouchableOpacity>
-          </View>
-        </View>
+        <TouchableOpacity style={styles.touchable} onPress={() => { handleSubmit(data) }}>
+            <View style={styles.visiteCard}>
+              <View style={styles.lineCardheader}>
+                <View style={styles.lineheader}>
+                <FontAwesome name="calendar" size={25} color="white" />
+                <Text  style={styles.Textheader}> Le {data.dateOfVisit} à {data.startTimeVisit}</Text>
+                </View>
+                <TouchableOpacity>
+                  <FontAwesome name="edit" size={30} color="white" />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.lineCard}>
+                <View>
+                  <Text> {data.bienImmoId.titre}</Text>
+                  <Text>{data.bienImmoId.numRue} {data.bienImmoId.rue} {data.bienImmoId.codePostal}</Text>
+                  <View style={styles.agenceDiv}>
+                  <View style={styles.agence}>
+                    <Text> {data.prosId.nom} {data.prosId.prenom}</Text>
+                    <TouchableOpacity style={styles.teltouchable} onPress={() => { onPressMobileNumberClick(data.prosId.tel)}}>
+                     <Text style={styles.tel}> {data.prosId.tel}</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.iconCard}>
+                  <TouchableOpacity style={styles.iconcontainer}  onPress={() => { onPressMobileNumberClick(data.prosId.tel)}}>
+                        <FontAwesome style={styles.icon} name='phone' size={30} color='#1F2937' />
+                    </TouchableOpacity>
+                  <TouchableOpacity style={styles.iconcontainer}>
+                    <FontAwesome name="remove" size={30} color="#1F2937" />
+                  </TouchableOpacity>
+                  </View>
+                  </View>
+                </View>
+              </View>    
+            </View>
+        </TouchableOpacity>
       );
     }
   });
@@ -146,11 +225,13 @@ export default function PersoVisites() {
             height={45}
           />
         </View>
+        <ScrollView style={styles.scrollview}>
         <View style={styles.cardContainer}>
           {activPage === "en attente" && visiteEnAttente}
           {activPage === "passées" && visitePassees}
-          {activPage === "confirmées" && visiteConfirmees}
+          {activPage === "confirmé" && visiteConfirmees}
         </View>
+        </ScrollView>
       </LinearGradient>
     </View>
   );
@@ -195,7 +276,6 @@ const styles = StyleSheet.create({
     marginRight: 3,
   },
   title: {
-    fontFamily: "Nunito",
     color: "white",
     fontSize: 40,
     fontStyle: "normal",
@@ -208,8 +288,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
+  touchable:{
+    width:'100%',
+    alignItems:'center'
+  },
+
   visiteCard: {
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     // alignItems: "center",
     height: 150,
     width: "90%",
@@ -230,7 +315,56 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     margin: 15,
   },
+  lineCardheader:{
+    flexDirection: "row",
+    justifyContent: "space-between",
+    margin: 15,
+    borderBottomColor:'white',
+    borderBottomWidth:2,
+    paddingBottom:6,
+  },
+
   SwitchSelector3choix: {
     width: "100%",
   },
+
+  lineheader:{
+    flexDirection:'row',
+    alignItems:'center',
+  },
+
+  Textheader:{
+  marginLeft: 10,
+  color:'white',
+  fontSize:15,
+  },
+
+  agence: {
+    marginTop: 10,
+    marginBottom:8,
+  },
+  agenceDiv:{
+    flexDirection:'row',
+    justifyContent:'space-between',
+    width: '78.5%',
+    alignItems: 'center',
+  },
+  scrollview:{
+    width: '100%',
+  },
+  iconcontainer :{
+    top : 0,
+    backgroundColor : 'white',
+    width : 50,
+    height: 50,
+    borderRadius : 100,
+    justifyContent:'center',
+    alignItems:'center',
+    marginRight:10,
+    },
+    iconCard:{
+      flexDirection:'row',
+      marginLeft: 160,
+    }
 });
+
