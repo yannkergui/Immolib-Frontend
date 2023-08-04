@@ -170,9 +170,7 @@ export default function FicheClient({navigation}) {
                     </View>
             </View>
                     <View>
-                        <TouchableOpacity
-                        style={styles.button}
-                        >
+                        <TouchableOpacity style={styles.button}>
                             < Text style={styles.textButton}>Télécharger les Documents</Text>
                         </TouchableOpacity>
                     </View>

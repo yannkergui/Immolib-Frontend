@@ -4,6 +4,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import { useDispatch } from 'react-redux';
 import {proDatas} from '../../reducers/pro';
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
  // Adresse IP à modifier si besoin
 const myIPAdress = '192.168.10.155:3000'
@@ -12,12 +13,19 @@ export default function ProConnectionScreen({ navigation }) {
 
    //Etats pour récupérer les inputs utilisateur
    const [email, setEmail]=useState('');
-   const [mdp, setMdp]=useState('');
+   const [motDePasse, setMotDePasse]=useState('');
    const [prenom, setPrenom]=useState('');
    const [nom, setNom]=useState('');
    const [tel, setTel]=useState('');
-   const [raisonSociale, setRaisonSociale]=useState('');
    const [siret, setSiret]=useState(null);
+
+  //Etats pour récupérer les données de l'API Insee :
+  const [denominInsee, setDenominInsee]=useState('');
+  const [sirenInsee, setSireninsee]=useState('');
+  const [siretInsee, setSiretinsee]=useState('');
+  const [dateInsee, setDateInsee]=useState('');
+  const [adresseInsee, setAdresseInsee]=useState('');
+
 
   //désactivation du regex réel pour les tests /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
    const EMAIL_REGEX = /[a-z]/
@@ -46,37 +54,42 @@ export default function ProConnectionScreen({ navigation }) {
   // 2eme boutton "Se connecter" qui redirige vers la homePage
   const handleConnexionBis = () => {
     // Si correspondance avec la REGEX EMAIL
-    if (EMAIL_REGEX.test(email) && mdp) {
+    if (EMAIL_REGEX.test(email) && motDePasse) {
       //Récupération des données de l'utilisateur de la BDD
       fetch(`http://${myIPAdress}/pros/signin`, {
         
       method : 'POST',
       headers : {'Content-Type' : 'application/json'},
-      body : JSON.stringify({email : email, motDePasse: mdp})
+      body : JSON.stringify({email : email, motDePasse: motDePasse})
       })
       .then(response => response.json())
       .then(data => {
         if (data.result) {
-          let { raisonSociale, siret, prenom, nom, email, tel, motDePasse, token, numRue, rue, codePostal, photo, } = data.pro
+          let { prenom, nom, email, tel, motDePasse, token, photo } = data.pro
+          let {denomination, siren, siret, dateCreation, adresse} = data.pro.agence
+
           console.log('data récupéré : ', data),
           dispatch(proDatas(
-            { raisonSociale,
-              siret,
-              prenom,
+            { prenom,
               nom, 
               email, 
               tel,
               motDePasse,
               token,
-              numRue,
-              rue,
-              codePostal,
               photo,
-              }));
+              agence : {
+                denomination,
+                siren,
+                siret,
+                dateCreation,
+                adresse,
+              }
+            }
+          ));
           setModalConnexion(false);
-          navigation.navigate('ProHome');
+          navigation.navigate('ProPreferences');
           setEmail('');
-          setMdp('')
+          setMotDePasse('')
           setEmailError(false);
         }
       })  
@@ -85,7 +98,7 @@ export default function ProConnectionScreen({ navigation }) {
       if (!EMAIL_REGEX.test(email))   {
         setEmailError(true);
       }
-      if (!mdp) {
+      if (!motDePasse) {
         setErrorEmpty(true);    
       }    
     } 
@@ -97,50 +110,173 @@ export default function ProConnectionScreen({ navigation }) {
   }
 
     // 2eme bouton "S'inscrire" qui redirige vers la homePage
-    const handleInscriptionBis = () => {
-        if (EMAIL_REGEX.test(email) && TEL_REGEX.test(tel) && SIRET_REGEX.test(siret)) {
-          fetch(`http://${myIPAdress}/pros/signup`, {
-            method : 'POST',
-            headers : {'Content-Type' : 'application/json'},
-            body : JSON.stringify({raisonSociale : raisonSociale, siret: siret, prenom : prenom, nom: nom, email : email, tel : tel, motDePasse: mdp})
-            })
-            .then(response => response.json())
-            .then(data => {
-              if (data.result) {
-                let {raisonSociale, siret, prenom, nom, email, tel, token, motDePasse} = data.pro
-                dispatch(proDatas({
-                  raisonSociale : raisonSociale,
-                  siret : siret,
-                  prenom : prenom,
-                  nom : nom, 
-                  email : email, 
-                  tel : tel,
-                  token : token,
-                  motDePasse : motDePasse}));
-                setModalInscription(false);
-                navigation.navigate('ProHome');
-                setEmail('');
-                setMdp('');
-                setEmailError(false);
-                setTelError(false);
-                
-              } 
-            })  
-        } else {
-          if (!EMAIL_REGEX.test(email)) {
-            setEmailError(true);
-          } 
-          if (!TEL_REGEX.test(tel)) {
-            setTelError(true);
+    // const handleInscriptionBis = () => {
+    //     if (EMAIL_REGEX.test(email) && TEL_REGEX.test(tel) && SIRET_REGEX.test(siret)) {
+    //       fetch (`https://api.insee.fr/entreprises/sirene/V3/siret/${siret}`,
+    //         {
+    //           method : 'GET',
+    //           headers : {
+    //             'Content-Type' : 'application/json',
+    //             //Required OAuth credentials not provided. Make sure your API invocation call has a header: "Authorization: Bearer ACCESS_TOKEN"
+    //             'Authorization' : 'Bearer 49db08e1-35ce-30fb-b53a-4f96e8282fce'
+    //           },
+    //         }
+    //       )
+    //         .then(response => response.json())
+		// 	      .then(data => {
+    //           if (data.header.message ==="ok") {
+    //             console.log("test1");
+    //             let adrInsee = data.etablissement.adresseEtablissement
+    //             setDenominInsee (data.etablissement.uniteLegale.denominationUniteLegale)
+    //             setSireninsee (data.etablissement.siren)
+    //             setSiretinsee (data.etablissement.siret)
+    //             setDateInsee (data.etablissement.dateCreationEtablissement)
+    //             setAdresseInsee (`${adrInsee.numeroVoieEtablissement}${adrInsee.indiceRepetitionEtablissement}, ${adrInsee.typeVoieEtablissement} ${adrInsee.libelleVoieEtablissement}, ${adrInsee.codePostalEtablissement} ${adrInsee.libelleCommuneEtablissement} `)
+    //             fetch(`http://${myIPAdress}/pros/signup`, {
+    //               method : 'POST',
+    //               headers : {'Content-Type' : 'application/json'},
+    //               body : JSON.stringify(
+    //                 { siret: siretInsee, prenom : prenom, nom: nom, email : email, motDePasse: motDePasse, tel : tel,
+    //                   denomination: denominInsee, siren: sirenInsee, dateCreation: dateInsee, adresse: adresseInsee  
+    //                 }
+    //               )
+    //             })
+    //               .then(response => response.json())
+    //               .then(data => {
+    //                 if (data.result) {
+    //                   let {prenom, nom, email, tel, motDePasse, token} = data.newPro
+    //                   let {denomination, siren, siret, dateCreation, adresse} = data.newPro.agence
+    //                   dispatch(proDatas(
+    //                     {
+    //                       siret,
+    //                       prenom,
+    //                       nom,
+    //                       email,
+    //                       tel,
+    //                       motDePasse,
+    //                       token,
+    //                       agence : {
+    //                         denomination,
+    //                         siren,
+    //                         siret,
+    //                         dateCreation,
+    //                         adresse,
+    //                       }
+    //                     }
+    //                   ))
+    //                   setModalInscription(false);
+    //                   navigation.navigate('ProPreferences');
+    //                   setEmail('');
+    //                   setMotDePasse('');
+    //                   setEmailError(false);
+    //                   setTelError(false);
+    //                   console.log("test3");
+    //                 } 
+    //               })  
+    //           }
+    //         }) 
+    //     } else {
+    //       if (!EMAIL_REGEX.test(email)) {
+    //         setEmailError(true);
+    //       } 
+    //       if (!TEL_REGEX.test(tel)) {
+    //         setTelError(true);
+    //       }
+    //       if (!SIRET_REGEX.test(siret)) {
+    //         setSiretError(true);
+    //       }
+    //       if (!prenom || !nom || !motDePasse) {
+    //         setErrorEmpty(true);
+    //       }
+    //     } 
+    //   }
+
+    const handleInscriptionBis = async () => {
+      if (EMAIL_REGEX.test(email) && TEL_REGEX.test(tel) && SIRET_REGEX.test(siret)) {
+          const response1 = await fetch(`https://api.insee.fr/entreprises/sirene/V3/siret/${siret}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer 49db08e1-35ce-30fb-b53a-4f96e8282fce'
+            },
+          });
+    
+          const data1 = await response1.json();
+    
+          if (data1.header.message === "ok") {
+            // Mise à jour des états avec les données de la première requête
+            let adrInsee = data1.etablissement.adresseEtablissement;
+            setDenominInsee(data1.etablissement.uniteLegale.denominationUniteLegale);
+            setSireninsee(data1.etablissement.siren);
+            setSiretinsee(data1.etablissement.siret);
+            setDateInsee(data1.etablissement.dateCreationEtablissement);
+            setAdresseInsee(`${adrInsee.numeroVoieEtablissement}${adrInsee.indiceRepetitionEtablissement}, ${adrInsee.typeVoieEtablissement} ${adrInsee.libelleVoieEtablissement}, ${adrInsee.codePostalEtablissement} ${adrInsee.libelleCommuneEtablissement}`);
+    
+            const response2 = await fetch(`http://${myIPAdress}/pros/signup`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                siret: siretInsee,
+                prenom: prenom,
+                nom: nom,
+                email: email,
+                motDePasse: motDePasse,
+                tel: tel,
+                denomination: denominInsee,
+                siren: sirenInsee,
+                dateCreation: dateInsee,
+                adresse: adresseInsee
+              })
+            });
+    
+            const data2 = await response2.json();
+    
+            if (data2.result) {
+              // Mise à jour des états avec les données de la deuxième requête
+              let { prenom, nom, email, tel, motDePasse, token } = data2.newPro;
+              let { denomination, siren, siret, dateCreation, adresse } = data2.newPro.agence;
+              dispatch(proDatas({
+                siret,
+                prenom,
+                nom,
+                email,
+                tel,
+                motDePasse,
+                token,
+                agence: {
+                  denomination,
+                  siren,
+                  siret,
+                  dateCreation,
+                  adresse,
+                }
+              }));
+    
+              setModalInscription(false);
+              navigation.navigate('ProPreferences');
+              setEmail('');
+              setMotDePasse('');
+              setEmailError(false);
+              setTelError(false);
+              console.log("test3");
+            }
           }
-          if (!SIRET_REGEX.test(siret)) {
-            setSiretError(true);
-          }
-          if (!prenom || !nom || !mdp) {
-            setErrorEmpty(true);
-          }
-        } 
+      } else {
+        if (!EMAIL_REGEX.test(email)) {
+          setEmailError(true);
+        }
+        if (!TEL_REGEX.test(tel)) {
+          setTelError(true);
+        }
+        if (!SIRET_REGEX.test(siret)) {
+          setSiretError(true);
+        }
+        if (!prenom || !nom || !motDePasse) {
+          setErrorEmpty(true);
+        }
       }
+    };
+    
 
   const closeModal = () => {
     setModalConnexion(false);
@@ -148,7 +284,8 @@ export default function ProConnectionScreen({ navigation }) {
     setEmail('');
     setPrenom('');
     setNom('');
-    setMdp('');
+    setSiret('');
+    setMotDePasse('');
     setEmailError(false);
     setTelError(false);
     setErrorEmpty(false);
@@ -163,28 +300,32 @@ export default function ProConnectionScreen({ navigation }) {
         end={{ x: 1, y: 1 }} // End point of the gradient
         style={styles.background}
       >    
-          <View style={styles.container}>  
-              <Image style={styles.image} source={require('../../assets/IMMOLIB.png')} /> 
-              <Text style={styles.text}>PRO</Text>        
-              <Text style={styles.text}>Programme tes visites et gère tes clients en toute simplicité</Text>        
-              <View style={styles.btnContainer}>
+          <View style={styles.container}> 
 
+              <Image style={styles.image} source={require('../../assets/IMMOLIB.png')} /> 
+              <Text style={styles.text}>PROFESSIONNELS</Text>        
+              <Text style={styles.text}>Programme tes visites et gère tes clients en toute simplicité</Text>    
+
+              <View style={styles.btnContainer}>
                 <TouchableOpacity style={styles.button} onPress={()=>handleConnexion()}>
                     <Text style={styles.textButton}>Se connecter</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={()=>handleInscription()}>
                     <Text style={styles.textButton}>S'inscrire</Text>
                 </TouchableOpacity>
+              </View>
+            {/* <StatusBar style="auto" /> */}
+          </View>
 
-                <Modal style={styles.modalConnect} visible={modalConnexion} animationType="fade" transparent>
+          <Modal style={styles.modalConnect} visible={modalConnexion} animationType="fade" transparent>
                   <KeyboardAvoidingView behavior={"padding"} style={styles.container}>
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
                         <View style={styles.centeredView}>                  
                             <View style={styles.modalContainer}>
                               <View style={styles.inputsEtDelete}>
                                 <View style={styles.inputs}>
-                                      <TextInput placeholder="email" style={styles.inputModal} keyboardType={"email-address"} autoCorrect={false} autoComplete={"email"} autoCapitalize={'none'} onChangeText={(value) => setEmail(value)} value={email}/>
-                                      <TextInput placeholder="Mot de passe" style={styles.inputModal} autoCapitalize={'none'} autoCorrect={false} onChangeText={(value) => setMdp(value)} value={mdp}/>        
+                                      <TextInput placeholder="Email" style={styles.inputModal} keyboardType={"email-address"} autoCorrect={false} autoComplete={"email"} autoCapitalize={'none'} onChangeText={(value) => setEmail(value)} value={email}/>
+                                      <TextInput placeholder="Mot de passe" style={styles.inputModal} autoCapitalize={'none'} autoCorrect={false} onChangeText={(value) => setMotDePasse(value)} value={motDePasse}/>        
                                 </View>
                                 <View style={styles.deleteModal}>
                                       <TouchableOpacity style={styles.btnDeleteModal} onPress={()=>closeModal()}>
@@ -202,45 +343,41 @@ export default function ProConnectionScreen({ navigation }) {
                         </View>
                       </TouchableWithoutFeedback>
                     </KeyboardAvoidingView>
-                </Modal>  
+          </Modal>  
 
-                <Modal style={styles.modalInscription} visible={modalInscription} animationType="fade" transparent>
-                  <KeyboardAvoidingView behavior={"padding"} style={styles.container}>
-                    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-                      <View style={styles.centeredView}>
-                          <View style={styles.modalContainer}>
-                            <View style={styles.inputsEtDelete}>
-                              <View style={styles.inputs}>
-                                  <TextInput placeholder="Raison sociale" style={styles.inputModal} onChangeText={(value) => setRaisonSociale(value)} value={raisonSociale}/>
-                                  <TextInput placeholder="n° Siret" style={styles.inputModal} keyboardType={"numeric"} onChangeText={(value) => setSiret(value)} value={siret}/>
-                                  <TextInput placeholder="Prénom" style={styles.inputModal} autoComplete={"given-name"} onChangeText={(value) => setPrenom(value)} value={prenom}/>
-                                  <TextInput placeholder="nom" style={styles.inputModal} autoComplete={"family-name"} onChangeText={(value) => setNom(value)} value={nom}/>
-                                  <TextInput placeholder="email" style={styles.inputModal} keyboardType={"email-address"} autoCorrect={false} autoComplete={"email"} autoCapitalize={'none'} onChangeText={(value) => setEmail(value)} value={email}/>
-                                  <TextInput placeholder="Mot de passe" style={styles.inputModal} autoCapitalize={'none'} autoCorrect={false} onChangeText={(value) => setMdp(value)} value={mdp}/> 
-                                  <TextInput placeholder="numéro de téléphone" style={styles.inputModal} keyboardType={"phone-pad"} onChangeText={(value) => setTel(value)} value={tel}/>           
-                              </View>
-                              <View style={styles.deleteModal}>
-                                  <TouchableOpacity  onPress={()=>closeModal()}>
-                                      <Text style={styles.textDelete}>X</Text>
-                                  </TouchableOpacity>
-                              </View>
-                            </View>
-                            <TouchableOpacity style={styles.btnInscription} onPress={()=>handleInscriptionBis()}>
-                                  <Text style={styles.textButton}>S'inscrire</Text>
-                            </TouchableOpacity> 
-                                {emailError && <Text style={styles.error}>Adresse mail invalide</Text>} 
-                                {telError && <Text style={styles.error}>Numéro de téléphone invalide</Text>}
-                                {siretError && <Text style={styles.error}>Numéro de Siret invalide</Text>}
-                                {errorEmpty && <Text style={styles.error}>Tous les champs ne sont pas complétés</Text>}   
-                          </View>
+          <Modal style={styles.modalInscription} visible={modalInscription} animationType="fade" transparent>
+            <KeyboardAvoidingView behavior={"padding"} style={styles.container}>
+              <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                <View style={styles.centeredView}>
+                    <View style={styles.modalContainer}>
+                      <View style={styles.inputsEtDelete}>
+                        <View style={styles.inputs}>
+                            <TextInput placeholder="n° Siret" style={styles.inputModal} keyboardType={"numeric"} onChangeText={(value) => setSiret(value)} value={siret}/>
+                            <TextInput placeholder="Prénom" style={styles.inputModal} autoComplete={"given-name"} onChangeText={(value) => setPrenom(value)} value={prenom}/>
+                            <TextInput placeholder="Nom" style={styles.inputModal} autoComplete={"family-name"} onChangeText={(value) => setNom(value)} value={nom}/>
+                            <TextInput placeholder="Email" style={styles.inputModal} keyboardType={"email-address"} autoCorrect={false} autoComplete={"email"} autoCapitalize={'none'} onChangeText={(value) => setEmail(value)} value={email}/>
+                            <TextInput placeholder="Mot de passe" style={styles.inputModal} autoCapitalize={'none'} autoCorrect={false} onChangeText={(value) => setMotDePasse(value)} value={motDePasse}/> 
+                            <TextInput placeholder="Numéro de téléphone" style={styles.inputModal} keyboardType={"phone-pad"} onChangeText={(value) => setTel(value)} value={tel}/>           
+                        </View>
+                        <View style={styles.deleteModal}>
+                            <TouchableOpacity  onPress={()=>closeModal()}>
+                                <Text style={styles.textDelete}>X</Text>
+                            </TouchableOpacity>
+                        </View>
                       </View>
-                    </TouchableWithoutFeedback>
-                  </KeyboardAvoidingView>
-                </Modal>
-                
-              </View>
-            {/* <StatusBar style="auto" /> */}
-          </View>
+                      <TouchableOpacity style={styles.btnInscription} onPress={()=>handleInscriptionBis()}>
+                            <Text style={styles.textButton}>S'inscrire</Text>
+                      </TouchableOpacity> 
+                          {emailError && <Text style={styles.error}>Adresse mail invalide</Text>} 
+                          {telError && <Text style={styles.error}>Numéro de téléphone invalide</Text>}
+                          {siretError && <Text style={styles.error}>Numéro de Siret invalide</Text>}
+                          {errorEmpty && <Text style={styles.error}>Tous les champs ne sont pas complétés</Text>}   
+                    </View>
+                </View>
+              </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
+          </Modal>
+
       </LinearGradient>
     </View>
   </KeyboardAvoidingView>
@@ -252,7 +389,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
   },
   background: {
     flex: 1,
@@ -266,29 +403,35 @@ const styles = StyleSheet.create({
     // borderColor : 'black',
     // borderWidth : 1,
     textAlign:'center',
-    paddingTop:3,
     fontSize: 20,
+    marginBottom: 90,
   },
   image : {
     // borderColor : 'black',
     // borderWidth : 1,
     // paddingTop : 50,
     height : '28%',
+    marginBottom: -30,
+    marginTop: 50,
+    marginRight: 20,
   },
   btnContainer : {
     //flex: 1,
     width: "100%",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-between",
+    // borderColor : 'black',
+    // borderWidth : 1,
+    height: 110,
+
   },
   button : {
     alignItems: "center",
     justifyContent: "center",
-    width: "80%",
-    height: "12%",
+    width: 140,
+    height: 40,
     backgroundColor: "#47AFA5",
     borderRadius: 10,
-    marginBottom: "15%",
 
     // paramètrage de l'ombre des boutons. utiliser : (https://ethercreative.github.io/react-native-shadow-generator/) si besoin
 
@@ -356,16 +499,16 @@ const styles = StyleSheet.create({
     fontSize : 25,
   },
   btnSeConnecter : {
-    marginTop : 20,
+    marginTop : 15,
     backgroundColor : '#47AFA5',
-    padding : 20,
+    padding : 10,
     borderRadius : 10,
     width : '90%',
   },
   btnInscription : {
-    marginTop : 20,
+    marginTop : 15,
     backgroundColor : '#47AFA5',
-    padding : 20,
+    padding : 10,
     borderRadius : 10,
     width : '90%',
   },

@@ -2,9 +2,14 @@ import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import { useState } from "react";
 import SwitchSelector from "react-native-switch-selector";
+import { useDispatch, useSelector } from "react-redux";
+import { userDatas } from "../../reducers/user";
 
 export default function PersoMonDossier1({ navigation }) {
-  
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value);
+ 
+
   // les 2 etats mis à jour au clique sur le switch
 
   const [situationActuelle, setSituationActuelle] = useState("locataire");
@@ -24,11 +29,12 @@ export default function PersoMonDossier1({ navigation }) {
   ];
 
   const handleEtapeSuivante = () => {
-    if (recherche ==="achat") {
+    if (recherche === "achat") {
       navigation.navigate("PersoMonDossier2Achat");
     } else {
       navigation.navigate("PersoMonDossier2Loc");
     }
+    dispatch(userDatas({recherche : recherche, situation : situationActuelle}));
   };
 
   // Boutton passer cette étape pour le moment, pour des sujet de mis à jour sur les creens suivants (a discuter)
@@ -93,8 +99,7 @@ export default function PersoMonDossier1({ navigation }) {
           />
         </View>
         <View style={styles.nextBtnContainer}>
-
-{/* Boutton passer cette étape pour le moment, pour des sujet de mis à jour sur les creens suivants (a discuter) */}
+          {/* Boutton passer cette étape pour le moment, pour des sujet de mis à jour sur les creens suivants (a discuter) */}
 
           {/* <TouchableOpacity style={styles.skip}
           onPress={() => handlePasserCetteEtape()}>
@@ -102,7 +107,7 @@ export default function PersoMonDossier1({ navigation }) {
           </TouchableOpacity> */}
           <TouchableOpacity
             style={styles.next}
-            onPress={() => handleEtapeSuivante()}
+            onPress={(value) => handleEtapeSuivante(value)}
           >
             <Text>Etape suivante</Text>
           </TouchableOpacity>
@@ -208,8 +213,6 @@ const styles = StyleSheet.create({
 
   searchContainer: {
     flexDirection: "row",
-    borderColor: "#47AFA5",
-    borderWidth: 2,
     borderRadius: 10,
     width: "70%",
     height: "7%",
@@ -220,9 +223,6 @@ const styles = StyleSheet.create({
 
   nextBtnContainer: {
     flexDirection: "row",
-    borderColor: "#47AFA5",
-    borderWidth: 2,
-    borderRadius: 10,
     width: "80%",
     height: "10%",
     alignItems: "center",

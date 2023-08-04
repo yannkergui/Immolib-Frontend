@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/IMMOLIB.png",
       "resizeMode": "contain",
-      "backgroundColor": "#BCCDB6"
+      "backgroundColor": "#46AFA5"
     },
     "assetBundlePatterns": [
       "**/*"

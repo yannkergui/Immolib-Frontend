@@ -12,8 +12,12 @@ import {
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import { useState } from "react";
 import SwitchSelector from "react-native-switch-selector";
+import { useDispatch, useSelector } from 'react-redux';
+import {userDatas} from '../../reducers/user'
 
 export default function PersoMonDossier2Achat({ navigation }) {
+
+  const dispatch = useDispatch();
   //Gestion des inputs qui ne doivent recevoir que des nombres (alors que c'est un TextInput, donc il faut appliquer une Regex) :
   const [monBudget, setMonBudget] = useState(0);
   const [inputSurface, setInputSurface] = useState("");
@@ -34,18 +38,6 @@ export default function PersoMonDossier2Achat({ navigation }) {
     setInputNbPiece(formattedText);
   };
 
-  //préparation des fonctions pour envoyer en base de données les inputs de budget, surface, nbPiece retravaillés:
-  const saveBudgetToDatabase = () => {
-    // Enregistrez 'budget' dans la base de données ici.
-  };
-
-  const saveSurfaceToDatabase = () => {
-    // Enregistrez 'budget' dans la base de données ici.
-  };
-
-  const saveNbPieceToDatabase = () => {
-    // Enregistrez 'budget' dans la base de données ici.
-  };
 
   const [valueTypeBien, setValueTypeBien] = useState("maison");
 
@@ -55,16 +47,17 @@ export default function PersoMonDossier2Achat({ navigation }) {
     { label: "Autre", value: "autre" },
   ];
 
-  console.log(valueTypeBien);
+  
 
   //navigation en cliquant sur "Etape suivante":
   const handleEtapeSuivante = () => {
+    dispatch(userDatas({budgetMax : monBudget, typeBienAchat : valueTypeBien, minSurfaceAchat: inputSurface, minPieceAchat: inputNbPiece }))
     navigation.navigate("PersoMonDossier3Achat");
   };
 
   const handlePasserCetteEtape = () => {
-    navigation.navigate("PersoMonDossier3Achat");
-    setValueTypeBien("");
+    navigation.navigate("PersoHome");
+    
   };
 
   return (
@@ -152,13 +145,13 @@ export default function PersoMonDossier2Achat({ navigation }) {
               style={styles.skip}
               onPress={() => handlePasserCetteEtape()}
             >
-              <Text style={styles.texteBtn}>Passer cette étape</Text>
+              <Text>Passer cette étape</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.next}
               onPress={() => handleEtapeSuivante()}
             >
-              <Text style={styles.texteBtn}>Etape suivante</Text>
+              <Text>Etape suivante</Text>
             </TouchableOpacity>
           </View>
         </SafeAreaView>
@@ -244,40 +237,36 @@ const styles = StyleSheet.create({
 
   nextBtnContainer: {
     flexDirection: "row",
-    // borderColor: "#47AFA5",
-    // borderWidth: 2,
     borderRadius: 10,
     width: "80%",
     height: "10%",
     alignItems: "center",
     justifyContent: "space-around",
-    marginTop: 50,
-    marginBottom: 50,
+    marginTop: 30,
   },
 
   skip: {
     alignItems: "center",
     justifyContent: "center",
-    width: 170,
-    height: 60,
-    backgroundColor: "#414042",
+    width: "40%",
+    height: "80%",
+    backgroundColor: "transparent",
     borderColor: "white",
     borderWidth: 1,
-    borderRadius: 25,
-    borderRadius: 15,
-    marginRight: 25,
+    borderRadius: 10,
+    marginRight: 3,
   },
+
   next: {
     alignItems: "center",
     justifyContent: "center",
-    width: 170,
-    height: 60,
-    backgroundColor: "#414042",
+    width: "40%",
+    height: "80%",
+    backgroundColor: "#47AFA5",
     borderColor: "white",
     borderWidth: 1,
-    borderRadius: 25,
-    borderRadius: 15,
-    marginLeft: 25,
+    borderRadius: 10,
+    marginRight: 3,
   },
 
   formContainer: {

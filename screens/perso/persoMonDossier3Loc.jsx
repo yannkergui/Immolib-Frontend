@@ -11,8 +11,16 @@ import { useState } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import * as DocumentPicker from "expo-document-picker";
 import SwitchSelector from "react-native-switch-selector";
+import { useDispatch, useSelector } from "react-redux";
+import { userDatas } from "../../reducers/user";
 
-export default function PersoMonDossier3Loc({navigation}) {
+export default function PersoMonDossier3Loc({ navigation }) {
+
+  const myIPAdress = "192.168.10.157";
+
+  const user = useSelector((state) => state.user.value);
+  const dispatch = useDispatch();
+
   //Etat relatif au revenu renseigné (util au push en BDD)
 
   const [monRevenu, setMonRevenu] = useState(0);
@@ -20,7 +28,7 @@ export default function PersoMonDossier3Loc({navigation}) {
   //3 Etats relatifs à la situation pro renseignée (util au push en BDD)
 
   const [situationAutre, setSituationAutre] = useState("");
-  const [contrat, setContrat] = useState("cdi");
+  const [contrat, setContrat] = useState("");
 
   const SwitchContrat = [
     { label: "CDI", value: "cdi" },
@@ -91,12 +99,55 @@ export default function PersoMonDossier3Loc({navigation}) {
   };
 
   const handleEtapeSuivante = () => {
+    dispatch(userDatas({ salaire: monRevenu, contrat: contrat }));
+    fetch(`http://${myIPAdress}:3000/users/${user.email}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        recherche: user.recherche,
+        situation: user.situation,
+        salaire: monRevenu,
+        contrat: contrat,
+        location: {
+          budgetMois: user.budgetMois,
+          typeBienLoc: user.typeBienLoc,
+          minSurfaceLoc: user.minSurfaceLoc,
+          minPieceLoc: user.minPieceLoc,
+          nbLoc: user.nbLocataire,
+          meuble: user.meuble,
+        },
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
     navigation.navigate("PersoHome");
   };
 
   const handlePasserCetteEtape = () => {
-    navigation.navigate("PersoHome")
-    setContrat("")
+    fetch(`http://${myIPAdress}:3000/users/${user.email}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        recherche: user.recherche,
+        situation: user.situation,
+        location: {
+          budgetMois: user.budgetMois,
+          typeBienLoc: user.typeBienLoc,
+          minSurfaceLoc: user.minSurfaceLoc,
+          minPieceLoc: user.minPieceLoc,
+          nbLoc: user.nbLocataire,
+          meuble: user.meuble,
+        },
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+    navigation.navigate("PersoHome");
+    
   };
 
   return (
@@ -151,13 +202,13 @@ export default function PersoMonDossier3Loc({navigation}) {
               animationDuration={250}
               height={45}
             />
-            <TextInput
+            {/* <TextInput
               style={styles.input}
               keyboardType="numeric"
               placeholder="Autre"
               onChangeText={(value) => setMonRevenu(value)}
               value={monRevenu}
-            ></TextInput>
+            ></TextInput> */}
           </View>
           <View style={styles.lineContainer}>
             <Text>Je charge mes documents</Text>
@@ -166,7 +217,9 @@ export default function PersoMonDossier3Loc({navigation}) {
             <Text>Fiche de paie 1</Text>
             {ficheDePaie1 !== "" ? (
               <FontAwesome name="check" size={30} color="green" />
-            ) : ''}
+            ) : (
+              ""
+            )}
             <TouchableOpacity onPress={UploadFicheDePaie1}>
               <FontAwesome name="cloud-upload" size={30} color="#ffffff" />
             </TouchableOpacity>
@@ -175,7 +228,9 @@ export default function PersoMonDossier3Loc({navigation}) {
             <Text>Fiche de paie 2</Text>
             {ficheDePaie2 !== "" ? (
               <FontAwesome name="check" size={30} color="green" />
-            ) : ''}
+            ) : (
+              ""
+            )}
             <TouchableOpacity onPress={UploadFicheDePaie2}>
               <FontAwesome name="cloud-upload" size={30} color="#ffffff" />
             </TouchableOpacity>
@@ -184,7 +239,9 @@ export default function PersoMonDossier3Loc({navigation}) {
             <Text>Fiche de paie 3</Text>
             {ficheDePaie3 !== "" ? (
               <FontAwesome name="check" size={30} color="green" />
-            ) : ''}
+            ) : (
+              ""
+            )}
             <TouchableOpacity onPress={UploadFicheDePaie3}>
               <FontAwesome name="cloud-upload" size={30} color="#ffffff" />
             </TouchableOpacity>
@@ -193,7 +250,9 @@ export default function PersoMonDossier3Loc({navigation}) {
             <Text>Dernier avis d'imposition</Text>
             {avisImpot !== "" ? (
               <FontAwesome name="check" size={30} color="green" />
-            ) : ''}
+            ) : (
+              ""
+            )}
             <TouchableOpacity onPress={UploadAvisImpot}>
               <FontAwesome name="cloud-upload" size={30} color="#ffffff" />
             </TouchableOpacity>
@@ -202,7 +261,9 @@ export default function PersoMonDossier3Loc({navigation}) {
             <Text>Bilans</Text>
             {bilan !== "" ? (
               <FontAwesome name="check" size={30} color="green" />
-            ) : ''}
+            ) : (
+              ""
+            )}
             <TouchableOpacity onPress={UploadBilan}>
               <FontAwesome name="cloud-upload" size={30} color="#ffffff" />
             </TouchableOpacity>
@@ -211,15 +272,19 @@ export default function PersoMonDossier3Loc({navigation}) {
             <Text>Autre document</Text>
             {Autre !== "" ? (
               <FontAwesome name="check" size={30} color="green" />
-            ) : ''}
+            ) : (
+              ""
+            )}
             <TouchableOpacity onPress={UploadAutre}>
               <FontAwesome name="cloud-upload" size={30} color="#ffffff" />
             </TouchableOpacity>
           </View>
         </View>
         <View style={styles.nextBtnContainer}>
-          <TouchableOpacity style={styles.skip}
-          onPress={() => handlePasserCetteEtape()}>
+          <TouchableOpacity
+            style={styles.skip}
+            onPress={() => handlePasserCetteEtape()}
+          >
             <Text>Passer cette étape</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -310,8 +375,6 @@ const styles = StyleSheet.create({
 
   nextBtnContainer: {
     flexDirection: "row",
-    borderColor: "#47AFA5",
-    borderWidth: 2,
     borderRadius: 10,
     width: "80%",
     height: "10%",

@@ -10,16 +10,22 @@ import {
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import { useState } from "react";
 import SwitchSelector from "react-native-switch-selector";
+import { useDispatch, useSelector } from 'react-redux';
+import {userDatas} from '../../reducers/user'
+
 
 export default function PersoMonDossier2Loc({ navigation }) {
   //Etat relatif au budget renseigné (util au push en BDD)
 
   const [monBudget, setMonBudget] = useState(0);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value);
+
 
   // les 2 etats mis à jour au clique sur le switch
 
-  const [bienRecherche, setBienRecherche] = useState("locataire");
-  const [bienMeuble, setBienMeuble] = useState("achat");
+  const [bienRecherche, setBienRecherche] = useState("maison");
+  const [bienMeuble, setBienMeuble] = useState("oui");
 
   //  Etat relatif à la surface minimum (util au push en BDD)
 
@@ -50,13 +56,13 @@ export default function PersoMonDossier2Loc({ navigation }) {
   //fonction changement de page
 
   const handleEtapeSuivante = () => {
-    navigation.navigate("PersoMonDossier3Loc");
+    navigation.navigate("PersoMonDossier3Loc")
+    dispatch(userDatas({budgetMois : monBudget, typeBienLoc : bienRecherche, minSurfaceLoc: surface, minPieceLoc: nbPiece, nbLoc: nbLocataire, meuble:bienMeuble }))
   };
 
   const handlePasserCetteEtape = () => {
-    navigation.navigate("PersoMonDossier3Loc")
-    setBienRecherche("")
-    setBienMeuble("")
+    navigation.navigate("PersoHome")
+    
   };
   
 
@@ -254,8 +260,6 @@ const styles = StyleSheet.create({
 
   nextBtnContainer: {
     flexDirection: "row",
-    borderColor: "#47AFA5",
-    borderWidth: 2,
     borderRadius: 10,
     width: "80%",
     height: "10%",
