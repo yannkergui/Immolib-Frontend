@@ -1,18 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
- value: { raisonSociale : '',
-          siret: null,
-          prenom : '',
+ value: { prenom : '',
           nom: '',
           email: '',
           tel : '',
           motDePasse : '',
-          token : '',
-          numRue: '',
-          rue: '',
-          codePostal : null,
+          token: '',
           photo: '',
+          agence: {
+            denomination: '',
+            siren: '',
+            siret: '',
+            dateCreation: '',
+            adresse :'',
+          }
         },
 };
 

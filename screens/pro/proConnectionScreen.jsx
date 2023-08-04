@@ -13,19 +13,18 @@ export default function ProConnectionScreen({ navigation }) {
 
    //Etats pour récupérer les inputs utilisateur
    const [email, setEmail]=useState('');
-   const [mdp, setMdp]=useState('');
+   const [motDePasse, setMotDePasse]=useState('');
    const [prenom, setPrenom]=useState('');
    const [nom, setNom]=useState('');
    const [tel, setTel]=useState('');
-   const [raisonSociale, setRaisonSociale]=useState('');
    const [siret, setSiret]=useState(null);
 
   //Etats pour récupérer les données de l'API Insee :
-  const [raisonSoc, setRaisonSoc]=useState('');
+  const [denominInsee, setDenominInsee]=useState('');
   const [sirenInsee, setSireninsee]=useState('');
   const [siretInsee, setSiretinsee]=useState('');
-  const [dateCrea, setDateCrea]=useState('');
-  const [adresseAgence, setAdresseAgence]=useState('');
+  const [dateInsee, setDateInsee]=useState('');
+  const [adresseInsee, setAdresseInsee]=useState('');
 
 
   //désactivation du regex réel pour les tests /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -55,37 +54,42 @@ export default function ProConnectionScreen({ navigation }) {
   // 2eme boutton "Se connecter" qui redirige vers la homePage
   const handleConnexionBis = () => {
     // Si correspondance avec la REGEX EMAIL
-    if (EMAIL_REGEX.test(email) && mdp) {
+    if (EMAIL_REGEX.test(email) && motDePasse) {
       //Récupération des données de l'utilisateur de la BDD
       fetch(`http://${myIPAdress}/pros/signin`, {
         
       method : 'POST',
       headers : {'Content-Type' : 'application/json'},
-      body : JSON.stringify({email : email, motDePasse: mdp})
+      body : JSON.stringify({email : email, motDePasse: motDePasse})
       })
       .then(response => response.json())
       .then(data => {
         if (data.result) {
-          let { raisonSociale, siret, prenom, nom, email, tel, motDePasse, token, numRue, rue, codePostal, photo, } = data.pro
+          let { prenom, nom, email, tel, motDePasse, token, photo } = data.pro
+          let {denomination, siren, siret, dateCreation, adresse} = data.pro.agence
+
           console.log('data récupéré : ', data),
           dispatch(proDatas(
-            { raisonSociale,
-              siret,
-              prenom,
+            { prenom,
               nom, 
               email, 
               tel,
               motDePasse,
               token,
-              numRue,
-              rue,
-              codePostal,
               photo,
-              }));
+              agence : {
+                denomination,
+                siren,
+                siret,
+                dateCreation,
+                adresse,
+              }
+            }
+          ));
           setModalConnexion(false);
           navigation.navigate('ProPreferences');
           setEmail('');
-          setMdp('')
+          setMotDePasse('')
           setEmailError(false);
         }
       })  
@@ -94,7 +98,7 @@ export default function ProConnectionScreen({ navigation }) {
       if (!EMAIL_REGEX.test(email))   {
         setEmailError(true);
       }
-      if (!mdp) {
+      if (!motDePasse) {
         setErrorEmpty(true);    
       }    
     } 
@@ -106,71 +110,173 @@ export default function ProConnectionScreen({ navigation }) {
   }
 
     // 2eme bouton "S'inscrire" qui redirige vers la homePage
-    const handleInscriptionBis = () => {
-        if (EMAIL_REGEX.test(email) && TEL_REGEX.test(tel) && SIRET_REGEX.test(siret)) {
-          fetch (`https://api.insee.fr/entreprises/sirene/V3/siret/${siret}`,
-            {
-              method : 'GET',
-              headers : {
-                'Content-Type' : 'application/json',
-                //Required OAuth credentials not provided. Make sure your API invocation call has a header: "Authorization: Bearer ACCESS_TOKEN"</ams:description>
-                'Authorization' : 'Bearer 49db08e1-35ce-30fb-b53a-4f96e8282fce'
-              },
+    // const handleInscriptionBis = () => {
+    //     if (EMAIL_REGEX.test(email) && TEL_REGEX.test(tel) && SIRET_REGEX.test(siret)) {
+    //       fetch (`https://api.insee.fr/entreprises/sirene/V3/siret/${siret}`,
+    //         {
+    //           method : 'GET',
+    //           headers : {
+    //             'Content-Type' : 'application/json',
+    //             //Required OAuth credentials not provided. Make sure your API invocation call has a header: "Authorization: Bearer ACCESS_TOKEN"
+    //             'Authorization' : 'Bearer 49db08e1-35ce-30fb-b53a-4f96e8282fce'
+    //           },
+    //         }
+    //       )
+    //         .then(response => response.json())
+		// 	      .then(data => {
+    //           if (data.header.message ==="ok") {
+    //             console.log("test1");
+    //             let adrInsee = data.etablissement.adresseEtablissement
+    //             setDenominInsee (data.etablissement.uniteLegale.denominationUniteLegale)
+    //             setSireninsee (data.etablissement.siren)
+    //             setSiretinsee (data.etablissement.siret)
+    //             setDateInsee (data.etablissement.dateCreationEtablissement)
+    //             setAdresseInsee (`${adrInsee.numeroVoieEtablissement}${adrInsee.indiceRepetitionEtablissement}, ${adrInsee.typeVoieEtablissement} ${adrInsee.libelleVoieEtablissement}, ${adrInsee.codePostalEtablissement} ${adrInsee.libelleCommuneEtablissement} `)
+    //             fetch(`http://${myIPAdress}/pros/signup`, {
+    //               method : 'POST',
+    //               headers : {'Content-Type' : 'application/json'},
+    //               body : JSON.stringify(
+    //                 { siret: siretInsee, prenom : prenom, nom: nom, email : email, motDePasse: motDePasse, tel : tel,
+    //                   denomination: denominInsee, siren: sirenInsee, dateCreation: dateInsee, adresse: adresseInsee  
+    //                 }
+    //               )
+    //             })
+    //               .then(response => response.json())
+    //               .then(data => {
+    //                 if (data.result) {
+    //                   let {prenom, nom, email, tel, motDePasse, token} = data.newPro
+    //                   let {denomination, siren, siret, dateCreation, adresse} = data.newPro.agence
+    //                   dispatch(proDatas(
+    //                     {
+    //                       siret,
+    //                       prenom,
+    //                       nom,
+    //                       email,
+    //                       tel,
+    //                       motDePasse,
+    //                       token,
+    //                       agence : {
+    //                         denomination,
+    //                         siren,
+    //                         siret,
+    //                         dateCreation,
+    //                         adresse,
+    //                       }
+    //                     }
+    //                   ))
+    //                   setModalInscription(false);
+    //                   navigation.navigate('ProPreferences');
+    //                   setEmail('');
+    //                   setMotDePasse('');
+    //                   setEmailError(false);
+    //                   setTelError(false);
+    //                   console.log("test3");
+    //                 } 
+    //               })  
+    //           }
+    //         }) 
+    //     } else {
+    //       if (!EMAIL_REGEX.test(email)) {
+    //         setEmailError(true);
+    //       } 
+    //       if (!TEL_REGEX.test(tel)) {
+    //         setTelError(true);
+    //       }
+    //       if (!SIRET_REGEX.test(siret)) {
+    //         setSiretError(true);
+    //       }
+    //       if (!prenom || !nom || !motDePasse) {
+    //         setErrorEmpty(true);
+    //       }
+    //     } 
+    //   }
+
+    const handleInscriptionBis = async () => {
+      if (EMAIL_REGEX.test(email) && TEL_REGEX.test(tel) && SIRET_REGEX.test(siret)) {
+          const response1 = await fetch(`https://api.insee.fr/entreprises/sirene/V3/siret/${siret}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer 49db08e1-35ce-30fb-b53a-4f96e8282fce'
+            },
+          });
+    
+          const data1 = await response1.json();
+    
+          if (data1.header.message === "ok") {
+            // Mise à jour des états avec les données de la première requête
+            let adrInsee = data1.etablissement.adresseEtablissement;
+            setDenominInsee(data1.etablissement.uniteLegale.denominationUniteLegale);
+            setSireninsee(data1.etablissement.siren);
+            setSiretinsee(data1.etablissement.siret);
+            setDateInsee(data1.etablissement.dateCreationEtablissement);
+            setAdresseInsee(`${adrInsee.numeroVoieEtablissement}${adrInsee.indiceRepetitionEtablissement}, ${adrInsee.typeVoieEtablissement} ${adrInsee.libelleVoieEtablissement}, ${adrInsee.codePostalEtablissement} ${adrInsee.libelleCommuneEtablissement}`);
+    
+            const response2 = await fetch(`http://${myIPAdress}/pros/signup`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                siret: siretInsee,
+                prenom: prenom,
+                nom: nom,
+                email: email,
+                motDePasse: motDePasse,
+                tel: tel,
+                denomination: denominInsee,
+                siren: sirenInsee,
+                dateCreation: dateInsee,
+                adresse: adresseInsee
+              })
+            });
+    
+            const data2 = await response2.json();
+    
+            if (data2.result) {
+              // Mise à jour des états avec les données de la deuxième requête
+              let { prenom, nom, email, tel, motDePasse, token } = data2.newPro;
+              let { denomination, siren, siret, dateCreation, adresse } = data2.newPro.agence;
+              dispatch(proDatas({
+                siret,
+                prenom,
+                nom,
+                email,
+                tel,
+                motDePasse,
+                token,
+                agence: {
+                  denomination,
+                  siren,
+                  siret,
+                  dateCreation,
+                  adresse,
+                }
+              }));
+    
+              setModalInscription(false);
+              navigation.navigate('ProPreferences');
+              setEmail('');
+              setMotDePasse('');
+              setEmailError(false);
+              setTelError(false);
+              console.log("test3");
             }
-          )
-            .then(response => response.json())
-			      .then(data => {
-              if (data.header.message ==="ok") {
-                setRaisonSoc (data.etablissement.uniteLegale.denominationUniteLegale)
-                setSireninsee (data.etablissement.siren)
-                setSiretinsee (data.etablissement.siret)
-                setDateCrea (data.etablissement.dateCreationEtablissement)
-                setAdresseAgence (`${data.etablissement}`)
-              }
-            })
-        
-          // fetch(`http://${myIPAdress}/pros/signup`, {
-          //   method : 'POST',
-          //   headers : {'Content-Type' : 'application/json'},
-          //   body : JSON.stringify({siret: siret, prenom : prenom, nom: nom, email : email, tel : tel, motDePasse: mdp})
-          //   })
-          //   .then(response => response.json())
-          //   .then(data => {
-          //     if (data.result) {
-          //       let {raisonSociale, siret, prenom, nom, email, tel, token, motDePasse} = data.pro
-          //       dispatch(proDatas({
-          //         raisonSociale : raisonSociale,
-          //         siret : siret,
-          //         prenom : prenom,
-          //         nom : nom, 
-          //         email : email, 
-          //         tel : tel,
-          //         token : token,
-          //         motDePasse : motDePasse}));
-          //       setModalInscription(false);
-          //       navigation.navigate('ProHome');
-          //       setEmail('');
-          //       setMdp('');
-          //       setEmailError(false);
-          //       setTelError(false);
-                
-          //     } 
-          //   })  
-        } else {
-          if (!EMAIL_REGEX.test(email)) {
-            setEmailError(true);
-          } 
-          if (!TEL_REGEX.test(tel)) {
-            setTelError(true);
           }
-          if (!SIRET_REGEX.test(siret)) {
-            setSiretError(true);
-          }
-          if (!prenom || !nom || !mdp) {
-            setErrorEmpty(true);
-          }
-        } 
+      } else {
+        if (!EMAIL_REGEX.test(email)) {
+          setEmailError(true);
+        }
+        if (!TEL_REGEX.test(tel)) {
+          setTelError(true);
+        }
+        if (!SIRET_REGEX.test(siret)) {
+          setSiretError(true);
+        }
+        if (!prenom || !nom || !motDePasse) {
+          setErrorEmpty(true);
+        }
       }
+    };
+    
 
   const closeModal = () => {
     setModalConnexion(false);
@@ -178,7 +284,8 @@ export default function ProConnectionScreen({ navigation }) {
     setEmail('');
     setPrenom('');
     setNom('');
-    setMdp('');
+    setSiret('');
+    setMotDePasse('');
     setEmailError(false);
     setTelError(false);
     setErrorEmpty(false);
@@ -218,7 +325,7 @@ export default function ProConnectionScreen({ navigation }) {
                               <View style={styles.inputsEtDelete}>
                                 <View style={styles.inputs}>
                                       <TextInput placeholder="Email" style={styles.inputModal} keyboardType={"email-address"} autoCorrect={false} autoComplete={"email"} autoCapitalize={'none'} onChangeText={(value) => setEmail(value)} value={email}/>
-                                      <TextInput placeholder="Mot de passe" style={styles.inputModal} autoCapitalize={'none'} autoCorrect={false} onChangeText={(value) => setMdp(value)} value={mdp}/>        
+                                      <TextInput placeholder="Mot de passe" style={styles.inputModal} autoCapitalize={'none'} autoCorrect={false} onChangeText={(value) => setMotDePasse(value)} value={motDePasse}/>        
                                 </View>
                                 <View style={styles.deleteModal}>
                                       <TouchableOpacity style={styles.btnDeleteModal} onPress={()=>closeModal()}>
@@ -249,7 +356,7 @@ export default function ProConnectionScreen({ navigation }) {
                             <TextInput placeholder="Prénom" style={styles.inputModal} autoComplete={"given-name"} onChangeText={(value) => setPrenom(value)} value={prenom}/>
                             <TextInput placeholder="Nom" style={styles.inputModal} autoComplete={"family-name"} onChangeText={(value) => setNom(value)} value={nom}/>
                             <TextInput placeholder="Email" style={styles.inputModal} keyboardType={"email-address"} autoCorrect={false} autoComplete={"email"} autoCapitalize={'none'} onChangeText={(value) => setEmail(value)} value={email}/>
-                            <TextInput placeholder="Mot de passe" style={styles.inputModal} autoCapitalize={'none'} autoCorrect={false} onChangeText={(value) => setMdp(value)} value={mdp}/> 
+                            <TextInput placeholder="Mot de passe" style={styles.inputModal} autoCapitalize={'none'} autoCorrect={false} onChangeText={(value) => setMotDePasse(value)} value={motDePasse}/> 
                             <TextInput placeholder="Numéro de téléphone" style={styles.inputModal} keyboardType={"phone-pad"} onChangeText={(value) => setTel(value)} value={tel}/>           
                         </View>
                         <View style={styles.deleteModal}>
@@ -297,15 +404,15 @@ const styles = StyleSheet.create({
     // borderWidth : 1,
     textAlign:'center',
     fontSize: 20,
-    marginBottom: 100,
+    marginBottom: 90,
   },
   image : {
     // borderColor : 'black',
     // borderWidth : 1,
     // paddingTop : 50,
     height : '28%',
-    marginBottom: -50,
-    marginTop: 20,
+    marginBottom: -30,
+    marginTop: 50,
     marginRight: 20,
   },
   btnContainer : {

@@ -22,39 +22,33 @@ export default function ProPreferences({navigation}) {
   const [nom, setNom]=useState('');
   const [email, setEmail]=useState('');
   const [tel, setTel]=useState('');
-  const [motDePasse, setMotDePasse]=useState('');
-  const [siret, setSiret]=useState(null);
 
   const pro = useSelector((state) => state.pro.value);
-  console.log(pro);
+  console.log("le redux pro est", pro);
+
+  const [emailError, setEmailError] = useState(false);
+  const [telError, setTelError] = useState(false);
+  // Etat pour gérer les champs vides
+  const [errorEmpty, setErrorEmpty] = useState(false);
 
   //désactivation du regex réel pour les tests /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const EMAIL_REGEX = /[a-z]/
   //désactivation du regex réel pour les tests /^(?:(?:(?:\+|00)33\s?|0)[0-9]\s?\d{8})$/
-   const TEL_REGEX = /[0-9]{1}/
-  //désactivation du regex réel pour les tests /\d{14}/g
-   const SIRET_REGEX = /\d{1}/g
-
-   const [emailError, setEmailError] = useState(false);
-   const [telError, setTelError] = useState(false);
-   const [siretError, setSiretError] = useState(false);
-   // Etat pour gérer les champs vides
-   const [errorEmpty, setErrorEmpty] = useState(false);
+  const TEL_REGEX = /[0-9]{1}/
 
   // Etats modale maj
   const [modalMaj, setModalMaj]=useState(false);
 
   const dispatch = useDispatch();
 
-  // Premier bouton "S'inscrire" qui ouvre la modale
+  // Icone "modifier" qui ouvre la modale
   const maj = () => {
     setModalMaj(true);
   }
-
-    // 2eme bouton "S'inscrire" qui redirige vers la homePage
+    // bouton "Modifier" qui valide les modifications
     const validerMaj = () => {
 
-        // if (EMAIL_REGEX.test(email) && TEL_REGEX.test(tel) && SIRET_REGEX.test(siret)) {
+        if (pro.token && EMAIL_REGEX.test(email) && TEL_REGEX.test(tel)) {
           fetch(`http://${myIPAdress}/pros/${pro.token}`, {
             method : 'PUT',
             headers : {'Content-Type' : 'application/json'},
@@ -62,7 +56,7 @@ export default function ProPreferences({navigation}) {
               prenom: prenom === '' ? pro.prenom : prenom,
               nom: nom === '' ? pro.nom : nom,
               email: email === '' ? pro.email : email,
-              tel: tel === null ? pro.tel : tel,
+              tel: tel === '' ? pro.tel : tel,
               // autres propriétés
             })
           })
@@ -78,28 +72,22 @@ export default function ProPreferences({navigation}) {
                   token : token,
                   motDePasse : motDePasse}));
                 setModalMaj(false);
-                navigation.navigate('ProHome');
                 setEmail('');
-                setMotDePasse('');
                 setEmailError(false);
                 setTelError(false);
-                
               } 
             })  
-        // } else {
-        //   if (!EMAIL_REGEX.test(email)) {
-        //     setEmailError(true);
-        //   } 
-        //   if (!TEL_REGEX.test(tel)) {
-        //     setTelError(true);
-        //   }
-        //   if (!SIRET_REGEX.test(siret)) {
-        //     setSiretError(true);
-        //   }
-        //   if (!prenom || !nom || !mdp) {
-        //     setErrorEmpty(true);
-        //   }
-        // } 
+        } else {
+          if (!EMAIL_REGEX.test(email)) {
+            setEmailError(true);
+          }
+          if (!TEL_REGEX.test(tel)) {
+            setTelError(true);
+          }
+          if (!prenom || !nom) {
+            setErrorEmpty(true);
+          }
+        }
       }
 
   const closeModal = () => {
@@ -119,7 +107,7 @@ export default function ProPreferences({navigation}) {
 
   //switch selector restriction visite aux dossiers complets :
   const [restrict, setRestrict] = useState(false);
-  const [restrictColor, setRestrictColor] = useState("grey");
+  const [restrictColor, setRestrictColor] = useState("rgba(227,227,227,0.5)");
   const restrictOptions = [
     { label: "N", value: false },
     { label: "O", value: true },
@@ -128,13 +116,13 @@ export default function ProPreferences({navigation}) {
     if (value) {
       setRestrictColor("green")
     } else {
-      setRestrictColor("grey")
+      setRestrictColor("rgba(227,227,227,0.5)")
     }
   }
 
   //switch selector validation auto des demandes de visites :
   const [valid, setValid] = useState(false);
-  const [validColor, setValidColor] = useState("grey");
+  const [validColor, setValidColor] = useState("rgba(227,227,227,0.5)");
   const validOptions = [
     { label: "N", value: false },
     { label: "O", value: true },
@@ -143,13 +131,13 @@ export default function ProPreferences({navigation}) {
     if (value) {
       setValidColor("green")
     } else {
-      setValidColor("grey")
+      setValidColor("rgba(227,227,227,0.5)")
     }
   }
 
   //switch selector notification pour chaque demande :
   const [notif, setNotif] = useState(false);
-  const [notifColor, setNotifColor] = useState("grey");
+  const [notifColor, setNotifColor] = useState("rgba(227,227,227,0.5)");
   const notifOptions = [
     { label: "N", value: false },
     { label: "O", value: true },
@@ -158,7 +146,7 @@ export default function ProPreferences({navigation}) {
     if (value) {
       setNotifColor("green")
     } else {
-      setNotifColor("grey")
+      setNotifColor("rgba(227,227,227,0.5)")
     }
   }
   
@@ -197,7 +185,6 @@ export default function ProPreferences({navigation}) {
                           <Text style={styles.inputProfile1}>{pro.email}</Text>
                       </View>
                       <View style={styles.lineProfile}>
-                          <Text style={styles.labels}>Tél. :</Text>
                           <Text style={styles.inputProfile2}>{pro.tel}</Text>
                       </View>
                   </View>  
@@ -209,23 +196,23 @@ export default function ProPreferences({navigation}) {
             <View style={styles.cardAgence}>
                     <View style={styles.lineAgence}>
                         <Text style={styles.labelsAgence}>Raison sociale :</Text>
-                        <Text style={styles.inputAgence}>88153249300031</Text>
+                        <Text style={styles.inputAgence}>{pro.agence.denomination}</Text>
                     </View>
                     <View style={styles.lineAgence}>
                         <Text style={styles.labelsAgence}>Siren :</Text>
-                        <Text style={styles.inputAgence}>88153249300031</Text>
+                        <Text style={styles.inputAgence}>{pro.agence.siren}</Text>
                     </View>
                     <View style={styles.lineAgence}>
                         <Text style={styles.labelsAgence}>Siret :</Text>
-                        <Text style={styles.inputAgence}>88153249300031</Text>
+                        <Text style={styles.inputAgence}>{pro.agence.siret}</Text>
                     </View>
                     <View style={styles.lineAgence}>
                         <Text style={styles.labelsAgence}>Date de création :</Text>
-                        <Text style={styles.inputAgence}>Société française de Radio Diffusion</Text>
+                        <Text style={styles.inputAgence}>{pro.agence.dateCreation}</Text>
                     </View>
                     <View style={styles.lineAgence}>
                         <Text style={styles.labelsAgence}>Adresse :</Text>
-                        <Text style={styles.inputAgence}>5, rue de la Tombe Issoire, Paris 75015</Text>
+                        <Text style={styles.inputAgence}>{pro.agence.adresse}</Text>
                     </View>
             </View>
 
@@ -325,7 +312,6 @@ export default function ProPreferences({navigation}) {
                             </TouchableOpacity> 
                                 {emailError && <Text style={styles.error}>Adresse mail invalide</Text>} 
                                 {telError && <Text style={styles.error}>Numéro de téléphone invalide</Text>}
-                                {siretError && <Text style={styles.error}>Numéro de Siret invalide</Text>}
                                 {errorEmpty && <Text style={styles.error}>Tous les champs ne sont pas complétés</Text>}   
                           </View>
                       </View>
