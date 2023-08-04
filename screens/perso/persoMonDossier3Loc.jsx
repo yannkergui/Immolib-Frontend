@@ -14,9 +14,9 @@ import SwitchSelector from "react-native-switch-selector";
 import { useDispatch, useSelector } from "react-redux";
 import { userDatas } from "../../reducers/user";
 
-export default function PersoMonDossier3Loc({ navigation }) {
 
-  const myIPAdress = "192.168.10.157";
+export default function PersoMonDossier3Loc({ navigation }) {
+  const myIPAdress = "192.168.10.169";
 
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
@@ -28,7 +28,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
   //3 Etats relatifs à la situation pro renseignée (util au push en BDD)
 
   const [situationAutre, setSituationAutre] = useState("");
-  const [contrat, setContrat] = useState("");
+  const [contrat, setContrat] = useState("cdi");
 
   const SwitchContrat = [
     { label: "CDI", value: "cdi" },
@@ -48,54 +48,132 @@ export default function PersoMonDossier3Loc({ navigation }) {
     const result = await DocumentPicker.getDocumentAsync({
       type: "image/*",
     });
-    for (let i = 0; i < result.assets.length; i++) {
-      setFicheDePaie1(result.assets[i].uri);
-    }
+    const formData = new FormData();
+
+    formData.append("photoFromFront", {
+      uri: result.assets[0].uri,
+      name: "salaire1",
+      type: "image/*",
+    });
+    fetch(`http://${myIPAdress}:3000/users/upload`, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setFicheDePaie1("ok")
+        dispatch(userDatas({ salaire1: data.url }));
+      });
   };
 
   const UploadFicheDePaie2 = async () => {
     const result = await DocumentPicker.getDocumentAsync({
       type: "image/*",
     });
-    for (let i = 0; i < result.assets.length; i++) {
-      setFicheDePaie2(result.assets[i].uri);
-    }
+    const formData = new FormData();
+
+    formData.append("photoFromFront", {
+      uri: result.assets[0].uri,
+      name: "salaire2",
+      type: "image/*",
+    });
+    fetch(`http://${myIPAdress}:3000/users/upload`, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setFicheDePaie2("ok")
+        dispatch(userDatas({ salaire2: data.url }));
+      });
   };
 
   const UploadFicheDePaie3 = async () => {
     const result = await DocumentPicker.getDocumentAsync({
       type: "image/*",
     });
-    for (let i = 0; i < result.assets.length; i++) {
-      setFicheDePaie3(result.assets[i].uri);
-    }
+    const formData = new FormData();
+
+    formData.append("photoFromFront", {
+      uri: result.assets[0].uri,
+      name: "salaire3",
+      type: "image/*",
+    });
+    fetch(`http://${myIPAdress}:3000/users/upload`, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setFicheDePaie3("ok")
+        dispatch(userDatas({ salaire3: data.url }));
+      });
   };
 
   const UploadAvisImpot = async () => {
     const result = await DocumentPicker.getDocumentAsync({
       type: "image/*",
     });
-    for (let i = 0; i < result.assets.length; i++) {
-      setAvisImpot(result.assets[i].uri);
-    }
+    const formData = new FormData();
+
+    formData.append("photoFromFront", {
+      uri: result.assets[0].uri,
+      name: "AvisImpot",
+      type: "image/*",
+    });
+    fetch(`http://${myIPAdress}:3000/users/upload`, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setAvisImpot("ok")
+        dispatch(userDatas({ impots: data.url }));
+      });
   };
 
   const UploadBilan = async () => {
     const result = await DocumentPicker.getDocumentAsync({
       type: "image/*",
     });
-    for (let i = 0; i < result.assets.length; i++) {
-      setBilan(result.assets[i].uri);
-    }
+    const formData = new FormData();
+
+    formData.append("photoFromFront", {
+      uri: result.assets[0].uri,
+      name: "AvisImpot",
+      type: "image/*",
+    });
+    fetch(`http://${myIPAdress}:3000/users/upload`, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setBilan("ok")
+        dispatch(userDatas({ bilan: data.url }));
+      });
   };
 
   const UploadAutre = async () => {
     const result = await DocumentPicker.getDocumentAsync({
       type: "image/*",
     });
-    for (let i = 0; i < result.assets.length; i++) {
-      setAutre(result.assets[i].uri);
-    }
+    const formData = new FormData();
+
+    formData.append("photoFromFront", {
+      uri: result.assets[0].uri,
+      name: "AvisImpot",
+      type: "image/*",
+    });
+    fetch(`http://${myIPAdress}:3000/users/upload`, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setAutre("ok")
+        dispatch(userDatas({ autres: data.url }));
+      });
   };
 
   const handleEtapeSuivante = () => {
@@ -116,12 +194,18 @@ export default function PersoMonDossier3Loc({ navigation }) {
           nbLoc: user.nbLocataire,
           meuble: user.meuble,
         },
+        documents: { 
+          salaire1: user.salaire1,
+          salaire2: user.salaire2,
+          salaire3: user.salaire3,
+          impots: user.impots,
+          bilan: user.bilan,
+          autres: user.autres,
+         },
       }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-      })
+      .then((data) => {});
     navigation.navigate("PersoHome");
   };
 
@@ -143,11 +227,8 @@ export default function PersoMonDossier3Loc({ navigation }) {
       }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-      })
+      .then((data) => {});
     navigation.navigate("PersoHome");
-    
   };
 
   return (
@@ -373,16 +454,6 @@ const styles = StyleSheet.create({
     marginTop: "5%",
   },
 
-  nextBtnContainer: {
-    flexDirection: "row",
-    borderRadius: 10,
-    width: "80%",
-    height: "10%",
-    alignItems: "center",
-    justifyContent: "space-around",
-    marginTop: 70,
-  },
-
   skip: {
     alignItems: "center",
     justifyContent: "center",
@@ -443,8 +514,6 @@ const styles = StyleSheet.create({
 
   nextBtnContainer: {
     flexDirection: "row",
-    borderColor: "#47AFA5",
-    borderWidth: 2,
     borderRadius: 10,
     width: "80%",
     height: "10%",
