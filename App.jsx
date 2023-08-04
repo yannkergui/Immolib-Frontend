@@ -29,6 +29,7 @@ import PersoMonDossier2Loc from "./screens/perso/persoMonDossier2Loc";
 import PersoMonDossier3Loc from "./screens/perso/persoMonDossier3Loc";
 import PersoMonDossier2Achat from "./screens/perso/persoMonDossier2Achat";
 import PersoMonDossier3Achat from "./screens/perso/persoMonDossier3Achat";
+import PersoMaVisite from "./screens/perso/persoMaVisite"
 
 import FirstScreen from "./screens/firstScreen";
 
@@ -38,11 +39,12 @@ import { Provider } from "react-redux";
 import user from "./reducers/user";
 import pro from "./reducers/pro";
 import monClient from "./reducers/monClient";
+import maVisite from "./reducers/maVisite"
 
 import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
-  reducer: { user, pro, monClient },
+  reducer: { user, pro, monClient, maVisite },
 });
 
 const TabNavigatorPro = () => {
@@ -205,6 +207,7 @@ export default function App() {
               component={TabNavigatorPro}
               style={styles.tabNavigator}
             />
+              <Stack.Screen name="PersoMaVisite" component={PersoMaVisite} />
               <Stack.Screen name="test" component={FicheClient} />
               <Stack.Screen name="FirstScreen" component={FirstScreen} />
               <Stack.Screen name="PersoMonDossier1" component={PersoMonDossier1} />

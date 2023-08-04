@@ -18,7 +18,7 @@ export default function ProHome({navigation}) {
       .then(data => {
         const updatedItems = {};
         data.VisitesTrouvees.map(data => { console.log(data.usersId);
-          const visitedate = data.date;
+          const visitedate = data.dateOfVisit;
           const name = `${data.usersId.nom} ${data.usersId.prenom} - ${data.bienImmoId.titre}`;
           const time = `${data.startTimeVisit}`;
 
@@ -37,13 +37,6 @@ export default function ProHome({navigation}) {
 
   // console.log(items2);
 
-const items = {
-  '2023-08-01': [{ name: 'Event 1', time: '10:00 AM' }],
-  '2023-08-15': [
-    { name: 'Event 2', time: '3:00 PM' },
-    { name: 'Event 3', time: '5:30 PM' },
-  ],
-};
 
 
   LocaleConfig.locales['fr'] = {

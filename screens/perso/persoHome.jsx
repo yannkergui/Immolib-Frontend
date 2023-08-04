@@ -13,12 +13,12 @@ export default function ProHome({navigation}) {
   const [items2, setItems2] = useState({});
 
   useEffect(() => {
-    fetch('http://192.168.10.138:3000/visites/user/64c7ad08d40e592879d3c844')
+    fetch('http://192.168.10.138:3000/visites/user/64c773356d2e8188f9e877a7')
       .then(response => response.json())
       .then(data => {
         const updatedItems = {};
-        data.VisitesTrouvees.map(data => { 
-          const visitedate = data.date;
+        data.VisitesTrouvees.map(data => {
+          const visitedate = data.dateOfVisit;
           const name = `${data.prosId.nom} ${data.prosId.prenom} - ${data.prosId.raisonSociale} - ${data.bienImmoId.titre}`;
           const time = `${data.startTimeVisit}`;
 
