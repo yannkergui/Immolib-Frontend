@@ -4,12 +4,11 @@ import SwitchSelector from "react-native-switch-selector";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 //import { useFonts } from 'expo-font';
 
+import ipAdress from "../../immolibTools"
+
 import { useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { proDatas } from '../../reducers/pro';
-
-// Adresse IP à modifier si besoin
-const myIPAdress = '192.168.10.155:3000'
 
 export default function ProPreferences({navigation}) {
 
@@ -24,7 +23,6 @@ export default function ProPreferences({navigation}) {
   const [tel, setTel]=useState('');
 
   const pro = useSelector((state) => state.pro.value);
-  console.log("le redux pro est", pro);
 
   const [emailError, setEmailError] = useState(false);
   const [telError, setTelError] = useState(false);
@@ -49,7 +47,7 @@ export default function ProPreferences({navigation}) {
     const validerMaj = () => {
 
         if (pro.token && EMAIL_REGEX.test(email) && TEL_REGEX.test(tel)) {
-          fetch(`http://${myIPAdress}/pros/${pro.token}`, {
+          fetch(`http://${ipAdress}/pros/${pro.token}`, {
             method : 'PUT',
             headers : {'Content-Type' : 'application/json'},
             body : JSON.stringify ({
@@ -73,6 +71,9 @@ export default function ProPreferences({navigation}) {
                   motDePasse : motDePasse}));
                 setModalMaj(false);
                 setEmail('');
+                setNom('');
+                setPrenom ('');
+                setTel('');
                 setEmailError(false);
                 setTelError(false);
               } 
@@ -95,15 +96,13 @@ export default function ProPreferences({navigation}) {
     setEmail('');
     setPrenom('');
     setNom('');
-    setMotDePasse('');
+    setTel('');
     setEmailError(false);
     setTelError(false);
     setErrorEmpty(false);
   }
 
   function changePhoto (){}
-
- 
 
   //switch selector restriction visite aux dossiers complets :
   const [restrict, setRestrict] = useState(false);
@@ -299,7 +298,9 @@ export default function ProPreferences({navigation}) {
                                   <TextInput placeholder="Prénom" placeholderTextColor="red" style={styles.inputModal} autoComplete={"given-name"} onChangeText={(value) => setPrenom(value)} value={prenom}/>
                                   <TextInput placeholder="Nom" placeholderTextColor="red" style={styles.inputModal} autoComplete={"family-name"} onChangeText={(value) => setNom(value)} value={nom}/>
                                   <TextInput placeholder="Email" placeholderTextColor="red" style={styles.inputModal} keyboardType={"email-address"} autoCorrect={false} autoComplete={"email"} autoCapitalize={'none'} onChangeText={(value) => setEmail(value)} value={email}/>
+                                  {emailError && <Text style={styles.error}>Adresse mail invalide</Text>} 
                                   <TextInput placeholder="Numéro de téléphone" placeholderTextColor="red" style={styles.inputModal} keyboardType={"phone-pad"} onChangeText={(value) => setTel(value)} value={tel}/>
+                                  {telError && <Text style={styles.error}>Numéro de téléphone invalide</Text>}
                               </View>
                               <View style={styles.deleteModal}>
                                   <TouchableOpacity  onPress={()=>closeModal()}>
@@ -310,8 +311,6 @@ export default function ProPreferences({navigation}) {
                             <TouchableOpacity style={styles.btnInscription} onPress={()=>validerMaj()}>
                                   <Text style={styles.textButton}>Enregistrer</Text>
                             </TouchableOpacity> 
-                                {emailError && <Text style={styles.error}>Adresse mail invalide</Text>} 
-                                {telError && <Text style={styles.error}>Numéro de téléphone invalide</Text>}
                                 {errorEmpty && <Text style={styles.error}>Tous les champs ne sont pas complétés</Text>}   
                           </View>
                       </View>
