@@ -10,9 +10,14 @@ import MapView, { Marker } from 'react-native-maps';
 
 export default function PersoMaVisite({navigation}) {
 
-
+  // récupération du reducer maVisite avec toutes les infos nécessaires pour les cards de ce screen
   const maVisite = useSelector((state) => state.maVisite.value);
+  const coordonnees = useSelector((state) => state.maVille.value);
 
+  console.log(coordonnees);
+
+  // fonction de click sur la Card visite pour dispatcher les infos dans le reducer afin de les afficher sur le screen suivant
+  // et naviguer vers l'écran perso ma visite
   const onPressMobileNumberClick = (number) => {
 
     let phoneNumber = '';
@@ -34,6 +39,7 @@ export default function PersoMaVisite({navigation}) {
       style={styles.background}
         >
       <View style={styles.container}>
+  {/* header commun à de nombreuses pages*/}
         <View style={styles.header}>
             <TouchableOpacity  onPress={() => navigation.goBack()}>
                 <FontAwesome style={styles.icon} name='chevron-left' size={20} color='#1F2937' />
@@ -44,6 +50,7 @@ export default function PersoMaVisite({navigation}) {
             </TouchableOpacity>
         </View>
         <View style={styles.localcontainer}>
+          {/* Card avec l'horaire de la visite et les boutons de mofification et suppréssions  */}
             <View style={styles.horaire}>
                 <Text style={styles.lineTitle2}>Le {maVisite.dateOfVisit} à {maVisite.startTimeVisit}</Text>
                 <TouchableOpacity style={styles.iconcontainer2}>
@@ -55,42 +62,45 @@ export default function PersoMaVisite({navigation}) {
             </View>
        
         <View style={styles.lineCard}>
+          {/* Card avec les infos du bien lié à la visite */}
               <Image style={styles.image} source={require('../../assets/bed.jpg')}/>
             <View style={styles.lineText}>
                 <View style={styles.TextinCard}>
                     <Text style={styles.lineTitle}>{maVisite.bienImmoId.titre}</Text>
                     <Text style={styles.text}>{maVisite.bienImmoId.description}</Text>
-                    <Text style={styles.text}>{maVisite.bienImmoId.numRue} {maVisite.bienImmoId.rue} {maVisite.bienImmoId.codePostal}</Text>
+                    <Text style={styles.text}>{maVisite.bienImmoId.numeroRue} {maVisite.bienImmoId.rue} {maVisite.bienImmoId.codePostal}</Text>
                     <Text style={styles.text}>surface : {maVisite.bienImmoId.surface} m2 - Nb de pièces : {maVisite.bienImmoId.nbPièces} </Text>
                     <Text style={styles.text}>Nb de chambres : {maVisite.bienImmoId.nbChambres} - {maVisite.bienImmoId.prixVente} €</Text>
                 </View>
             </View>
           </View>   
           <View style= {styles.mapView}>
+            {/* Map avec Marker lié à l'adresse du bien */}
             <MapView style= {styles.map}
-                    mapType = 'hybrid'
                     initialRegion={{
-                        latitude: 48.887669293711525,
-                        longitude: 2.30367687487854,
-                        latitudeDelta: 0.007,
+                        latitude: `${coordonnees.latitude}`,
+                        longitude: `${coordonnees.longitude}`,
+                        latitudeDelta: 0.008,
                         longitudeDelta: 0.007,
                     }}
                     >
+                      <Marker style= {styles.marker} coordinate={{latitude:`${coordonnees.latitude}` ,longitude:`${coordonnees.longitude}`}} />
             </MapView>
           </View>
+          {/* Card du professionnel avec possiblité d'envoyer un mail et d'appeler */}
           <View style={styles.lineCard}>
               <Image style={styles.image2} source={require('../../assets/alice.jpeg')}/>
             <View style={styles.lineText2}>
                 <View style={styles.TextinCard2}>
                     <Text style={styles.lineTitle}>{maVisite.prosId.nom} {maVisite.prosId.prenom}</Text>
-                    <Text style={styles.text}>{maVisite.prosId.raisonSociale}</Text>
-                    <Text style={styles.text}>{maVisite.prosId.numRue} {maVisite.prosId.rue} {maVisite.prosId.codePostal}</Text>
+                    <Text style={styles.text}>{maVisite.prosId.agence.denomination}</Text>
+                    <Text style={styles.text}>{maVisite.prosId.agence.adresse}</Text>
                     <Text style={styles.text}>Téléphone : {maVisite.prosId.tel}</Text>
                     <Text style={styles.texttel} onPress={() => { onPressMobileNumberClick(maVisite.prosId.tel)}}>Email : {maVisite.prosId.tel}</Text>
                 </View>
             </View>
             <View>
-                <TouchableOpacity style={styles.iconcontainer2} onPress={() => { handleSubmit()}}>
+                <TouchableOpacity style={styles.iconcontainer2} onPress={() => { mailSubmit()}}>
                     <FontAwesome style={styles.icon} name='phone' size={30} color='#1F2937' />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.iconcontainer2} >
@@ -178,7 +188,7 @@ lineCard: {
     justifyContent: "space-between",
     alignItems:'center',
     width: 370,
-    height:170,
+    height:180,
     borderRadius: 25,
     backgroundColor: "#BCCDB6",
     shadowColor: "#000",
@@ -199,9 +209,9 @@ borderRadius:10,
   },
   lineText:{
 marginLeft:10,
-marginRight:10,
+marginRight:40,
 justifyContent:'center',
-alignItems:'center',
+alignItems:'flex-start',
   },
   lineTitle:{
     color:'white',
@@ -210,7 +220,8 @@ alignItems:'center',
   },
   text:{
     textAlign:'center',
-    marginBottom: 4
+    marginBottom: 8,
+    marginRight:14,
   },
   map:{
     height: 230,
@@ -238,8 +249,10 @@ alignItems:'center',
     width:'90%',
   },
   TextinCard2:{
-    alignItems:'flex-start',
-    marginRight: 40
+    alignItems:'center',
+    width:180,
+    marginLeft: 5,
+   
   },
   image2:{
     height: 90,

@@ -6,6 +6,7 @@ import SwitchSelector from "react-native-switch-selector";
 import { useDispatch } from 'react-redux';
 import { useState, useEffect } from "react";
 import { maVisiteData } from '../../reducers/maVisite';
+import { maVilleData } from '../../reducers/maVille';
 
 
 export default function PersoVisites({navigation}) {
@@ -17,7 +18,7 @@ export default function PersoVisites({navigation}) {
 
   // Fetch du backend au chargement de la page pour récupérer les visites liées au user
   useEffect(() => {
-    fetch('http://192.168.10.138:3000/visites/user/64c773356d2e8188f9e877a7')
+    fetch('http://192.168.10.174:3000/visites/user/64cccd2e0fd39de6f4a550dd')
       .then(response => response.json())
       .then(data => {
         setVisitesPerso(data.VisitesTrouvees);
@@ -27,7 +28,7 @@ export default function PersoVisites({navigation}) {
   // constante relative au switch de changement de page 
   const page = [
     { label: "en attente de validation", value: "en attente" },
-    { label: "confirmées", value: "confirmées" },
+    { label: "confirmées", value: "confirmé" },
     { label: "passées", value: "passées" },
   ];
 
@@ -39,6 +40,16 @@ export default function PersoVisites({navigation}) {
   // et naviguer vers l'écran perso ma visite
   const handleSubmit = (e) => {
     dispatch(maVisiteData(e));
+    fetch (`https://api-adresse.data.gouv.fr/search/?q=${e.bienImmoId.numeroRue}+${e.bienImmoId.rue}+${e.bienImmoId.codePostal}`)
+    .then((response) => response.json())
+    .then((data) => {console.log(data.features[0]);
+      const newAdress = {
+        latitude:  data.features[0].geometry.coordinates[1],
+        longitude:  data.features[0].geometry.coordinates[0],
+      };
+      dispatch(maVilleData(newAdress))
+    
+    })
     navigation.navigate('PersoMaVisite')
 
   };
@@ -79,13 +90,18 @@ export default function PersoVisites({navigation}) {
               <View style={styles.agenceDiv}>
               <View style={styles.agence}>
                 <Text> {data.prosId.nom} {data.prosId.prenom}</Text>
-                <TouchableOpacity style={styles.teltouchable} onPress={() => { onPressMobileNumberClick(data.prosId.tel)}}>
+                {/* <TouchableOpacity style={styles.teltouchable} onPress={() => { onPressMobileNumberClick(data.prosId.tel)}}> */}
                  <Text style={styles.tel}> {data.prosId.tel}</Text>
-                </TouchableOpacity>
+                {/* </TouchableOpacity> */}
               </View>
-              <TouchableOpacity>
+              <View style={styles.iconCard}>
+              <TouchableOpacity style={styles.iconcontainer}  onPress={() => { onPressMobileNumberClick(data.prosId.tel)}}>
+                    <FontAwesome style={styles.icon} name='phone' size={30} color='#1F2937' />
+                </TouchableOpacity>
+              <TouchableOpacity style={styles.iconcontainer}>
                 <FontAwesome name="remove" size={30} color="#1F2937" />
               </TouchableOpacity>
+              </View>
               </View>
             </View>
           </View>    
@@ -99,37 +115,44 @@ export default function PersoVisites({navigation}) {
 
   // 2iem map relatif aux visites passées
 
-  const visitePassees = visitesPerso.map((data) => {
+  const visitePassees = visitesPerso.map((data) => { console.log(data);
     if (data.statut === "passées") {
       return (
-        <View style={styles.visiteCard}>
-          <View style={styles.lineCardheader}>
-            <View style={styles.lineheader}>
-            <FontAwesome name="calendar" size={25} color="white" />
-            <Text  style={styles.Textheader}> Le {data.date} à {data.startTimeVisit}</Text>
+        <TouchableOpacity style={styles.touchable} onPress={() => { handleSubmit(data) }}>
+            <View style={styles.visiteCard}>
+              <View style={styles.lineCardheader}>
+                <View style={styles.lineheader}>
+                <FontAwesome name="calendar" size={25} color="white" />
+                <Text  style={styles.Textheader}> Le {data.dateOfVisit} à {data.startTimeVisit}</Text>
+                </View>
+                <TouchableOpacity>
+                  <FontAwesome name="edit" size={30} color="white" />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.lineCard}>
+                <View>
+                  <Text> {data.bienImmoId.titre}</Text>
+                  <Text>{data.bienImmoId.numRue} {data.bienImmoId.rue} {data.bienImmoId.codePostal}</Text>
+                  <View style={styles.agenceDiv}>
+                  <View style={styles.agence}>
+                    <Text> {data.prosId.nom} {data.prosId.prenom}</Text>
+                    <TouchableOpacity style={styles.teltouchable} onPress={() => { onPressMobileNumberClick(data.prosId.tel)}}>
+                     <Text style={styles.tel}> {data.prosId.tel}</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.iconCard}>
+                  <TouchableOpacity style={styles.iconcontainer}  onPress={() => { onPressMobileNumberClick(data.prosId.tel)}}>
+                        <FontAwesome style={styles.icon} name='phone' size={30} color='#1F2937' />
+                    </TouchableOpacity>
+                  <TouchableOpacity style={styles.iconcontainer}>
+                    <FontAwesome name="remove" size={30} color="#1F2937" />
+                  </TouchableOpacity>
+                  </View>
+                  </View>
+                </View>
+              </View>    
             </View>
-            <TouchableOpacity>
-              <FontAwesome name="edit" size={30} color="white" />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.lineCard}>
-            <View>
-            <Text> {data.bienImmoId.titre}</Text>
-            <Text>{data.bienImmoId.numRue} {data.bienImmoId.rue} {data.bienImmoId.codePostal}</Text>
-            <View style={styles.agenceDiv}>
-            <View style={styles.agence}>
-            <Text> {data.prosId.nom} {data.prosId.prenom}</Text>
-            <TouchableOpacity style={styles.teltouchable} onPress={() => { onPressMobileNumberClick(data.prosId.tel)}}>
-            <Text style={styles.tel}> {data.prosId.tel}</Text>
-            </TouchableOpacity>
-            </View>
-            <TouchableOpacity>
-              <FontAwesome name="remove" size={30} color="#1F2937" />
-            </TouchableOpacity>
-            </View>
-            </View>
-          </View>
-        </View>
+        </TouchableOpacity>
       );
     }
   });
@@ -137,36 +160,43 @@ export default function PersoVisites({navigation}) {
   // 3iem map relatif aux visites confirmées
 
   const visiteConfirmees = visitesPerso.map((data) => {
-    if (data.statut === "confirmées") {
+    if (data.statut === "confirmé") {
       return (
-        <View style={styles.visiteCard}>
-          <View style={styles.lineCardheader}>
-            <View style={styles.lineheader}>
-            <FontAwesome name="calendar" size={25} color="white" />
-            <Text  style={styles.Textheader}> Le {data.date} à {data.startTimeVisit}</Text>
+        <TouchableOpacity style={styles.touchable} onPress={() => { handleSubmit(data) }}>
+            <View style={styles.visiteCard}>
+              <View style={styles.lineCardheader}>
+                <View style={styles.lineheader}>
+                <FontAwesome name="calendar" size={25} color="white" />
+                <Text  style={styles.Textheader}> Le {data.dateOfVisit} à {data.startTimeVisit}</Text>
+                </View>
+                <TouchableOpacity>
+                  <FontAwesome name="edit" size={30} color="white" />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.lineCard}>
+                <View>
+                  <Text> {data.bienImmoId.titre}</Text>
+                  <Text>{data.bienImmoId.numRue} {data.bienImmoId.rue} {data.bienImmoId.codePostal}</Text>
+                  <View style={styles.agenceDiv}>
+                  <View style={styles.agence}>
+                    <Text> {data.prosId.nom} {data.prosId.prenom}</Text>
+                    <TouchableOpacity style={styles.teltouchable} onPress={() => { onPressMobileNumberClick(data.prosId.tel)}}>
+                     <Text style={styles.tel}> {data.prosId.tel}</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.iconCard}>
+                  <TouchableOpacity style={styles.iconcontainer}  onPress={() => { onPressMobileNumberClick(data.prosId.tel)}}>
+                        <FontAwesome style={styles.icon} name='phone' size={30} color='#1F2937' />
+                    </TouchableOpacity>
+                  <TouchableOpacity style={styles.iconcontainer}>
+                    <FontAwesome name="remove" size={30} color="#1F2937" />
+                  </TouchableOpacity>
+                  </View>
+                  </View>
+                </View>
+              </View>    
             </View>
-            <TouchableOpacity>
-              <FontAwesome name="edit" size={30} color="white" />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.lineCard}>
-            <View>
-            <Text> {data.bienImmoId.titre}</Text>
-            <Text>{data.bienImmoId.numRue} {data.bienImmoId.rue} {data.bienImmoId.codePostal}</Text>
-            <View style={styles.agenceDiv}>
-            <View style={styles.agence}>
-            <Text> {data.prosId.nom} {data.prosId.prenom}</Text>
-            <TouchableOpacity style={styles.teltouchable} onPress={() => { onPressMobileNumberClick(data.prosId.tel)}}>
-            <Text style={styles.tel}> {data.prosId.tel}</Text>
-            </TouchableOpacity>
-            </View>
-            <TouchableOpacity>
-              <FontAwesome name="remove" size={30} color="#1F2937" />
-            </TouchableOpacity>
-            </View>
-            </View>
-          </View>
-        </View>
+        </TouchableOpacity>
       );
     }
   });
@@ -199,7 +229,7 @@ export default function PersoVisites({navigation}) {
         <View style={styles.cardContainer}>
           {activPage === "en attente" && visiteEnAttente}
           {activPage === "passées" && visitePassees}
-          {activPage === "confirmées" && visiteConfirmees}
+          {activPage === "confirmé" && visiteConfirmees}
         </View>
         </ScrollView>
       </LinearGradient>
@@ -319,19 +349,22 @@ const styles = StyleSheet.create({
     width: '78.5%',
     alignItems: 'center',
   },
-
-  tel:{
-    color: 'blue',
-  },
-  teltouchable: {
-    borderBottomColor:'blue',
-    borderBottomWidth:1,
-    borderBottomEndRadius : 20,
-    borderBottomStartRadius: 20,
-  },
-
   scrollview:{
     width: '100%',
-  }
+  },
+  iconcontainer :{
+    top : 0,
+    backgroundColor : 'white',
+    width : 50,
+    height: 50,
+    borderRadius : 100,
+    justifyContent:'center',
+    alignItems:'center',
+    marginRight:10,
+    },
+    iconCard:{
+      flexDirection:'row',
+      marginLeft: 160,
+    }
 });
 
