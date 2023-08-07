@@ -38,14 +38,14 @@ export default function PersoConnectionScreen({ navigation }) {
   }
 
   // Adresse IP à modifier si besoin
-  const myIPAdress='192.168.10.169';
+  const myIPAdress='172.20.10.3';
 
   // 2eme boutton "Se connecter" qui redirige vers la homePage
   const handleConnexionBis = () => {
     // Si correspondance avec la REGEX EMAIL
     if (EMAIL_REGEX.test(email) && mdp) {
       //Récupération des données de l'utilisateur de la BDD
-      fetch(`http://${ipAdress}:3000/users/signin`, {
+      fetch(`http://172.20.10.3:3000/users/signin`, {
       method : 'POST',
       headers : {'Content-Type' : 'application/json'},
       body : JSON.stringify({email : email, motDePasse: mdp})
@@ -53,15 +53,20 @@ export default function PersoConnectionScreen({ navigation }) {
       .then(response => response.json())
       .then(data => {
         if (data.result) {
-          console.log('data récupéré : ', data),
-          dispatch(userDatas({prenom : data.data.prenom,
+          // console.log('data récupéré : ', data.data),
+          dispatch(userDatas({_id: data.data._id,
+                            prenom : data.data.prenom,
                             nom : data.data.nom, 
                             email : data.data.email, 
                             tel : data.data.tel,
                             token : data.data.token,
-                            motDePasse : data.data.motDePasse}));
+                            motDePasse : data.data.motDePasse,
+                            dejaInscrit : 'true',
+                          
+                          }));
+
           setModalConnexion(false)
-          navigation.navigate('TabNavigatorPerso', { screen: 'Home' });
+          navigation.navigate('PersoPriseDeVisite');
           setEmail('');
           setEmailError(false);
           setMdp('');
@@ -86,7 +91,7 @@ export default function PersoConnectionScreen({ navigation }) {
     // 2eme bouton "S'inscrire" qui redirige vers la homePage
     const handleInscriptionBis = () => {
         if (EMAIL_REGEX.test(email) && TEL_REGEX.test(tel)) {
-          fetch(`http://${ipAdress}:3000/users/signup`, {
+          fetch(`http://${myIPAdress}:3000/users/signup`, {
             method : 'POST',
             headers : {'Content-Type' : 'application/json'},
             body : JSON.stringify({prenom : prenom, nom: nom, email : email, tel : tel, motDePasse: mdp})
@@ -99,7 +104,8 @@ export default function PersoConnectionScreen({ navigation }) {
                   email : data.data.email, 
                   tel : data.data.tel,
                   token : data.data.token,
-                  motDePasse : data.data.motDePasse}));
+                  motDePasse : data.data.motDePasse,
+                  dejaInscrit : 'false',}));
                 setModalInscription(false)
                 navigation.navigate("PersoMonDossier1")
                 setEmail('');

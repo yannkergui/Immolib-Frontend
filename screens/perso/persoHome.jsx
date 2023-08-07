@@ -3,9 +3,9 @@ import { StyleSheet, Text, View, TouchableOpacity, Linking, Platform } from 'rea
 import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useFonts } from 'expo-font';
-import { useDispatch } from 'react-redux';
 import { useState, useEffect } from "react";
 import { maVisiteData } from '../../reducers/maVisite';
+import { useDispatch, useSelector } from 'react-redux';
 import {Calendar,Calendarlist,Agenda, LocaleConfig} from 'react-native-calendars';
 
 
@@ -15,8 +15,12 @@ export default function ProHome({navigation}) {
   const [dateVisite, setDateVisite] = useState([])
   const [items2, setItems2] = useState({});
 
+  const user = useSelector((state) => state.user.value);
+
+
+
   useEffect(() => {
-    fetch('http://192.168.10.154:3000/visites/user/64cccd2e0fd39de6f4a550dd')
+    fetch(`http://172.20.10.3:3000/visites/user/${user._id}`)
       .then(response => response.json())
       .then(data => {console.log('test',data.VisitesTrouvees);
         const updatedItems = {};
