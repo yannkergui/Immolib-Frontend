@@ -29,7 +29,8 @@ import PersoMonDossier2Loc from "./screens/perso/persoMonDossier2Loc";
 import PersoMonDossier3Loc from "./screens/perso/persoMonDossier3Loc";
 import PersoMonDossier2Achat from "./screens/perso/persoMonDossier2Achat";
 import PersoMonDossier3Achat from "./screens/perso/persoMonDossier3Achat";
-import PersoMaVisite from "./screens/perso/persoMaVisite"
+import PersoMaVisite from "./screens/perso/persoMaVisite";
+import PersoPriseDeVisite from "./screens/perso/persoPriseDeVisite";
 
 import FirstScreen from "./screens/firstScreen";
 
