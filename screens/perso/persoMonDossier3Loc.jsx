@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { userDatas } from "../../reducers/user";
 
 export default function PersoMonDossier3Loc({ navigation }) {
-  const myIPAdress = "192.168.10.169";
+  const myIPAdress = "192.168.10.147";
 
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
@@ -229,7 +229,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {});
-    navigation.navigate("PersoHome");
+    navigation.navigate("TabNavigatorPerso");
   };
 
   const handlePasserCetteEtape = () => {

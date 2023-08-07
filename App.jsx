@@ -200,6 +200,8 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
+            <Stack.Screen name="ProVisites" component={ProVisites} />
+            <Stack.Screen name="FirstScreen" component={FirstScreen} />
               <Stack.Screen
                 name="TabNavigatorPerso"
                 component={TabNavigatorPerso}
@@ -211,13 +213,11 @@ export default function App() {
                 style={styles.tabNavigator}
               />
               <Stack.Screen name="PersoMaVisite" component={PersoMaVisite} />
-              <Stack.Screen name="test" component={FicheClient} />
-              <Stack.Screen name="FirstScreen" component={FirstScreen} />
+              <Stack.Screen name="ficheClient" component={FicheClient} />
               <Stack.Screen name="PersoMonDossier1" component={PersoMonDossier1} />
               <Stack.Screen name="PersoMonDossier2Achat" component={PersoMonDossier2Achat} />
               <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
               <Stack.Screen name="PersoConnexionScreen" component={PersoConnectionScreen} />
-              <Stack.Screen name="ProVisites" component={ProVisites} />
               <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
               <Stack.Screen name="PersoHome" component={PersoHome}/>
               <Stack.Screen name="PersoMonDossier2Loc" component={PersoMonDossier2Loc} />
@@ -230,6 +230,7 @@ export default function App() {
               <Stack.Screen name="ProConnectionScreen" component={ProConnectionScreen} />
               <Stack.Screen name="ProHome" component={ProHome} />
               <Stack.Screen name="ProTchats" component={ProTchats} />
+              <Stack.Screen name="ProPreferences" component={ProPreferences} />
           </Stack.Navigator>
         </NavigationContainer>
     </Provider>

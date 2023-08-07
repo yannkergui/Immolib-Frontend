@@ -92,7 +92,7 @@ export default function ProConnectionScreen({ navigation }) {
             }
           ));
           setModalConnexion(false);
-          navigation.navigate('ProPreferences');
+          navigation.navigate('TabNavigatorPro');
           setEmail('');
           setMotDePasse('')
           setEmailError(false);

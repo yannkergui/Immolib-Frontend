@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useDispatch } from 'react-redux';
 import {userDatas} from '../../reducers/user'
 
-import { ipAdress } from "../../immolibTools";
+import { myIPAdress } from "../../immolibTools";
 
 export default function PersoConnectionScreen({ navigation }) {
 
@@ -38,14 +38,14 @@ export default function PersoConnectionScreen({ navigation }) {
   }
 
   // Adresse IP à modifier si besoin
-  const myIPAdress='192.168.10.169';
+  const myIPAdress='192.168.10.147';
 
   // 2eme boutton "Se connecter" qui redirige vers la homePage
   const handleConnexionBis = () => {
     // Si correspondance avec la REGEX EMAIL
     if (EMAIL_REGEX.test(email) && mdp) {
       //Récupération des données de l'utilisateur de la BDD
-      fetch(`http://${ipAdress}:3000/users/signin`, {
+      fetch(`http://${myIPAdress}:3000/users/signin`, {
       method : 'POST',
       headers : {'Content-Type' : 'application/json'},
       body : JSON.stringify({email : email, motDePasse: mdp})
@@ -86,7 +86,7 @@ export default function PersoConnectionScreen({ navigation }) {
     // 2eme bouton "S'inscrire" qui redirige vers la homePage
     const handleInscriptionBis = () => {
         if (EMAIL_REGEX.test(email) && TEL_REGEX.test(tel)) {
-          fetch(`http://${ipAdress}:3000/users/signup`, {
+          fetch(`http://${myIPAdress}:3000/users/signup`, {
             method : 'POST',
             headers : {'Content-Type' : 'application/json'},
             body : JSON.stringify({prenom : prenom, nom: nom, email : email, tel : tel, motDePasse: mdp})
@@ -153,7 +153,7 @@ export default function PersoConnectionScreen({ navigation }) {
                   <TouchableOpacity style={styles.button} onPress={()=>handleInscription()}>
                       <Text style={styles.textButton}>S'inscrire</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.button}onPress={()=> navigation.navigate("PersoHome")}>
+                  <TouchableOpacity style={styles.button}onPress={()=> navigation.navigate("TabNavigatorPerso")}>
                       <Text style={styles.textButton}>Poursuivre sans inscription</Text>
                   </TouchableOpacity>
 
