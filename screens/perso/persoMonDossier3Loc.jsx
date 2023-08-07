@@ -21,11 +21,11 @@ export default function PersoMonDossier3Loc({ navigation }) {
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
 
-  //Etat relatif au revenu renseigné (util au push en BDD)
+  //Etat relatif au revenu renseigné 
 
   const [monRevenu, setMonRevenu] = useState(0);
 
-  //3 Etats relatifs à la situation pro renseignée (util au push en BDD)
+  //3 Etats relatifs à la situation pro renseignée 
 
   const [situationAutre, setSituationAutre] = useState("");
   const [contrat, setContrat] = useState("cdi");
@@ -254,7 +254,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {});
-    navigation.navigate("PersoHome");
+    navigation.navigate("TabNavigatorPerso");
   };
 
   const handlePasserCetteEtape = () => {
@@ -276,7 +276,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {});
-    navigation.navigate("PersoHome");
+    navigation.navigate("TabNavigatorPerso");
   };
 
   return (
