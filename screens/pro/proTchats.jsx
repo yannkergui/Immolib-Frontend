@@ -12,7 +12,7 @@ export default function ProTchats() {
         style={styles.background}
       >
         <View style={styles.container}>
-          <Text>PRO Home</Text>
+          <Text>PRO Tchats</Text>
           <StatusBar style="auto" />
         </View>
       </LinearGradient>

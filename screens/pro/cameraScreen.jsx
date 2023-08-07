@@ -56,6 +56,7 @@ export default function CameraScreen({navigation}) {
       })
     })
       .then(response => response.json())
+      navigation.navigate ('ProPreferences')
     })
       ;
     
