@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { userDatas } from "../../reducers/user";
 
 export default function PersoMonDossier3Loc({ navigation }) {
-  const myIPAdress = "192.168.10.169";
+  const myIPAdress = "192.168.10.156";
 
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
@@ -44,6 +44,31 @@ export default function PersoMonDossier3Loc({ navigation }) {
   const [Autre, setAutre] = useState("");
 
   // fonction relative à l'upload des fichiers au clique sur l'icone
+
+  // const UploadPhoto= async (nomDuFichier, setEtat) => {
+  //   const result = await DocumentPicker.getDocumentAsync({
+  //     type: "image/*",
+  //   });
+  //   const formData = new FormData();
+
+  //   formData.append("photoFromFront", {
+  //     uri: result.assets[0].uri,
+  //     name: nomDuFichier,
+  //     type: "image/*",
+  //   });
+
+  //   fetch(`http://${myIPAdress}:3000/users/upload`, {
+  //     method: "POST",
+  //     body: formData,
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setEtat("ok");
+  //       dispatch(userDatas({ [nomDuFichier]: data.url }));
+  //     });
+  // };
+
+
 
   const UploadDocId = async () => {
     const result = await DocumentPicker.getDocumentAsync({
