@@ -29,7 +29,8 @@ import PersoMonDossier2Loc from "./screens/perso/persoMonDossier2Loc";
 import PersoMonDossier3Loc from "./screens/perso/persoMonDossier3Loc";
 import PersoMonDossier2Achat from "./screens/perso/persoMonDossier2Achat";
 import PersoMonDossier3Achat from "./screens/perso/persoMonDossier3Achat";
-import PersoMaVisite from "./screens/perso/persoMaVisite"
+import PersoMaVisite from "./screens/perso/persoMaVisite";
+import PersoPriseDeVisite from "./screens/perso/persoPriseDeVisite";
 
 import FirstScreen from "./screens/firstScreen";
 
@@ -199,15 +200,16 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
-            <Stack.Screen
-              name="TabNavigatorPerso"
-              component={TabNavigatorPerso}
-            />
-            <Stack.Screen
-              name="TabNavigatorPro"
-              component={TabNavigatorPro}
-              style={styles.tabNavigator}
-            />
+              <Stack.Screen
+                name="TabNavigatorPerso"
+                component={TabNavigatorPerso}
+              />
+              <Stack.Screen name="PersoPriseDeVisite" component={PersoPriseDeVisite} />
+              <Stack.Screen
+                name="TabNavigatorPro"
+                component={TabNavigatorPro}
+                style={styles.tabNavigator}
+              />
               <Stack.Screen name="PersoMaVisite" component={PersoMaVisite} />
               <Stack.Screen name="test" component={FicheClient} />
               <Stack.Screen name="FirstScreen" component={FirstScreen} />

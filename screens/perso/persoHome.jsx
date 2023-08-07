@@ -16,9 +16,9 @@ export default function ProHome({navigation}) {
   const [items2, setItems2] = useState({});
 
   useEffect(() => {
-    fetch('http://192.168.10.174:3000/visites/user/64cccd2e0fd39de6f4a550dd')
+    fetch('http://192.168.10.154:3000/visites/user/64cccd2e0fd39de6f4a550dd')
       .then(response => response.json())
-      .then(data => {console.log(data.VisitesTrouvees);
+      .then(data => {console.log('test',data.VisitesTrouvees);
         const updatedItems = {};
         data.VisitesTrouvees.map(data => { 
           const visitedate = data.dateOfVisit;
