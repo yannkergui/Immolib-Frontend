@@ -40,19 +40,19 @@ export default function CameraScreen({navigation}) {
       name: 'proProfilePhotoTest.jpeg',
       type: 'image/jpeg',
      });
-    fetch(`http://192.168.1.19:3000/pros/uploadPhoto`, {
+    fetch(`http://192.168.10.175:3000/pros/uploadPhoto`, {
       method: 'POST',
       body: formData,
     })
     .then((response) => response.json())
     .then((data) => {
         data.result && dispatch(updateProProfilePhoto(data.url))
-        console.log("la photo", pro.photo);
-        fetch(`http://${ipAdress}/pros/${pro.token}`, {
+        console.log("la photo est là :", pro.photo);
+        fetch(`http://192.168.10.175:3000/pros/${pro.token}`, {
       method : 'PUT',
       headers : {'Content-Type' : 'application/json'},
       body : JSON.stringify ({
-        photo: pro.photo,
+        photo: data.url,
       })
     })
       .then(response => response.json())

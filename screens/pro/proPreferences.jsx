@@ -49,7 +49,7 @@ export default function ProPreferences({navigation}) {
 
         if (pro.token && EMAIL_REGEX.test(email) && TEL_REGEX.test(tel)) {
           fetch(`http://${ipAdress}/pros/${pro.token}`, {
-            method : 'PUT',
+            method : 'POST',
             headers : {'Content-Type' : 'application/json'},
             body : JSON.stringify ({
               prenom: prenom === '' ? pro.prenom : prenom,
@@ -62,6 +62,7 @@ export default function ProPreferences({navigation}) {
             .then(response => response.json())
             .then(data => {
               if (data.proUpdated) {
+                
                 let {prenom, nom, email, tel, token, motDePasse} = data.proUpdated
                 dispatch(proDatas({
                   prenom : prenom,
@@ -180,7 +181,7 @@ function handlePhoto () {
                 <FontAwesome name='edit' size={20} color="white" marginRight={20} marginTop={10} marginBottom={5} onPress={()=>maj()}/>
                 <View style = {{flexDirection: "row", width: '100%', justifyContent: 'center'}}>
                   <View style = {styles.photoBloc}>
-                    <Image source={{uri: pro.photo}} style={styles.photo}/>
+                    <Image source={{url: pro.photo? pro.photo : "toto"}} style={styles.photo}/>
                     <TouchableOpacity style={styles.photoText} onPress={() => handlePhoto()}>
                       <Text style={styles.photoText}>Modifiez votre photo</Text>
                     </TouchableOpacity> 
