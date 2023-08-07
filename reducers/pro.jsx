@@ -26,10 +26,13 @@ export const proSlice = createSlice({
     //   state.value.profil = action.payload;
     // },
     proDatas : (state, action) => {
-      state.value = action.payload
-    }
-  },
-});
+      state.value = action.payload;
+    },
+    updateProProfilePhoto: (state, action) => {
+      state.value.photo = action.payload;
+    },
+  }
+})
 
-export const { proDatas } = proSlice.actions;
+export const { proDatas, updateProProfilePhoto } = proSlice.actions;
 export default proSlice.reducer;
