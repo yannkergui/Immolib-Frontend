@@ -5,6 +5,8 @@ import { useState } from "react";
 import { useDispatch } from 'react-redux';
 import {userDatas} from '../../reducers/user'
 
+import { ipAdress } from "../../immolibTools";
+
 export default function PersoConnectionScreen({ navigation }) {
 
    //Etats pour récupérer les inputs utilisateur
@@ -43,7 +45,7 @@ export default function PersoConnectionScreen({ navigation }) {
     // Si correspondance avec la REGEX EMAIL
     if (EMAIL_REGEX.test(email) && mdp) {
       //Récupération des données de l'utilisateur de la BDD
-      fetch(`http://${myIPAdress}:3000/users/signin`, {
+      fetch(`http://${ipAdress}:3000/users/signin`, {
       method : 'POST',
       headers : {'Content-Type' : 'application/json'},
       body : JSON.stringify({email : email, motDePasse: mdp})
@@ -84,7 +86,7 @@ export default function PersoConnectionScreen({ navigation }) {
     // 2eme bouton "S'inscrire" qui redirige vers la homePage
     const handleInscriptionBis = () => {
         if (EMAIL_REGEX.test(email) && TEL_REGEX.test(tel)) {
-          fetch(`http://${myIPAdress}:3000/users/signup`, {
+          fetch(`http://${ipAdress}:3000/users/signup`, {
             method : 'POST',
             headers : {'Content-Type' : 'application/json'},
             body : JSON.stringify({prenom : prenom, nom: nom, email : email, tel : tel, motDePasse: mdp})
@@ -163,7 +165,7 @@ export default function PersoConnectionScreen({ navigation }) {
                                 <View style={styles.inputsEtDelete}>
                                   <View style={styles.inputs}>
                                         <TextInput placeholder="email" style={styles.inputModal} keyboardType={"email-address"} autoCorrect={false} autoComplete={"email"} autoCapitalize={'none'} onChangeText={(value) => setEmail(value)} value={email}/>
-                                        <TextInput placeholder="Mot de passe" style={styles.inputModal} autoCapitalize={'none'} autoCorrect={false} onChangeText={(value) => setMdp(value)} value={mdp}/>  
+                                        <TextInput placeholder="Mot de passe" style={styles.inputModal} selectionColor={"red"} secureTextEntry={true} autoCapitalize={'none'} autoCorrect={false} onChangeText={(value) => setMdp(value)} value={mdp}/>  
                                               
                                   </View>
                                   <View style={styles.deleteModal}>
@@ -194,7 +196,7 @@ export default function PersoConnectionScreen({ navigation }) {
                                     <TextInput placeholder="Prénom" style={styles.inputModal}  autoComplete={"given-name"} onChangeText={(value) => setPrenom(value)} value={prenom}/>
                                     <TextInput placeholder="nom" style={styles.inputModal} autoComplete={"family-name"} onChangeText={(value) => setNom(value)} value={nom}/>
                                     <TextInput placeholder="email" style={styles.inputModal} keyboardType={"email-address"} autoCorrect={false} autoComplete={"email"} autoCapitalize={'none'} onChangeText={(value) => setEmail(value)} value={email}/>
-                                    <TextInput placeholder="Mot de passe" style={styles.inputModal} autoCapitalize={'none'} autoCorrect={false} onChangeText={(value) => setMdp(value)} value={mdp}/> 
+                                    <TextInput placeholder="Mot de passe" style={styles.inputModal} selectionColor={"red"} secureTextEntry={true} autoCapitalize={'none'} autoCorrect={false} onChangeText={(value) => setMdp(value)} value={mdp}/> 
                                     <TextInput placeholder="numéro de téléphone" style={styles.inputModal} keyboardType={"phone-pad"} onChangeText={(value) => setTel(value)} value={tel}/>           
                                 </View>
                                 <View style={styles.deleteModal}>
@@ -302,7 +304,7 @@ const styles = StyleSheet.create({
     alignItems : 'center',
   },
   modalContainer : {
-    backgroundColor : 'rgba(255, 255, 255, 0.8)',
+    backgroundColor : 'rgba(255, 255, 255, 1)',
     width : '80%',
     padding : 10,
     borderRadius : 10, 
