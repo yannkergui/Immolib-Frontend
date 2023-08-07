@@ -38,7 +38,7 @@ export default function PersoConnectionScreen({ navigation }) {
   }
 
   // Adresse IP à modifier si besoin
-  const myIPAdress='192.168.10.147';
+  const myIPAdress='192.168.10.169';
 
   // 2eme boutton "Se connecter" qui redirige vers la homePage
   const handleConnexionBis = () => {

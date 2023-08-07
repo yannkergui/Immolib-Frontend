@@ -117,12 +117,12 @@ export default function ProConnectionScreen({ navigation }) {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${inseeJeton}`
+              'Authorization': 'Bearer 412b7176-b22c-30b4-8e4a-9fe5a9a0b108'
             },
           });
-    
+    console.log("test1");
           const data1 = await response1.json();
-    
+          console.log("test2");
           if (data1.header.message === "ok") {
             // Mise à jour des états avec les données de la première requête
             let adrInsee = data1.etablissement.adresseEtablissement;
@@ -132,7 +132,7 @@ export default function ProConnectionScreen({ navigation }) {
             setDateInsee(data1.etablissement.dateCreationEtablissement);
             setAdresseInsee(`${adrInsee.numeroVoieEtablissement}${adrInsee.indiceRepetitionEtablissement}, ${adrInsee.typeVoieEtablissement} ${adrInsee.libelleVoieEtablissement}, ${adrInsee.codePostalEtablissement} ${adrInsee.libelleCommuneEtablissement}`);
     
-            const response2 = await fetch(`http://${ipAdress}/pros/signup`, {
+            const response2 = await fetch(`http://192.168.1.19:3000/pros/signup`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({

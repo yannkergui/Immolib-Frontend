@@ -6,11 +6,12 @@ import {
   TouchableOpacity,
   Linking,
   Platform,
+  Image,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import {
   Calendar,
@@ -20,32 +21,30 @@ import {
 } from "react-native-calendars";
 
 export default function ProHome({ navigation }) {
-  const [dateVisite, setDateVisite] = useState([]);
   const [items2, setItems2] = useState({});
+  const pro = useSelector((state) => state.pro.value);
+  const [tableau, setTableau] = useState([]);
+
+  const updatedItems = {};
 
   useEffect(() => {
-    fetch("http://192.168.10.138:3000/visites/pro/64c793b55faa2cf4d0383d1d")
+    fetch(`http://192.168.10.175:3000/visites/pro/${pro.token}`)
       .then((response) => response.json())
       .then((data) => {
-        const updatedItems = {};
-        data.VisitesTrouvees.map((data) => {
-          console.log(data.usersId);
+        data.visitesTrouvees.forEach((data) => {
           const visitedate = data.dateOfVisit;
-          const name = `${data.usersId.nom} ${data.usersId.prenom} - ${data.bienImmoId.titre}`;
-          const time = `${data.startTimeVisit}`;
-
+          const name = `${data.usersId.nom ? data.usersId.nom : ''} ${data.usersId.prenom ? data.usersId.prenom : ''} - ${data.bienImmoId.titre ? data.bienImmoId.titre : ''}`
+          const time = `${data.startTimeVisit ? data.startTimeVisit : ''}`;
           if (!updatedItems[visitedate]) {
             updatedItems[visitedate] = [{ name, time }];
           } else {
             updatedItems[visitedate].push({ name, time });
           }
         });
-
         setItems2(updatedItems);
       });
   }, []);
 
-  // console.log(items2);
 
   LocaleConfig.locales["fr"] = {
     monthNames: [
@@ -106,7 +105,7 @@ export default function ProHome({ navigation }) {
 
   const renderItem = (item) => {
     return (
-      <View style={styles.item}>
+      <View style={styles.item} onPress= {()=> console.log('test')}>
         <Text style={styles.eventName}>{item.name}</Text>
         <Text style={styles.eventTime}>{item.time}</Text>
       </View>
@@ -149,14 +148,10 @@ export default function ProHome({ navigation }) {
       >
         <View style={styles.container}>
           <View style={styles.header}>
-            <Text style={styles.Title}>Home</Text>
-            <TouchableOpacity style={styles.iconcontainer}>
-              <FontAwesome
-                style={styles.icon}
-                name="user"
-                size={30}
-                color="#1F2937"
-              />
+            <Text style={styles.title}>Home</Text>
+            <TouchableOpacity style={styles.iconContainer} onPress={()=> navigation.navigate('ProPreferences')}>
+              {pro.photo && <Image source={{url: pro.photo}} style={styles.photo}/>}
+              {!pro.photo && <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' />}
             </TouchableOpacity>
           </View>
           <TouchableOpacity style={styles.button}>
@@ -185,7 +180,7 @@ export default function ProHome({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "100%",
+    //width: "100%",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -199,26 +194,31 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 80,
     alignItems: "center", // Center the content horizontally
-    justifyContent: "center",
+    justifyContent: "flex-end",
+    // borderColor: "black",
+    // borderWidth: 1,
   },
-  iconcontainer: {
-    position: "absolute",
-    left: 330,
+  iconContainer: {
+    //position :"absolute",
+    left: 0,
     top: 0,
     backgroundColor: "white",
-    width: 50,
-    height: 50,
-    paddingLeft: 15,
-    paddingTop: 8.5,
+    width: 60,
+    height: 60,
+    // paddingLeft: 15,
+    // paddingTop: 8.5,
     borderRadius: 100,
   },
-  Title: {
+  title: {
     color: "white",
     fontSize: 35,
     fontStyle: "normal",
     fontWeight: "600",
     letterSpacing: -1.5,
     textAlign: "center",
+    // borderColor: "red",
+    // borderWidth: 1,
+    marginRight: 78,
   },
   button: {
     position: "absolute",
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
     paddingTop: 7,
   },
   calendar: {
-    width: 400,
+    width: 370,
     borderRadius: 20,
   },
   item: {
@@ -304,5 +304,11 @@ const styles = StyleSheet.create({
   emptyDatetext: {
     fontSize: 13,
     color: "white",
+  },
+  photo: {
+    width: 60,
+    height: 60,
+    borderRadius: 50,
+    marginBottom: 4,
   },
 });

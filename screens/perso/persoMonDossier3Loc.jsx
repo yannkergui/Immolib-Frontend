@@ -21,11 +21,11 @@ export default function PersoMonDossier3Loc({ navigation }) {
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
 
-  //Etat relatif au revenu renseigné (util au push en BDD)
+  //Etat relatif au revenu renseigné 
 
   const [monRevenu, setMonRevenu] = useState(0);
 
-  //3 Etats relatifs à la situation pro renseignée (util au push en BDD)
+  //3 Etats relatifs à la situation pro renseignée 
 
   const [situationAutre, setSituationAutre] = useState("");
   const [contrat, setContrat] = useState("cdi");
@@ -44,6 +44,31 @@ export default function PersoMonDossier3Loc({ navigation }) {
   const [Autre, setAutre] = useState("");
 
   // fonction relative à l'upload des fichiers au clique sur l'icone
+
+  // const UploadPhoto= async (nomDuFichier, setEtat) => {
+  //   const result = await DocumentPicker.getDocumentAsync({
+  //     type: "image/*",
+  //   });
+  //   const formData = new FormData();
+
+  //   formData.append("photoFromFront", {
+  //     uri: result.assets[0].uri,
+  //     name: nomDuFichier,
+  //     type: "image/*",
+  //   });
+
+  //   fetch(`http://${myIPAdress}:3000/users/upload`, {
+  //     method: "POST",
+  //     body: formData,
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setEtat("ok");
+  //       dispatch(userDatas({ [nomDuFichier]: data.url }));
+  //     });
+  // };
+
+
 
   const UploadDocId = async () => {
     const result = await DocumentPicker.getDocumentAsync({
@@ -251,7 +276,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {});
-    navigation.navigate("PersoHome");
+    navigation.navigate("TabNavigatorPerso");
   };
 
   return (
