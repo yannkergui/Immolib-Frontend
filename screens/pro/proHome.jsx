@@ -24,9 +24,9 @@ export default function ProHome({ navigation }) {
   const [items2, setItems2] = useState({});
 
   useEffect(() => {
-    fetch('http://192.168.10.138:3000/visites/pro/64c793b55faa2cf4d0383d1d')
-      .then(response => response.json())
-      .then(data => {
+    fetch("http://192.168.10.138:3000/visites/pro/64c793b55faa2cf4d0383d1d")
+      .then((response) => response.json())
+      .then((data) => {
         const updatedItems = {};
         data.VisitesTrouvees.map((data) => {
           console.log(data.usersId);
