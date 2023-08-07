@@ -5,6 +5,7 @@ import {
   View,
   Image,
   TextInput,
+  ScrollView
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import { useState } from "react";
@@ -13,7 +14,6 @@ import * as DocumentPicker from "expo-document-picker";
 import SwitchSelector from "react-native-switch-selector";
 import { useDispatch, useSelector } from "react-redux";
 import { userDatas } from "../../reducers/user";
-
 
 export default function PersoMonDossier3Loc({ navigation }) {
   const myIPAdress = "192.168.10.169";
@@ -35,6 +35,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
     { label: "CDD", value: "cdd" },
   ];
 
+  const [idDoc, setIdDoc] = useState("");
   const [ficheDePaie1, setFicheDePaie1] = useState("");
   const [ficheDePaie2, setFicheDePaie2] = useState("");
   const [ficheDePaie3, setFicheDePaie3] = useState("");
@@ -43,6 +44,28 @@ export default function PersoMonDossier3Loc({ navigation }) {
   const [Autre, setAutre] = useState("");
 
   // fonction relative à l'upload des fichiers au clique sur l'icone
+
+  const UploadDocId = async () => {
+    const result = await DocumentPicker.getDocumentAsync({
+      type: "image/*",
+    });
+    const formData = new FormData();
+
+    formData.append("photoFromFront", {
+      uri: result.assets[0].uri,
+      name: "idDoc",
+      type: "image/*",
+    });
+    fetch(`http://${myIPAdress}:3000/users/upload`, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setIdDoc("ok");
+        dispatch(userDatas({ idDoc: data.url }));
+      });
+  };
 
   const UploadFicheDePaie1 = async () => {
     const result = await DocumentPicker.getDocumentAsync({
@@ -61,7 +84,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        setFicheDePaie1("ok")
+        setFicheDePaie1("ok");
         dispatch(userDatas({ salaire1: data.url }));
       });
   };
@@ -83,7 +106,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        setFicheDePaie2("ok")
+        setFicheDePaie2("ok");
         dispatch(userDatas({ salaire2: data.url }));
       });
   };
@@ -105,7 +128,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        setFicheDePaie3("ok")
+        setFicheDePaie3("ok");
         dispatch(userDatas({ salaire3: data.url }));
       });
   };
@@ -127,7 +150,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        setAvisImpot("ok")
+        setAvisImpot("ok");
         dispatch(userDatas({ impots: data.url }));
       });
   };
@@ -149,7 +172,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        setBilan("ok")
+        setBilan("ok");
         dispatch(userDatas({ bilan: data.url }));
       });
   };
@@ -171,7 +194,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        setAutre("ok")
+        setAutre("ok");
         dispatch(userDatas({ autres: data.url }));
       });
   };
@@ -194,14 +217,14 @@ export default function PersoMonDossier3Loc({ navigation }) {
           nbLoc: user.nbLocataire,
           meuble: user.meuble,
         },
-        documents: { 
+        documents: {
           salaire1: user.salaire1,
           salaire2: user.salaire2,
           salaire3: user.salaire3,
           impots: user.impots,
           bilan: user.bilan,
           autres: user.autres,
-         },
+        },
       }),
     })
       .then((response) => response.json())
@@ -246,6 +269,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
           <Text>15/03/2023 à 17h</Text>
           <Text>66 rue Victor Hugo, 75001 Paris</Text>
         </View>
+        
         <Text style={styles.title}>Mon Dossier</Text>
         <View style={styles.pageContainer}>
           <View style={styles.pageNumber}>
@@ -283,17 +307,22 @@ export default function PersoMonDossier3Loc({ navigation }) {
               animationDuration={250}
               height={45}
             />
-            {/* <TextInput
-              style={styles.input}
-              keyboardType="numeric"
-              placeholder="Autre"
-              onChangeText={(value) => setMonRevenu(value)}
-              value={monRevenu}
-            ></TextInput> */}
           </View>
           <View style={styles.lineContainer}>
             <Text>Je charge mes documents</Text>
           </View>
+          <View style={styles.lineContainer}>
+            <Text>Pièce d'identité</Text>
+            {idDoc !== "" ? (
+              <FontAwesome name="check" size={30} color="green" />
+            ) : (
+              ""
+            )}
+            <TouchableOpacity onPress={UploadDocId}>
+              <FontAwesome name="cloud-upload" size={30} color="#ffffff" />
+            </TouchableOpacity>
+          </View>
+
           <View style={styles.lineContainer}>
             <Text>Fiche de paie 1</Text>
             {ficheDePaie1 !== "" ? (

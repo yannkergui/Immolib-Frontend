@@ -13,7 +13,9 @@ import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import SwitchSelector from "react-native-switch-selector";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import user, { userDatas } from "../../reducers/user";
+import { userDatas } from "../../reducers/user";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import * as DocumentPicker from "expo-document-picker";
 
 export default function PersoMonDossier3Achat({ navigation }) {
   const myIPAdress = "192.168.10.169";
@@ -34,6 +36,28 @@ export default function PersoMonDossier3Achat({ navigation }) {
   const handleNbPieceChange = (text) => {
     const formattedText = text.replace(/[^0-9]/g, ""); // élimine tous les caractères non numériques
     setInputNbPiece(formattedText);
+  };
+
+  const UploadAccord = async () => {
+    const result = await DocumentPicker.getDocumentAsync({
+      type: "image/*",
+    });
+    const formData = new FormData();
+
+    formData.append("photoFromFront", {
+      uri: result.assets[0].uri,
+      name: "PreAccord",
+      type: "image/*",
+    });
+    fetch(`http://${myIPAdress}:3000/users/upload`, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setUploadPreAccord("ok");
+        dispatch(userDatas({ banqueDoc: data.url }));
+      });
   };
 
   //navigations en cliquant sur "Etape suivante", ou 1/3 et 2/3:
@@ -62,6 +86,9 @@ export default function PersoMonDossier3Achat({ navigation }) {
           financement: valueTypeFinancement,
           accordBanque: valuePreAccord,
         },
+        documents: {
+          banqueDoc: user.banqueDoc,
+        }
       }),
     })
       .then((response) => response.json())
@@ -93,21 +120,13 @@ export default function PersoMonDossier3Achat({ navigation }) {
     navigation.navigate("PersoHome");
   };
 
-  // à voir si nous laissons la possibilité à l'utilisateur de revenir en arrière dans le tunnel de complétude (à duscuter)
-
-  // const handlePage1 = () => {
-  //   navigation.navigate("PersoMonDossier1");
-  // };
-  // const handlePage2 = () => {
-  //   navigation.navigate("PersoMonDossier2Achat");
-  // };
-
   //mise en place des options pour les switchs selectors :
   const [valuePrimo, setValuePrimo] = useState(false);
   const [valueTypeInvest, setValueTypeInvest] = useState("principale");
   const [valueTypeFinancement, setValueTypeFinancement] =
     useState("pretbancaire");
   const [valuePreAccord, setValuePreAccord] = useState(false);
+  const [UploadPreAccord, setUploadPreAccord] = useState("");
 
   //mise en place des options pour le switch selector du primo accédant :
   const optionsPrimo = [
@@ -223,20 +242,38 @@ export default function PersoMonDossier3Achat({ navigation }) {
               />
             </View>
 
-            <View style={styles.lineContainer}>
-              <Text style={styles.sousTitre}>Pré-accord bancaire :</Text>
-              <SwitchSelector
-                options={optionsPreAccord}
-                initial={0}
-                onPress={(value) => setValuePreAccord(value)}
-                valuePadding={2.5}
-                hasPadding
-                style={styles.SwitchSelector}
-                buttonColor="#47AFA5"
-                buttonMargin={1.5}
-                animationDuration={250}
-                height={45}
-              />
+            <View style={styles.lastLine}>
+              <View style={styles.lastBloc}>
+                <Text style={styles.sousTitre}>Pré-accord bancaire :</Text>
+                <SwitchSelector
+                  options={optionsPreAccord}
+                  initial={0}
+                  onPress={(value) => setValuePreAccord(value)}
+                  valuePadding={2.5}
+                  hasPadding
+                  style={styles.SwitchSelector}
+                  buttonColor="#47AFA5"
+                  buttonMargin={1.5}
+                  animationDuration={250}
+                  height={45}
+                />
+              </View>
+              {valuePreAccord ? (
+                <View style={styles.lastBloc}>
+                  <Text style={styles.sousTitre}>Chargé le document :</Text>
+                  {UploadPreAccord === "ok" ? (
+                    <FontAwesome name="check" size={30} color="green" />
+                  ) : (
+                    <TouchableOpacity onPress={UploadAccord}>
+                      <FontAwesome
+                        name="cloud-upload"
+                        size={30}
+                        color="#ffffff"
+                      />
+                    </TouchableOpacity>
+                  )}
+                </View>
+              ) : null}
             </View>
           </View>
           <View style={styles.nextBtnContainer}>
@@ -422,5 +459,15 @@ const styles = StyleSheet.create({
   },
   sousTitre: {
     marginBottom: 10,
+  },
+
+  lastLine: {
+    flexDirection: "row",
+    width: "90%",
+    justifyContent: "space-between",
+  },
+
+  lastBloc: {
+    alignItems: "center",
   },
 });
