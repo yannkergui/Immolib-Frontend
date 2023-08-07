@@ -77,11 +77,11 @@ export default function ProConnectionScreen({ navigation }) {
       .then(response => response.json())
       .then(data => {
         if (data.result) {
-          let { prenom, nom, email, tel, motDePasse, token, photo } = data.pro
+          let { _id, prenom, nom, email, tel, motDePasse, token, photo } = data.pro
           let {denomination, siren, siret, dateCreation, adresse} = data.pro.agence
           // console.log('data récupéré : ', data),
           dispatch(proDatas(
-            { prenom, nom, email, tel, motDePasse, token, photo,
+            { _id, prenom, nom, email, tel, motDePasse, token, photo,
               agence : {
                 denomination,
                 siren,
@@ -92,7 +92,7 @@ export default function ProConnectionScreen({ navigation }) {
             }
           ));
           setModalConnexion(false);
-          navigation.navigate('TabNavigatorPro');
+          navigation.navigate('ProClients');
           setEmail('');
           setMotDePasse('')
           setEmailError(false);
