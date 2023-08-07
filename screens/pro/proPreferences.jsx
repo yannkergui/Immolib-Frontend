@@ -34,8 +34,9 @@ export default function ProPreferences({navigation}) {
   //désactivation du regex réel pour les tests /^(?:(?:(?:\+|00)33\s?|0)[0-9]\s?\d{8})$/
   const TEL_REGEX = /[0-9]{1}/
 
-  // Etats modale maj
+  // Etats modales
   const [modalMaj, setModalMaj]=useState(false);
+  const [modalPhoto, setModalPhoto] = useState(false)
 
   const dispatch = useDispatch();
 
@@ -100,9 +101,20 @@ export default function ProPreferences({navigation}) {
     setEmailError(false);
     setTelError(false);
     setErrorEmpty(false);
+    setModalPhoto(false);
   }
 
-  function changePhoto (){}
+
+function handlePhoto () {
+  setModalPhoto(true)
+}
+
+  function launchCamera (){
+    navigation.navigate('CameraScreen');
+    setModalPhoto(false)
+
+
+  }
 
   //switch selector restriction visite aux dossiers complets :
   const [restrict, setRestrict] = useState(false);
@@ -168,8 +180,8 @@ export default function ProPreferences({navigation}) {
                 <FontAwesome name='edit' size={20} color="white" marginRight={20} marginTop={10} marginBottom={5} onPress={()=>maj()}/>
                 <View style = {{flexDirection: "row", width: '100%', justifyContent: 'center'}}>
                   <View style = {styles.photoBloc}>
-                    <Image source={require("../../assets/alice.jpeg")} style={styles.photo}/>
-                    <TouchableOpacity style={styles.photoText} onPress={() => changePhoto()}>
+                    <Image source={{uri: pro.photo}} style={styles.photo}/>
+                    <TouchableOpacity style={styles.photoText} onPress={() => handlePhoto()}>
                       <Text style={styles.photoText}>Modifiez votre photo</Text>
                     </TouchableOpacity> 
                   </View>
@@ -312,6 +324,30 @@ export default function ProPreferences({navigation}) {
                                   <Text style={styles.textButton}>Enregistrer</Text>
                             </TouchableOpacity> 
                                 {errorEmpty && <Text style={styles.error}>Tous les champs ne sont pas complétés</Text>}   
+                          </View>
+                      </View>
+                    </TouchableWithoutFeedback>
+                  </KeyboardAvoidingView>
+    </Modal>
+
+    <Modal visible={modalPhoto} animationType="fade" transparent>
+                  <KeyboardAvoidingView behavior={"padding"} style={styles.container}>
+                    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                      <View style={styles.centeredView}>
+                          <View style={styles.modalContainer}>
+                            <View style={styles.inputsEtDelete}>
+                              <View style={styles.deleteModal}>
+                                  <TouchableOpacity  onPress={()=>closeModal()}>
+                                      <Text style={styles.textDelete}>X</Text>
+                                  </TouchableOpacity>
+                              </View>
+                            </View>
+                            <TouchableOpacity style={styles.btnInscription} onPress={()=>launchCamera()}>
+                              <Text style={styles.textButton}>Prenez une photo</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.btnInscription} onPress={()=>pickPhoto()}>
+                              <Text style={styles.textButton}>Télécharger une photo</Text>
+                            </TouchableOpacity> 
                           </View>
                       </View>
                     </TouchableWithoutFeedback>

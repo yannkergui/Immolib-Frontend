@@ -17,6 +17,7 @@ import WelcomeScreenPro from "./screens/pro/WelcomeScreenPro";
 import MonDossierPro from "./screens/pro/monDossierpro"
 import ProConnectionScreen from "./screens/pro/proConnectionScreen";
 import ProPreferences from "./screens/pro/proPreferences";
+import CameraScreen from "./screens/pro/cameraScreen";
 
 import PersoConnectionScreen from "./screens/perso/persoConnectionScreen";
 import PersoHome from "./screens/perso/persoHome";
@@ -199,6 +200,9 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
+            <Stack.Screen name="ProConnexionScreen" component={ProConnectionScreen} />
+            <Stack.Screen name="ProPreferences" component={ProPreferences} />
+            <Stack.Screen name="CameraScreen" component={CameraScreen} />
             <Stack.Screen
               name="TabNavigatorPerso"
               component={TabNavigatorPerso}
@@ -209,7 +213,6 @@ export default function App() {
               style={styles.tabNavigator}
             />
               <Stack.Screen name="PersoMaVisite" component={PersoMaVisite} />
-              <Stack.Screen name="test" component={FicheClient} />
               <Stack.Screen name="FirstScreen" component={FirstScreen} />
               <Stack.Screen name="PersoMonDossier1" component={PersoMonDossier1} />
               <Stack.Screen name="PersoMonDossier2Achat" component={PersoMonDossier2Achat} />
