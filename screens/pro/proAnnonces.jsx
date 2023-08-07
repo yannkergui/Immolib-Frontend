@@ -1,11 +1,33 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useState } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import SwitchSelector from "react-native-switch-selector";
+import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect } from "react";
 
-export default function ProAnnonces() {
+export default function ProAnnonces( {navigation} ) {
+
+  const myIPAdress='192.168.10.156';
+
+  const pro = useSelector((state) => state.pro.value);
+
+
+  const [biensPro, setBiensPro] = useState([]);
+
+
+   // Fetch du backend pour récupérer les annonces liées au pro 
+
+   useEffect(() => {
+    fetch(`http://${myIPAdress}:3000/biens/pro/64d046c3588b8ddd65d8cbcf`)
+      .then(response => response.json())
+      .then(data => {
+        setBiensPro(data.biens)
+        // console.log(data.bien)
+      })
+  }, []);
+
+ 
 
  // constante relative au switch de changement de page 
 
@@ -16,52 +38,28 @@ export default function ProAnnonces() {
 
 // Etat relatif au changement de page via le switch
 
-const [activPage, setActivePage] = useState("Location");
-console.log(activPage)
+const [activPage, setActivePage] = useState("location");
 
-// annonceData (en dur pour le moment, sera par la suite un fetch de la BDD)
-
-const annonces = [
-  {
-    titre: "Appartement 3 pièces",
-    adresse: "77 rue victor hugo, 75000 Paris",
-    photo: "https://i0.wp.com/courrierdesameriques.com/wp-content/uploads/2021/06/louer-un-appartement-cond-a-miami.jpeg?w=256&h=256&crop=1&ssl=1",
-    transaction: "vente"
-    
-  },
-  {
-    titre: "Maison 160m²",
-    adresse: "77 rue victor hugo, 75000 Paris",
-    photo: "https://prod-saint-gobain-fr.content.saint-gobain.io/sites/saint-gobain.fr/files/2022-04/maison-contemporaine-la-maison-saint-gobain01.jpg",
-    transaction: "vente"
-  },
-  {
-    titre: "studio 20 m²",
-    adresse: "77 rue victor hugo, 75000 Paris",
-    photo: "https://resize-elle.ladmedia.fr/rcrop/638,,forcex/img/var/plain_site/storage/images/deco/pratique/travaux/plans-2d-3d/plan-de-studio-3-facons-d-amenager-un-studio-de-35-m2/88947988-1-fre-FR/Plan-de-studio-3-facons-d-amenager-un-studio-de-35-m2.jpg",
-    transaction: "location",
-  },
-  
-];
+const handleCreerAnnonce = () => {navigation.navigate("CreationAnnonce")}
 
 // 1er map relatif aux annonces Vente
 
-const annoncesVente = annonces.map((data) => {
+const annoncesVente = biensPro.map((data) => {
   if (data.transaction === "vente") {
     return (
       <View style={styles.annonceCard}>
         <View style={styles.lineCard}>
-        <Image
+          <View style={styles.imageConatainer}>
+          <Image
           source={{ uri: data.photo }}
           style= {styles.image}>
           </Image>
+          </View>
           <View style={styles.textContainer}>
           <Text style={styles.annonceTitre}>{data.titre} </Text>
-          <Text style={styles.annonceAdresse}> {data.adresse}</Text>
+          <Text style={styles.annonceAdresse}> {data.numeroRue} {data.rue} {data.ville} {data.codePostal}</Text>
           </View>
-          
-        </View>
-        
+        </View>    
       </View>
     );
   }
@@ -69,18 +67,20 @@ const annoncesVente = annonces.map((data) => {
 
   // 2iem map relatif aux annonces location
 
-  const annoncesLocation = annonces.map((data) => {
+  const annoncesLocation = biensPro.map((data) => {
     if (data.transaction === "location") {
       return (
         <View style={styles.annonceCard}>
         <View style={styles.lineCard}>
-        <Image
+          <View style={styles.imageConatainer}>
+          <Image
           source={{ uri: data.photo }}
           style= {styles.image}>
           </Image>
+          </View>
           <View style={styles.textContainer}>
           <Text style={styles.annonceTitre}>{data.titre} </Text>
-          <Text style={styles.annonceAdresse}> {data.adresse}</Text>
+          <Text style={styles.annonceAdresse}> {data.numeroRue} {data.rue} {data.ville} {data.codePostal}</Text>
           </View>
         </View>    
       </View>
@@ -98,7 +98,7 @@ const annoncesVente = annonces.map((data) => {
       style={styles.container}
     >
         <View style={styles.header}> 
-        <Text style={styles.Title}>Mes Clients</Text>
+        <Text style={styles.Title}>Mes Annonces</Text>
         <TouchableOpacity style={styles.iconcontainer}>
           <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' />
         </TouchableOpacity>
@@ -119,10 +119,10 @@ const annoncesVente = annonces.map((data) => {
         </View>
         <StatusBar style="auto" />
         <View style={styles.cardContainer}>
-          {activPage === "vente" && annoncesVente}
           {activPage === "location" && annoncesLocation}
+          {activPage === "vente" && annoncesVente}
         </View>
-        <TouchableOpacity style={styles.next}>
+        <TouchableOpacity style={styles.next} onPress={handleCreerAnnonce}>
           <Text>Créer une annonce</Text>
         </TouchableOpacity>
     </LinearGradient>
@@ -230,6 +230,10 @@ const styles = StyleSheet.create({
     width: "100%",
   },
 
+  imageConatainer: {
+    width: "50%"
+  },
+
   image: {
     height: 120, 
     width:120,
@@ -241,9 +245,12 @@ annonceTitre: {
   fontWeight: 'bold',
   marginBottom:10,
   
+  
 },
 textContainer: {
-  justifyContent: "space-between"
+  justifyContent: "space-between",
+  width: "50%", 
+  maxWidth: "50%",
 },
 
 next: {

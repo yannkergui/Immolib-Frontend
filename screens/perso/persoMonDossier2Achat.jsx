@@ -56,7 +56,7 @@ export default function PersoMonDossier2Achat({ navigation }) {
   };
 
   const handlePasserCetteEtape = () => {
-    navigation.navigate("PersoHome");
+    navigation.navigate('TabNavigatorPerso', { screen: 'Home' });
     
   };
 

@@ -61,7 +61,7 @@ export default function PersoMonDossier2Loc({ navigation }) {
   };
 
   const handlePasserCetteEtape = () => {
-    navigation.navigate("PersoHome")
+    navigation.navigate('TabNavigatorPerso', { screen: 'Home' })
     
   };
   
