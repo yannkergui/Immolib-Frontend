@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   ScrollView,
+  LayoutAnimation,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState, useEffect } from "react";
@@ -19,10 +20,12 @@ import SwitchSelector from "react-native-switch-selector";
 export default function ProVisites() {
   //constante relative à la modale de changement de page
   const [modalConfirmation, setModalConfirmation] = useState(false);
+  const [selectedVisite, setSelectedVisite] = useState(null);
 
   //fonction pour ouvrir la modale de changement de page
-  const openModalConfirmation = () => {
+  const openModalConfirmation = (data) => {
     setModalConfirmation(!modalConfirmation);
+    setSelectedVisite(data);
   };
 
   //constante pour message de confirmation de rendez-vous dans la modale
@@ -41,7 +44,7 @@ export default function ProVisites() {
   // constante relative au switch de changement de page
 
   const page = [
-    { label: "En attente de validation", value: "En attente" },
+    { label: "En attente de validation", value: "en attente" },
     { label: "A venir", value: "aVenir" },
   ];
 
@@ -50,11 +53,9 @@ export default function ProVisites() {
   const [activPage, setActivePage] = useState("en attente");
   console.log(activPage);
 
-
   //création d'une fonction pour confirmer une visite en attente
 
   const confirmVisite = (id) => {
-    console.log("id", id);
     fetch(`http://192.168.10.147:3000/visites/statut/${id}`, {
       method: "PUT",
       headers: {
@@ -67,6 +68,8 @@ export default function ProVisites() {
       .then((res) => res.json())
       .then((data) => {
         console.log("data", data);
+
+        // setVisitesPro(visitesPro.filter((visite) => visite._id !== id));
         setRdvConfirmé(true);
       });
   };
@@ -78,13 +81,22 @@ export default function ProVisites() {
     fetch("http://192.168.10.147:3000/visites/pro/64cccc590fd39de6f4a550da")
       .then((res) => res.json())
       .then((data) => {
-        console.log("data", data.VisitesTrouvees);
+        console.log("data du 1er useEffect", data.VisitesTrouvees);
         setVisitesPro(data.VisitesTrouvees);
       });
   }, []);
 
+  //constante pour limiter la longueur du titre du bien
+  const titreBien = (titre) => {
+    if (titre.length > 32) {
+      return titre.substring(0, 32) + "...";
+    } else {
+      return titre;
+    }
+  };
+
   const visiteEnAttente = visitesPro.map((data) => {
-    console.log("data visites en attente", data);
+    // console.log("data visites en attente", data);
     if (data.statut === "en attente") {
       return (
         <View style={styles.visiteCard}>
@@ -99,13 +111,15 @@ export default function ProVisites() {
           </View>
           <View style={styles.lineCard}>
             <View style={styles.descriptionCard}>
-              <Text>{data.bienImmoId.titre}</Text>
+              <Text>
+                {titreBien(data.bienImmoId.titre)} {""}
+              </Text>
               <Text>
                 {data.bienImmoId.numeroRue}, {data.bienImmoId.rue}{" "}
                 {data.bienImmoId.codePostal}
               </Text>
             </View>
-            <TouchableOpacity onPress={() => openModalConfirmation()}>
+            <TouchableOpacity onPress={() => openModalConfirmation(data)}>
               <FontAwesome name="check" size={30} color="#1F2937" />
             </TouchableOpacity>
             <TouchableOpacity>
@@ -122,7 +136,9 @@ export default function ProVisites() {
                 style={styles.container}
               >
                 <TouchableWithoutFeedback
-                  onPress={() => openModalConfirmation()}
+                  onPress={() => {
+                    openModalConfirmation(), setSelectedVisite(null);
+                  }}
                   accessible={false}
                 >
                   <View style={styles.centeredView}>
@@ -130,19 +146,20 @@ export default function ProVisites() {
                       <View style={styles.inputsEtDelete}>
                         {RdvConfirmé ? (
                           <Text style={styles.textModaleConfirm}>
-                            Rendez-vous confirmé !
+                            Rendez-vous confirmé ! ✅
                           </Text>
                         ) : (
                           <Text style={styles.inputs}>Confirmer ?</Text>
                         )}
                       </View>
 
-                      {!RdvConfirmé ? (
+                      {!RdvConfirmé && selectedVisite ? (
                         <Text style={styles.textButton}>
                           Voulez-vous confirmer ce rendez-vous du{" "}
-                          {data.dateOfVisit} à {data.startTimeVisit} pour le
-                          bien du {data.bienImmoId.numeroRue},{" "}
-                          {data.bienImmoId.rue} ?
+                          {selectedVisite.dateOfVisit} à{" "}
+                          {selectedVisite.startTimeVisit} pour le bien du{" "}
+                          {selectedVisite.bienImmoId.numeroRue},{" "}
+                          {selectedVisite.bienImmoId.rue} ?
                         </Text>
                       ) : null}
 
@@ -164,7 +181,9 @@ export default function ProVisites() {
                         <TouchableOpacity
                           style={styles.btnModal}
                           onPress={() => {
-                            openModalConfirmation(), setRdvConfirmé(false);
+                            openModalConfirmation(),
+                              setRdvConfirmé(false),
+                              setSelectedVisite(null);
                           }}
                         >
                           {!RdvConfirmé ? (
@@ -190,7 +209,7 @@ export default function ProVisites() {
   // 2iem map relatif aux visites passées
 
   const visiteAVenir = visitesPro.map((data) => {
-    console.log("datavisites à venir", data);
+    // console.log("datavisites à venir", data);
 
     if (data.statut === "confirmé") {
       return (
@@ -206,7 +225,9 @@ export default function ProVisites() {
           </View>
           <View style={styles.lineCard}>
             <View style={styles.descriptionCard}>
-              <Text>{data.bienImmoId.titre}</Text>
+              <Text>
+                {titreBien(data.bienImmoId.titre)} {""}
+              </Text>
               <Text>
                 {data.bienImmoId.numeroRue}, {data.bienImmoId.rue}{" "}
                 {data.bienImmoId.codePostal}
@@ -221,7 +242,6 @@ export default function ProVisites() {
     }
   });
 
-  
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -256,7 +276,11 @@ export default function ProVisites() {
           />
         </View>
         <StatusBar style="auto" />
-        <ScrollView contentContainerStyle={styles.scrollViewContent} vertical={true} bounces={false}>
+        <ScrollView
+          contentContainerStyle={styles.scrollViewContent}
+          vertical={true}
+          bounces={false}
+        >
           <View style={styles.cardContainer}>
             {activPage === "en attente" && visiteEnAttente}
             {activPage === "aVenir" && visiteAVenir}
@@ -344,6 +368,7 @@ const styles = StyleSheet.create({
   visiteCard: {
     justifyContent: "space-between",
     // alignItems: "center",
+
     height: 150,
     width: "90%",
     borderRadius: 25,
@@ -359,6 +384,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   lineCard: {
+    flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
     margin: 15,
@@ -368,7 +394,7 @@ const styles = StyleSheet.create({
   },
   descriptionCard: {
     flexDirection: "column",
-    margin: 15,
+
     justifyContent: "space-between",
   },
   modalConfirmation: {
