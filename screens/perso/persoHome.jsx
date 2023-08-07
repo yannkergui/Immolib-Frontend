@@ -35,7 +35,7 @@ export default function ProHome({navigation}) {
             updatedItems[visitedate].push({ name, time });
           }
 
-          setDateVisite(data);
+      
         });
 
         setItems2(updatedItems);

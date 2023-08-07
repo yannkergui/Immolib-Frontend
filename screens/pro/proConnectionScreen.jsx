@@ -77,11 +77,11 @@ export default function ProConnectionScreen({ navigation }) {
       .then(response => response.json())
       .then(data => {
         if (data.result) {
-          let { prenom, nom, email, tel, motDePasse, token, photo } = data.pro
+          let { _id, prenom, nom, email, tel, motDePasse, token, photo } = data.pro
           let {denomination, siren, siret, dateCreation, adresse} = data.pro.agence
           // console.log('data récupéré : ', data),
           dispatch(proDatas(
-            { prenom, nom, email, tel, motDePasse, token, photo,
+            { _id, prenom, nom, email, tel, motDePasse, token, photo,
               agence : {
                 denomination,
                 siren,
@@ -92,7 +92,7 @@ export default function ProConnectionScreen({ navigation }) {
             }
           ));
           setModalConnexion(false);
-          navigation.navigate('ProPreferences');
+          navigation.navigate('ProClients');
           setEmail('');
           setMotDePasse('')
           setEmailError(false);
@@ -117,12 +117,12 @@ export default function ProConnectionScreen({ navigation }) {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${inseeJeton}`
+              'Authorization': 'Bearer 412b7176-b22c-30b4-8e4a-9fe5a9a0b108'
             },
           });
-    
+    console.log("test1");
           const data1 = await response1.json();
-    
+          console.log("test2");
           if (data1.header.message === "ok") {
             // Mise à jour des états avec les données de la première requête
             let adrInsee = data1.etablissement.adresseEtablissement;
@@ -132,7 +132,7 @@ export default function ProConnectionScreen({ navigation }) {
             setDateInsee(data1.etablissement.dateCreationEtablissement);
             setAdresseInsee(`${adrInsee.numeroVoieEtablissement}${adrInsee.indiceRepetitionEtablissement}, ${adrInsee.typeVoieEtablissement} ${adrInsee.libelleVoieEtablissement}, ${adrInsee.codePostalEtablissement} ${adrInsee.libelleCommuneEtablissement}`);
     
-            const response2 = await fetch(`http://${ipAdress}/pros/signup`, {
+            const response2 = await fetch(`http://192.168.1.19:3000/pros/signup`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({

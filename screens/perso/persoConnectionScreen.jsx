@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useDispatch } from 'react-redux';
 import {userDatas} from '../../reducers/user'
 
-import { ipAdress } from "../../immolibTools";
+import { myIPAdress } from "../../immolibTools";
 
 export default function PersoConnectionScreen({ navigation }) {
 
@@ -159,7 +159,7 @@ export default function PersoConnectionScreen({ navigation }) {
                   <TouchableOpacity style={styles.button} onPress={()=>handleInscription()}>
                       <Text style={styles.textButton}>S'inscrire</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.button}onPress={()=> navigation.navigate("PersoHome")}>
+                  <TouchableOpacity style={styles.button}onPress={()=> navigation.navigate("TabNavigatorPerso")}>
                       <Text style={styles.textButton}>Poursuivre sans inscription</Text>
                   </TouchableOpacity>
 
