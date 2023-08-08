@@ -14,11 +14,14 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import SwitchSelector from "react-native-switch-selector";
 import * as DocumentPicker from "expo-document-picker";
 import { useSelector } from "react-redux";
+import { ipAdress } from "../../immolibTools";
 
-export default function CreationAnnonce() {
-  const myIPAdress = "192.168.10.156";
+export default function CreationAnnonce( {navigation} ) { 
+  
 
   const pro = useSelector((state) => state.pro.value);
+
+
 
   const [titre, setTitre] = useState("");
   const [description, setDescription] = useState("");
@@ -63,7 +66,7 @@ export default function CreationAnnonce() {
       name: "PreAccord",
       type: "image/*",
     });
-    fetch(`http://${myIPAdress}:3000/biens/upload`, {
+    fetch(`http://${ipAdress}/biens/upload`, {
       method: "POST",
       body: formData,
     })
@@ -74,7 +77,7 @@ export default function CreationAnnonce() {
   };
 
   const PublierAnnonce = async () => {
-    fetch(`http://${myIPAdress}:3000/biens/newBien`, {
+    fetch(`http://${ipAdress}/biens/newBien`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -87,7 +90,7 @@ export default function CreationAnnonce() {
         nbChambres: nbChambre,
         transaction: transaction,
         numeroRue: numeroRue,
-        nomRue: nomRue,
+        rue: nomRue,
         codePostal: codePostal,
         ville: ville,
         loyerMensuel: loyer,
@@ -99,9 +102,9 @@ export default function CreationAnnonce() {
     })
   .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        navigation.navigate("Mes annonces");
       });
-    // navigation.navigate("TabNavigatorPerso");
+    
   };
 
  
@@ -278,7 +281,7 @@ export default function CreationAnnonce() {
             </TouchableOpacity>
           </View>
           <View style={styles.lastLineCard}>
-            <TouchableOpacity style={styles.next}>
+            <TouchableOpacity style={styles.next} onPress={PublierAnnonce}>
               <Text> Je publie mon annonce </Text>
             </TouchableOpacity>
           </View>

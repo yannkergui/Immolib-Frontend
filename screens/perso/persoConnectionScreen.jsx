@@ -3,9 +3,11 @@ import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput, KeyboardAvo
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import { useDispatch } from 'react-redux';
-import {userDatas} from '../../reducers/user'
+import {userDatas} from '../../reducers/user';
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
-import { ipAdress } from "../../immolibTools";
+import { myIPAdress } from "../../immolibTools";
 
 export default function PersoConnectionScreen({ navigation }) {
 
@@ -38,14 +40,14 @@ export default function PersoConnectionScreen({ navigation }) {
   }
 
   // Adresse IP à modifier si besoin
-  const myIPAdress='192.168.10.156';
+  const myIPAdress='172.20.10.3';
 
   // 2eme boutton "Se connecter" qui redirige vers la homePage
   const handleConnexionBis = () => {
     // Si correspondance avec la REGEX EMAIL
     if (EMAIL_REGEX.test(email) && mdp) {
       //Récupération des données de l'utilisateur de la BDD
-      fetch(`http://${myIPAdress}:3000/users/signin`, {
+      fetch(`http://192.168.10.155:3000/users/signin`, {
       method : 'POST',
       headers : {'Content-Type' : 'application/json'},
       body : JSON.stringify({email : email, motDePasse: mdp})
@@ -53,15 +55,20 @@ export default function PersoConnectionScreen({ navigation }) {
       .then(response => response.json())
       .then(data => {
         if (data.result) {
-          console.log('data récupéré : ', data),
-          dispatch(userDatas({prenom : data.data.prenom,
+          // console.log('data récupéré : ', data.data),
+          dispatch(userDatas({_id: data.data._id,
+                            prenom : data.data.prenom,
                             nom : data.data.nom, 
                             email : data.data.email, 
                             tel : data.data.tel,
                             token : data.data.token,
-                            motDePasse : data.data.motDePasse}));
+                            motDePasse : data.data.motDePasse,
+                            dejaInscrit : 'true',
+                          
+                          }));
+
           setModalConnexion(false)
-          navigation.navigate('TabNavigatorPerso', { screen: 'Home' });
+          navigation.navigate('PersoPriseDeVisite');
           setEmail('');
           setEmailError(false);
           setMdp('');
@@ -86,7 +93,7 @@ export default function PersoConnectionScreen({ navigation }) {
     // 2eme bouton "S'inscrire" qui redirige vers la homePage
     const handleInscriptionBis = () => {
         if (EMAIL_REGEX.test(email) && TEL_REGEX.test(tel)) {
-          fetch(`http://${myIPAdress}:3000/users/signup`, {
+          fetch(`http://192.168.10.155:3000/users/signup`, {
             method : 'POST',
             headers : {'Content-Type' : 'application/json'},
             body : JSON.stringify({prenom : prenom, nom: nom, email : email, tel : tel, motDePasse: mdp})
@@ -99,9 +106,10 @@ export default function PersoConnectionScreen({ navigation }) {
                   email : data.data.email, 
                   tel : data.data.tel,
                   token : data.data.token,
-                  motDePasse : data.data.motDePasse}));
+                  motDePasse : data.data.motDePasse,
+                  dejaInscrit : 'false',}));
                 setModalInscription(false)
-                navigation.navigate("PersoMonDossier1")
+                navigation.navigate("PersoPriseDeVisite")
                 setEmail('');
                 setEmailError(false);
                 setTelError(false);
@@ -153,7 +161,7 @@ export default function PersoConnectionScreen({ navigation }) {
                   <TouchableOpacity style={styles.button} onPress={()=>handleInscription()}>
                       <Text style={styles.textButton}>S'inscrire</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.button}onPress={()=> navigation.navigate("PersoHome")}>
+                  <TouchableOpacity style={styles.button}onPress={()=> navigation.navigate("TabNavigatorPerso")}>
                       <Text style={styles.textButton}>Poursuivre sans inscription</Text>
                   </TouchableOpacity>
 
@@ -170,7 +178,7 @@ export default function PersoConnectionScreen({ navigation }) {
                                   </View>
                                   <View style={styles.deleteModal}>
                                         <TouchableOpacity style={styles.btnDeleteModal} onPress={()=>closeModal()}>
-                                            <Text style={styles.textDelete}>X</Text>
+                                        <FontAwesome style={styles.icon} name='sign-out' size={20} color='#1F2937' />
                                         </TouchableOpacity>
                                   </View>
                                 </View>
@@ -201,7 +209,7 @@ export default function PersoConnectionScreen({ navigation }) {
                                 </View>
                                 <View style={styles.deleteModal}>
                                     <TouchableOpacity  onPress={()=>closeModal()}>
-                                        <Text style={styles.textDelete}>X</Text>
+                                    <FontAwesome style={styles.icon} name='sign-out' size={20} color='#1F2937' />
                                     </TouchableOpacity>
                                 </View>
                               </View>
@@ -267,9 +275,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#47AFA5",
     borderRadius: 10,
     marginBottom: "15%",
-
-    // paramètrage de l'ombre des boutons. utiliser : (https://ethercreative.github.io/react-native-shadow-generator/) si besoin
-
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -336,16 +341,36 @@ const styles = StyleSheet.create({
   btnSeConnecter : {
     marginTop : 20,
     backgroundColor : '#47AFA5',
-    padding : 20,
     borderRadius : 10,
-    width : '90%',
+    width : 200,
+    height:35,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+    elevation: 18,
   },
   btnInscription : {
     marginTop : 20,
     backgroundColor : '#47AFA5',
-    padding : 20,
     borderRadius : 10,
-    width : '90%',
+    width : 200,
+    height:35,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+    elevation: 18,
   },
   error: {
     marginTop: 10,

@@ -4,10 +4,19 @@ import { useState } from "react";
 import SwitchSelector from "react-native-switch-selector";
 import { useDispatch, useSelector } from "react-redux";
 import { userDatas } from "../../reducers/user";
+import moment from "moment"; 
+
 
 export default function PersoMonDossier1({ navigation }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
+
+  const maVisite = useSelector((state) => state.maVisite.value);
+
+  console.log(maVisite.newVisit.dateOfVisit);
+    // formattage de la date afin d'avoir un affichage plus fluide
+    let selectedDate = maVisite.newVisit.dateOfVisit
+    let frenchDate = moment(selectedDate).format("DD/MM/YYYY");
  
 
   // les 2 etats mis à jour au clique sur le switch
@@ -61,9 +70,9 @@ export default function PersoMonDossier1({ navigation }) {
           </View>
         </View>
         <Text style={styles.title}>Mon Dossier</Text>
-        <View style={styles.textContainer}>
-          <Text>15/03/2023 à 17h</Text>
-          <Text>66 rue Victor Hugo, 75001 Paris</Text>
+        <View style={styles.lineCard}>
+        <Text style={styles.Title}>Visite Enregistrée le :</Text>
+        <Text style={styles.Title}> {frenchDate} à {maVisite.newVisit.startTimeVisit}</Text>
         </View>
         <Text style={styles.title}>Situation Actuelle</Text>
         <View style={styles.situationContainer}>
@@ -237,15 +246,49 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: "40%",
-    height: "80%",
+    height: "60%",
     backgroundColor: "#47AFA5",
     borderColor: "white",
     borderWidth: 1,
     borderRadius: 10,
     marginRight: 3,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+    elevation: 18,
   },
 
   SwitchSelector: {
     width: "100%",
+  },
+  Title: {
+    color: 'white',
+    fontSize: 25,
+    fontStyle: 'normal',
+    fontWeight: '600', 
+    letterSpacing: -1.5, 
+    textAlign:'center',
+  },
+  lineCard: {
+    alignItems:'center',
+    justifyContent:'center',
+    width: 370,
+    height:70,
+    borderRadius: 20,
+    backgroundColor: "#BCCDB6",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+    elevation: 18,
+    marginBottom: 20,
+    marginTop: 30,
   },
 });

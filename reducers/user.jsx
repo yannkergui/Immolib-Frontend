@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   value: {
+    _id:"",
     prenom: "",
     nom: "",
     motDePasse: "",
@@ -37,6 +38,7 @@ const initialState = {
     impots: "",
     bilan: "",
     autres: "",
+    dejaInscrit: "",
   },
 };
 

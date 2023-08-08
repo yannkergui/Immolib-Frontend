@@ -18,7 +18,7 @@ export default function PersoVisites({navigation}) {
 
   // Fetch du backend au chargement de la page pour récupérer les visites liées au user
   useEffect(() => {
-    fetch('http://192.168.10.154:3000/visites/user/64cccd2e0fd39de6f4a550dd')
+    fetch('http://192.168.10.155:3000/visites/user/64cccd2e0fd39de6f4a550dd')
       .then(response => response.json())
       .then(data => {
         setVisitesPerso(data.VisitesTrouvees);
