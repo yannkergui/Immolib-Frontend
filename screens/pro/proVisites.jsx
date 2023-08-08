@@ -17,20 +17,21 @@ import { useSelector, useDispatch } from "react-redux";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import SwitchSelector from "react-native-switch-selector";
 
-export default function ProVisites() {
+export default function ProVisites({ navigation }) {
+  
   //constante relative à la modale de changement de page
   const [modalConfirmation, setModalConfirmation] = useState(false);
   const [selectedVisite, setSelectedVisite] = useState(null);
-
+  
   //fonction pour ouvrir la modale de changement de page
   const openModalConfirmation = (data) => {
     setModalConfirmation(!modalConfirmation);
     setSelectedVisite(data);
   };
-
+  
   //constante pour message de confirmation de rendez-vous dans la modale
   const [RdvConfirmé, setRdvConfirmé] = useState(false);
-
+  
   //mise en place d'un useEffect pour gérer la fermeture de la modale de confirmation de rendez-vous
   useEffect(() => {
     if (RdvConfirmé) {
@@ -40,18 +41,21 @@ export default function ProVisites() {
       }, 1500);
     }
   }, [RdvConfirmé]);
-
+  
   // constante relative au switch de changement de page
-
+  
   const page = [
     { label: "En attente de validation", value: "en attente" },
     { label: "A venir", value: "aVenir" },
   ];
 
+  // etat pour stocker les infos reçues du backend
+  const [visitesPro, setVisitesPro] = useState([]);
+
   // Etat relatif au changement de page via le switch
 
   const [activPage, setActivePage] = useState("en attente");
-  console.log(activPage);
+  
 
   //création d'une fonction pour confirmer une visite en attente
 
@@ -68,31 +72,40 @@ export default function ProVisites() {
       .then((res) => res.json())
       .then((data) => {
         console.log("data", data);
-
         // setVisitesPro(visitesPro.filter((visite) => visite._id !== id));
         setRdvConfirmé(true);
       });
   };
 
-  // etat pour stocker les infos reçues du backend
-  const [visitesPro, setVisitesPro] = useState([]);
 
   useEffect(() => {
-    fetch("http://192.168.10.147:3000/visites/pro/64cccc590fd39de6f4a550da")
+    fetch(
+      "http://192.168.10.147:3000/visites/pro/OM41xNKcm6LscivHh9Y7l5MlIluKCYDb"
+    )
       .then((res) => res.json())
       .then((data) => {
-        console.log("data du 1er useEffect", data.VisitesTrouvees);
-        setVisitesPro(data.VisitesTrouvees);
+        console.log("data du 1er useEffect", data.visitesTrouvees);
+        setVisitesPro(data.visitesTrouvees);
       });
   }, []);
 
   //constante pour limiter la longueur du titre du bien
   const titreBien = (titre) => {
-    if (titre.length > 32) {
-      return titre.substring(0, 32) + "...";
+    if (titre.length > 25) {
+      return titre.substring(0, 25) + "...";
     } else {
       return titre;
     }
+  };
+
+  //constante pour formatter la date de la visite en français
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    const formattedDate = new Date(dateString).toLocaleDateString(
+      "fr-FR",
+      options
+    );
+    return formattedDate;
   };
 
   const visiteEnAttente = visitesPro.map((data) => {
@@ -103,7 +116,7 @@ export default function ProVisites() {
           <View style={styles.lineCard}>
             <Text>
               {" "}
-              Le {data.dateOfVisit} à {data.startTimeVisit}{" "}
+              Le {formatDate(data.dateOfVisit)} à {data.startTimeVisit}{" "}
             </Text>
             <TouchableOpacity>
               <FontAwesome name="edit" size={30} color="#1F2937" />
@@ -116,7 +129,7 @@ export default function ProVisites() {
               </Text>
               <Text>
                 {data.bienImmoId.numeroRue}, {data.bienImmoId.rue}{" "}
-                {data.bienImmoId.codePostal}
+                {data.bienImmoId.codePostal}{""} {data.bienImmoId.ville}
               </Text>
             </View>
             <TouchableOpacity onPress={() => openModalConfirmation(data)}>
@@ -156,10 +169,10 @@ export default function ProVisites() {
                       {!RdvConfirmé && selectedVisite ? (
                         <Text style={styles.textButton}>
                           Voulez-vous confirmer ce rendez-vous du{" "}
-                          {selectedVisite.dateOfVisit} à{" "}
+                          {formatDate(selectedVisite.dateOfVisit)} à{" "}
                           {selectedVisite.startTimeVisit} pour le bien du{" "}
                           {selectedVisite.bienImmoId.numeroRue},{" "}
-                          {selectedVisite.bienImmoId.rue} ?
+                          {selectedVisite.bienImmoId.rue} à {selectedVisite.bienImmoId.codePostal} ?
                         </Text>
                       ) : null}
 
@@ -168,7 +181,7 @@ export default function ProVisites() {
                           <TouchableOpacity
                             style={styles.btnModal}
                             onPress={() => {
-                              setRdvConfirmé(true), confirmVisite(data._id); // Appeler la fonction de confirmation
+                              setRdvConfirmé(true), confirmVisite(selectedVisite._id); // Appeler la fonction de confirmation
                             }}
                           >
                             <FontAwesome
@@ -217,7 +230,7 @@ export default function ProVisites() {
           <View style={styles.lineCard}>
             <Text>
               {" "}
-              Le {data.dateOfVisit} à {data.startTimeVisit}{" "}
+              Le {formatDate(data.dateOfVisit)} à {data.startTimeVisit}{" "}
             </Text>
             <TouchableOpacity>
               <FontAwesome name="edit" size={30} color="#1F2937" />
@@ -230,7 +243,7 @@ export default function ProVisites() {
               </Text>
               <Text>
                 {data.bienImmoId.numeroRue}, {data.bienImmoId.rue}{" "}
-                {data.bienImmoId.codePostal}
+                {data.bienImmoId.codePostal}{""} {data.bienImmoId.ville}
               </Text>
             </View>
             <TouchableOpacity>
@@ -252,7 +265,10 @@ export default function ProVisites() {
       >
         <View style={styles.header}>
           <Text style={styles.Title}>Mes Visites</Text>
-          <TouchableOpacity style={styles.iconcontainer}>
+          <TouchableOpacity
+            style={styles.iconcontainer}
+            onPress={() => navigation.navigate("ProPreferences")}
+          >
             <FontAwesome
               style={styles.icon}
               name="user"
