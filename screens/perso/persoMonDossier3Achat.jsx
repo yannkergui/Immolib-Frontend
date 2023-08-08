@@ -19,7 +19,7 @@ import * as DocumentPicker from "expo-document-picker";
 import moment from "moment"; 
 
 export default function PersoMonDossier3Achat({ navigation }) {
-  const myIPAdress = "192.168.10.169";
+  
 
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);

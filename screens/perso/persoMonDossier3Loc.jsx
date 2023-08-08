@@ -88,7 +88,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
       name: "idDoc",
       type: "image/*",
     });
-    fetch(`http://${myIPAdress}:3000/users/upload`, {
+    fetch(`http://${ipAdress}/users/upload`, {
       method: "POST",
       body: formData,
     })
@@ -220,7 +220,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
       name: "AvisImpot",
       type: "image/*",
     });
-    fetch(`http://${myIPAdress}:3000/users/upload`, {
+    fetch(`http://${ipAdress}/users/upload`, {
       method: "POST",
       body: formData,
     })
@@ -233,7 +233,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
 
   const handleEtapeSuivante = () => {
     dispatch(userDatas({ salaire: monRevenu, contrat: contrat }));
-    fetch(`http://${myIPAdress}:3000/users/${user.email}`, {
+    fetch(`http://${ipAdress}/users/${user.email}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -246,7 +246,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
           typeBienLoc: user.typeBienLoc,
           minSurfaceLoc: user.minSurfaceLoc,
           minPieceLoc: user.minPieceLoc,
-          nbLoc: user.nbLocataire,
+          nbLoc: user.nbLoc,
           meuble: user.meuble,
         },
         documents: {
@@ -265,7 +265,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
   };
 
   const handlePasserCetteEtape = () => {
-    fetch(`http://${myIPAdress}:3000/users/${user.email}`, {
+    fetch(`http://${ipAdress}/users/${user.email}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
