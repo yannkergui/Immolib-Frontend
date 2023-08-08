@@ -134,7 +134,7 @@ const TabNavigatorPerso = () => {
         let iconName = "";
         if (route.name === "Home") {
           iconName = "home";
-          size = focused ? 40 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné),
+          size = focused ? 38 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné),
         } else if (route.name === "Mes tchats") {
           iconName = "commenting-o";
           size = focused ? 40 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné),
@@ -220,16 +220,10 @@ export default function App() {
               <Stack.Screen name="PersoMonDossier2Achat" component={PersoMonDossier2Achat} />
               <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
               <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
-              <Stack.Screen name="PersoHome" component={PersoHome}/>
               <Stack.Screen name="PersoMonDossier2Loc" component={PersoMonDossier2Loc} />
               <Stack.Screen name="PersoMonDossier3Loc" component={PersoMonDossier3Loc} />
               <Stack.Screen name="PersoMonDossier3Achat" component={PersoMonDossier3Achat} />
-              <Stack.Screen name="PersoVisites" component={PersoVisites} />
-              <Stack.Screen name="ProAnnonces" component={ProAnnonces} />
-              <Stack.Screen name="ProClients" component={ProClients} />
               <Stack.Screen name="ProConnectionScreen" component={ProConnectionScreen} />
-              <Stack.Screen name="ProHome" component={ProHome} />
-              <Stack.Screen name="ProTchats" component={ProTchats} />
               <Stack.Screen name="ProPreferences" component={ProPreferences} />
           </Stack.Navigator>
         </NavigationContainer>
