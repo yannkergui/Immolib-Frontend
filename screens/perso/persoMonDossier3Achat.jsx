@@ -49,7 +49,7 @@ export default function PersoMonDossier3Achat({ navigation }) {
       name: "PreAccord",
       type: "image/*",
     });
-    fetch(`http://${myIPAdress}:3000/users/upload`, {
+    fetch(`http://192.168.10.155:3000/users/upload`, {
       method: "POST",
       body: formData,
     })
@@ -70,7 +70,7 @@ export default function PersoMonDossier3Achat({ navigation }) {
         accordBanque: valuePreAccord,
       })
     );
-    fetch(`http://${myIPAdress}:3000/users/${user.email}`, {
+    fetch(`http://192.168.10.155:3000/users/${user.email}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -95,11 +95,11 @@ export default function PersoMonDossier3Achat({ navigation }) {
       .then((data) => {
         console.log(data);
       });
-    navigation.navigate("PersoHome");
+    navigation.navigate("TabNavigatorPerso");
   };
 
   const handlePasserCetteEtape = () => {
-    fetch(`http://${myIPAdress}:3000/users/${user.email}`, {
+    fetch(`http://192.168.10.155:3000/users/${user.email}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -117,7 +117,7 @@ export default function PersoMonDossier3Achat({ navigation }) {
       .then((data) => {
         console.log(data);
       });
-    navigation.navigate("PersoHome");
+    navigation.navigate("TabNavigatorPerso");
   };
 
   //mise en place des options pour les switchs selectors :

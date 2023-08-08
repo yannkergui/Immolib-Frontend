@@ -40,7 +40,7 @@ export default function CameraScreen({navigation}) {
       name: 'proProfilePhotoTest.jpeg',
       type: 'image/jpeg',
      });
-    fetch(`http://192.168.10.175:3000/pros/uploadPhoto`, {
+    fetch(`http://192.168.10.155:3000/pros/uploadPhoto`, {
       method: 'POST',
       body: formData,
     })
