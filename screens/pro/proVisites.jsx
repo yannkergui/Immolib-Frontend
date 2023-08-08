@@ -81,8 +81,8 @@ export default function ProVisites() {
     fetch("http://192.168.10.147:3000/visites/pro/64cccc590fd39de6f4a550da")
       .then((res) => res.json())
       .then((data) => {
-        console.log("data du 1er useEffect", data.VisitesTrouvees);
-        setVisitesPro(data.VisitesTrouvees);
+        console.log("data du 1er useEffect", data.visitesTrouvees);
+        setVisitesPro(data.visitesTrouvees);
       });
   }, []);
 

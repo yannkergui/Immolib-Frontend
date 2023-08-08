@@ -14,9 +14,10 @@ import * as DocumentPicker from "expo-document-picker";
 import SwitchSelector from "react-native-switch-selector";
 import { useDispatch, useSelector } from "react-redux";
 import { userDatas } from "../../reducers/user";
+import { ipAdress } from "../../immolibTools";
 
 export default function PersoMonDossier3Loc({ navigation }) {
-  const myIPAdress = "192.168.10.147";
+  
 
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
@@ -81,7 +82,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
       name: "idDoc",
       type: "image/*",
     });
-    fetch(`http://${myIPAdress}:3000/users/upload`, {
+    fetch(`http://${ipAdress}/users/upload`, {
       method: "POST",
       body: formData,
     })
@@ -213,7 +214,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
       name: "AvisImpot",
       type: "image/*",
     });
-    fetch(`http://${myIPAdress}:3000/users/upload`, {
+    fetch(`http://${ipAdress}/users/upload`, {
       method: "POST",
       body: formData,
     })
@@ -226,7 +227,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
 
   const handleEtapeSuivante = () => {
     dispatch(userDatas({ salaire: monRevenu, contrat: contrat }));
-    fetch(`http://${myIPAdress}:3000/users/${user.email}`, {
+    fetch(`http://${ipAdress}/users/${user.email}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -258,7 +259,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
   };
 
   const handlePasserCetteEtape = () => {
-    fetch(`http://${myIPAdress}:3000/users/${user.email}`, {
+    fetch(`http://${ipAdress}/users/${user.email}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

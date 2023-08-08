@@ -4,8 +4,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import { useDispatch } from 'react-redux';
 import {userDatas} from '../../reducers/user'
-
-import { myIPAdress } from "../../immolibTools";
+import { ipAdress } from "../../immolibTools";
 
 export default function PersoConnectionScreen({ navigation }) {
 
@@ -45,7 +44,7 @@ export default function PersoConnectionScreen({ navigation }) {
     // Si correspondance avec la REGEX EMAIL
     if (EMAIL_REGEX.test(email) && mdp) {
       //Récupération des données de l'utilisateur de la BDD
-      fetch(`http://172.20.10.3:3000/users/signin`, {
+      fetch(`http://${ipAdress}/users/signin`, {
       method : 'POST',
       headers : {'Content-Type' : 'application/json'},
       body : JSON.stringify({email : email, motDePasse: mdp})
@@ -91,7 +90,7 @@ export default function PersoConnectionScreen({ navigation }) {
     // 2eme bouton "S'inscrire" qui redirige vers la homePage
     const handleInscriptionBis = () => {
         if (EMAIL_REGEX.test(email) && TEL_REGEX.test(tel)) {
-          fetch(`http://${myIPAdress}:3000/users/signup`, {
+          fetch(`http://${ipAdress}/users/signup`, {
             method : 'POST',
             headers : {'Content-Type' : 'application/json'},
             body : JSON.stringify({prenom : prenom, nom: nom, email : email, tel : tel, motDePasse: mdp})
