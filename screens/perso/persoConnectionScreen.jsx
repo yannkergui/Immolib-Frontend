@@ -3,7 +3,9 @@ import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput, KeyboardAvo
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import { useDispatch } from 'react-redux';
-import {userDatas} from '../../reducers/user'
+import {userDatas} from '../../reducers/user';
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 import { myIPAdress } from "../../immolibTools";
 
@@ -176,7 +178,7 @@ export default function PersoConnectionScreen({ navigation }) {
                                   </View>
                                   <View style={styles.deleteModal}>
                                         <TouchableOpacity style={styles.btnDeleteModal} onPress={()=>closeModal()}>
-                                            <Text style={styles.textDelete}>X</Text>
+                                        <FontAwesome style={styles.icon} name='sign-out' size={20} color='#1F2937' />
                                         </TouchableOpacity>
                                   </View>
                                 </View>
@@ -207,7 +209,7 @@ export default function PersoConnectionScreen({ navigation }) {
                                 </View>
                                 <View style={styles.deleteModal}>
                                     <TouchableOpacity  onPress={()=>closeModal()}>
-                                        <Text style={styles.textDelete}>X</Text>
+                                    <FontAwesome style={styles.icon} name='sign-out' size={20} color='#1F2937' />
                                     </TouchableOpacity>
                                 </View>
                               </View>
@@ -273,9 +275,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#47AFA5",
     borderRadius: 10,
     marginBottom: "15%",
-
-    // paramètrage de l'ombre des boutons. utiliser : (https://ethercreative.github.io/react-native-shadow-generator/) si besoin
-
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -342,16 +341,36 @@ const styles = StyleSheet.create({
   btnSeConnecter : {
     marginTop : 20,
     backgroundColor : '#47AFA5',
-    padding : 20,
     borderRadius : 10,
-    width : '90%',
+    width : 200,
+    height:35,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+    elevation: 18,
   },
   btnInscription : {
     marginTop : 20,
     backgroundColor : '#47AFA5',
-    padding : 20,
     borderRadius : 10,
-    width : '90%',
+    width : 200,
+    height:35,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+    elevation: 18,
   },
   error: {
     marginTop: 10,

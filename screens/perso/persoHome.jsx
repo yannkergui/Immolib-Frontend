@@ -44,6 +44,25 @@ export default function PersoHome({navigation}) {
       })
   }, []);
 
+  const countNonEmptyFields = () => {
+    let count = 0;
+  
+    for (const key in user) {
+      if (user[key] !== "" && user[key] !== null && user[key] !== undefined) {
+        count++;
+      }
+    }
+  
+    return count;
+  };
+  
+  let completion 
+  
+  if(user.dejaInscrit){
+  completion = (countNonEmptyFields()/25)*100
+  } else {completion = (countNonEmptyFields()/15)*100}
+  
+
   // Configuration des noms de mois et jours en français pour le calendrier
   LocaleConfig.locales["fr"] = {
     monthNames: [
@@ -172,7 +191,7 @@ export default function PersoHome({navigation}) {
           
           {/* Affichage du statut du profil */}
           <View >
-            <Text style={styles.subtitle}>Mon profil est complet à 90%</Text>
+            <Text style={styles.subtitle}>Mon profil est complet à {completion}%</Text>
           </View>
         </View>
       </LinearGradient>

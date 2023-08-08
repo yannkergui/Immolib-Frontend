@@ -6,6 +6,7 @@ import { useFonts } from 'expo-font';
 import { useState, useEffect } from "react";
 import { maVisiteData } from '../../reducers/maVisite';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from "moment"; 
 
 
 export default function CompleteTonDossier ({navigation}) {
@@ -13,6 +14,9 @@ export default function CompleteTonDossier ({navigation}) {
 
   const maVisite = useSelector((state) => state.maVisite.value);
 
+  // formattage de la date afin d'avoir un affichage plus fluide
+  let selectedDate = maVisite.newVisit.dateOfVisit
+  let frenchDate = moment(selectedDate).format("DD/MM/YYYY");
 
   return (
     <View style={styles.container}>
@@ -28,7 +32,7 @@ export default function CompleteTonDossier ({navigation}) {
       <View style={styles.composant}>
       <View style={styles.lineCard}>
         <Text style={styles.Title}>Visite Enregistrée le :</Text>
-        <Text style={styles.Title}>La visite du reducer</Text>
+        <Text style={styles.Title}> {frenchDate} à {maVisite.newVisit.startTimeVisit}</Text>
       </View>
       <View>
         <Text style={styles.Title}>tu recevras un mail de ton agence pour savoir si ta visite est validée</Text>
