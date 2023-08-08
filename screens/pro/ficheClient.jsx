@@ -1,25 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, Linking, Platform, SafeAreaView, ScrollView, Switch } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useFonts } from 'expo-font';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 
 export default function FicheClient({navigation}) {
 
-  const [switchValue, setSwitchValue] = useState(false);
+  //Etats pour les boutons switch
+  const [switchValueId, setSwitchValueId] = useState(false);
+  const [switchValueDom, setSwitchValueDom] = useState(false);
+  const [switchValueFP1, setSwitchValueFP1] = useState(false);
+  const [switchValueFP2, setSwitchValueFP2] = useState(false);
+  const [switchValueFP3, setSwitchValueFP3] = useState(false);
+  const [switchValueImpot, setSwitchValueImpot] = useState(false);
+  const [switchValuePret, setSwitchValuePret] = useState(false);
+
   const user = useSelector((state) => state.monClient.value);
 
-  // const handleSubmit = () => {
-  //   navigation.navigate('ProAnnonces')
-  // }
-
-    const [fontsLoaded] = useFonts({
-        Nunitobold: require('../../assets/fonts/Nunito/static/Nunito-Bold.ttf'),
-        NunitoSans: require('../../assets/fonts/Nunito_Sans/static/NunitoSans_7pt-Medium.ttf')
-      });
+    // const [fontsLoaded] = useFonts({
+    //     Nunitobold: require('../../assets/fonts/Nunito/static/Nunito-Bold.ttf'),
+    //     NunitoSans: require('../../assets/fonts/Nunito_Sans/static/NunitoSans_7pt-Medium.ttf')
+    //   });
+  const handleSubmit = () => {
+    navigation.navigate('ProPreferences')
+  }
 
   return (
     <View style={styles.container}>
@@ -30,6 +37,7 @@ export default function FicheClient({navigation}) {
       style={styles.background}
         >
       <View style={styles.container}>
+        <ScrollView style={styles.scrollContainer}>
         <View style={styles.header}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
                 <FontAwesome style={styles.icon} name='chevron-left' size={20} color='#1F2937' />
@@ -39,89 +47,135 @@ export default function FicheClient({navigation}) {
                 <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' />
             </TouchableOpacity>
         </View>
-        <ScrollView style={styles.scrollContainer}>
         <View style={styles.CardsGroup}>
                 <Text style={styles.cardTitle}>Infos Client :</Text>
                 <View style={styles.clientsCard1}>
                     <View style={styles.rowInfos}>
                         <Text style={styles.Infos}>Nom :</Text>
-                        <Text style={styles.Infos}>{user.nom}</Text>
+                        <Text style={styles.Infos}>{user.usersId.nom}</Text>
                     </View>
                     <View style={styles.rowInfos}>
                         <Text style={styles.Infos}>Prénom : </Text>
-                        <Text style={styles.Infos}>{user.prénom}</Text>
+                        <Text style={styles.Infos}>{user.usersId.prenom}</Text>
                     </View>
                     <View style={styles.rowInfos}>
                         <Text style={styles.Infos}>Téléphone : </Text>
-                        <Text style={styles.Infos}>{user.téléphone}</Text>
+                        <Text style={styles.Infos}>{user.usersId.tel}</Text>
                     </View>
                     <View style={styles.rowInfos}>
                         <Text style={styles.Infos}>Email :</Text>
-                        <Text style={styles.Infos}>{user.email}</Text>
+                        <Text style={styles.Infos}>{user.usersId.email}</Text>
                     </View>
                     <View style={styles.rowInfos}>
                         <Text style={styles.Infos}>salaire Mensuel :</Text>
-                        <Text style={styles.Infos}>{user.salaire} €</Text>
+                        <Text style={styles.Infos}>{user.usersId.salaire} €</Text>
                     </View>
                 </View>
             
                 <Text style={styles.cardTitle}>Sa Recherche :</Text>
+                {user.usersId.recherche==='location' &&
                 <View style={styles.clientsCard2}>
                     <View style={styles.rowInfos}>
                         <Text style={styles.Infos2}>Recherche :</Text>
-                        <Text style={styles.Infos2}>Location</Text>
+                        <Text style={styles.Infos2}>{user.usersId.recherche}</Text>
                     </View>
                     <View style={styles.rowInfos}>
                         <Text style={styles.Infos2}>Zone de Recherche :</Text>
-                        <Text style={styles.Infos2}>Paris</Text>
+                        <Text style={styles.Infos2}>{/*user.usersId.zone*/}Paris</Text>
                     </View>
                     <View style={styles.rowInfos}>
                         <Text style={styles.Infos2}>Budget Mensuel Max :</Text>
-                        <Text style={styles.Infos2}>1500 euros</Text>
+                        <Text style={styles.Infos2}>{user.usersId.location.budgetMois} euros</Text>
                     </View>
                     <View style={styles.rowInfos}>
                         <Text style={styles.Infos2}>Type de Bien recherché :</Text>
-                        <Text style={styles.Infos2}>Maison</Text>
+                        <Text style={styles.Infos2}>{user.usersId.location.typeBienLoc}</Text>
                     </View>
                     <View style={styles.rowInfos}>
                         <Text style={styles.Infos2}>Surface Minimum :</Text>
-                        <Text style={styles.Infos2}>70m²</Text>
+                        <Text style={styles.Infos2}>{user.usersId.location.minSurfaceLoc} m²</Text>
                     </View>
                     <View style={styles.rowInfos}>
                         <Text style={styles.Infos2}>Nbre de pièces Minimum :</Text>
-                        <Text style={styles.Infos2}>3</Text>
+                        <Text style={styles.Infos2}>{user.usersId.location.minPieceLoc}</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2}>Nbre de locataires : 2</Text>
-                        <Text style={styles.Infos2}>2</Text>
+                        <Text style={styles.Infos2}>Nbre de locataires :</Text>
+                        <Text style={styles.Infos2}>{user.usersId.location.nbLoc}</Text>
                     </View>
                     <View style={styles.rowInfos}>
                         <Text style={styles.Infos2}>Bien Meublé :</Text>
-                        <Text style={styles.Infos2}>Indifférent</Text>
+                        <Text style={styles.Infos2}>{user.usersId.location.meuble}</Text>
                     </View>
-                </View>
+                </View> }
+
+                {user.usersId.recherche==='achat' &&
+                <View style={styles.clientsCard2}>
+                    <View style={styles.rowInfos}>
+                        <Text style={styles.Infos2}>Recherche :</Text>
+                        <Text style={styles.Infos2}>{user.usersId.recherche}</Text>
+                    </View>
+                    <View style={styles.rowInfos}>
+                        <Text style={styles.Infos2}>Zone de Recherche :</Text>
+                        <Text style={styles.Infos2}>{/*user.usersId.zone*/}Paris</Text>
+                    </View>
+                    <View style={styles.rowInfos}>
+                        <Text style={styles.Infos2}>Budget Mensuel Max :</Text>
+                        <Text style={styles.Infos2}>{user.usersId.achat.budgetMax} euros</Text>
+                    </View>
+                    <View style={styles.rowInfos}>
+                        <Text style={styles.Infos2}>Type de Bien recherché :</Text>
+                        <Text style={styles.Infos2}>{user.usersId.achat.typeBienAchat}</Text>
+                    </View>
+                    <View style={styles.rowInfos}>
+                        <Text style={styles.Infos2}>Surface Minimum :</Text>
+                        <Text style={styles.Infos2}>{user.usersId.achat.minSurfaceAchat} m²</Text>
+                    </View>
+                    <View style={styles.rowInfos}>
+                        <Text style={styles.Infos2}>Nbre de pièces Minimum :</Text>
+                        <Text style={styles.Infos2}>{user.usersId.achat.minPieceAchat}</Text>
+                    </View>
+                    <View style={styles.rowInfos}>
+                        <Text style={styles.Infos2}>Type d'investissement</Text>
+                        <Text style={styles.Infos2}>{user.usersId.achat.typeInvest}</Text>
+                    </View>
+                    <View style={styles.rowInfos}>
+                        <Text style={styles.Infos2}>Primo accédant ?</Text>
+                        <Text style={styles.Infos2}>{user.usersId.achat.typeInvest ? "oui" : "non"}</Text>
+                    </View>
+                    <View style={styles.rowInfos}>
+                        <Text style={styles.Infos2}>Financement</Text>
+                        <Text style={styles.Infos2}>{user.usersId.achat.financement}</Text>
+                    </View>
+                    <View style={styles.rowInfos}>
+                        <Text style={styles.Infos2}>accord Banque ?</Text>
+                        <Text style={styles.Infos2}>{user.usersId.achat.accordBanque ? "oui" : "non"}</Text>
+                    </View>
+                </View> }
+
                 <Text style={styles.cardTitle}>Pièces Justificatives :</Text>
+                {user.usersId.recherche==='location' &&
                 <View style={styles.clientsCard3}>
                     <View style={styles.rowInfos}>
                         <Text style={styles.Infos}>{`\u2022`} Pièce d'identité</Text>
                         <Switch
                             style={styles.switch}
                             trackColor={{ false: "#767577", true: "#f4f3f4"}}
-                            thumbColor={switchValue ? "#46AFA5" : "#f4f3f4"}
+                            thumbColor={switchValueId ? "#46AFA5" : "#f4f3f4"}
                             ios_backgroundColor="#3e3e3e"
-                            onValueChange={(newValue) => setSwitchValue(newValue)}
-                            value={switchValue}
+                            onValueChange={(newValue) => setSwitchValueId(newValue)}
+                            value={switchValueId}
                             />
-                    </View>
+                    </View> 
                     <View style={styles.rowInfos}>
                         <Text style={styles.Infos}>{`\u2022`} Justificatif de Domicile</Text>
                         <Switch
                             style={styles.switch}
                             trackColor={{ false: "#767577", true: "#f4f3f4"}}
-                            thumbColor={switchValue ? "#46AFA5" : "#f4f3f4"}
+                            thumbColor={switchValueDom ? "#46AFA5" : "#f4f3f4"}
                             ios_backgroundColor="#3e3e3e"
-                            onValueChange={(newValue) => setSwitchValue(newValue)}
-                            value={switchValue}
+                            onValueChange={(newValue) => setSwitchValueDom(newValue)}
+                            value={switchValueDom}
                             />
                     </View>
                     <View style={styles.rowInfos}>
@@ -129,10 +183,10 @@ export default function FicheClient({navigation}) {
                         <Switch
                             style={styles.switch}
                             trackColor={{ false: "#767577", true: "#f4f3f4"}}
-                            thumbColor={switchValue ? "#46AFA5" : "#f4f3f4"}
+                            thumbColor={switchValueFP1 ? "#46AFA5" : "#f4f3f4"}
                             ios_backgroundColor="#3e3e3e"
-                            onValueChange={(newValue) => setSwitchValue(newValue)}
-                            value={switchValue}
+                            onValueChange={(newValue) => setSwitchValueFP1(newValue)}
+                            value={switchValueFP1}
                             />
                     </View>
                     <View style={styles.rowInfos}>
@@ -140,10 +194,10 @@ export default function FicheClient({navigation}) {
                         <Switch
                             style={styles.switch}
                             trackColor={{ false: "#767577", true: "#f4f3f4"}}
-                            thumbColor={switchValue ? "#46AFA5" : "#f4f3f4"}
+                            thumbColor={switchValueFP2 ? "#46AFA5" : "#f4f3f4"}
                             ios_backgroundColor="#3e3e3e"
-                            onValueChange={(newValue) => setSwitchValue(newValue)}
-                            value={switchValue}
+                            onValueChange={(newValue) => setSwitchValueFP2(newValue)}
+                            value={switchValueFP2}
                             />
                     </View>
                     <View style={styles.rowInfos}>
@@ -151,10 +205,10 @@ export default function FicheClient({navigation}) {
                         <Switch
                             style={styles.switch}
                             trackColor={{ false: "#767577", true: "#f4f3f4"}}
-                            thumbColor={switchValue ? "#46AFA5" : "#f4f3f4"}
+                            thumbColor={switchValueFP3 ? "#46AFA5" : "#f4f3f4"}
                             ios_backgroundColor="#3e3e3e"
-                            onValueChange={(newValue) => setSwitchValue(newValue)}
-                            value={switchValue}
+                            onValueChange={(newValue) => setSwitchValueFP3(newValue)}
+                            value={switchValueFP3}
                             />
                     </View>
                     <View style={styles.rowInfos}>
@@ -162,13 +216,27 @@ export default function FicheClient({navigation}) {
                         <Switch
                             style={styles.switch}
                             trackColor={{ false: "#767577", true: "#f4f3f4"}}
-                            thumbColor={switchValue ? "#46AFA5" : "#f4f3f4"}
+                            thumbColor={switchValueImpot ? "#46AFA5" : "#f4f3f4"}
                             ios_backgroundColor="#3e3e3e"
-                            onValueChange={(newValue) => setSwitchValue(newValue)}
-                            value={switchValue}
+                            onValueChange={(newValue) => setSwitchValueImpot(newValue)}
+                            value={switchValueImpot}
                             />
                     </View>
-            </View>
+            </View> }
+            {user.usersId.recherche==='achat' &&
+            <View style={styles.clientsCard3}>
+              <View style={styles.rowInfos}>
+              <Text style={styles.Infos}>{`\u2022`}Prêt accord banque</Text>
+              <Switch
+                  style={styles.switch}
+                  trackColor={{ false: "#767577", true: "#f4f3f4"}}
+                  thumbColor={switchValuePret ? "#46AFA5" : "#f4f3f4"}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={(newValue) => setSwitchValuePret(newValue)}
+                  value={switchValuePret}
+                  />
+              </View>
+            </View>}
                     <View>
                         <TouchableOpacity style={styles.button}>
                             < Text style={styles.textButton}>Télécharger les Documents</Text>
@@ -274,7 +342,7 @@ clientsCard2 :{
   clientsCard3 :{
     justifyContent : 'center',
     alignItems : 'flex-start',
-    height:350,
+    //height:350,
     width : 400,
     borderRadius: 100,
     backgroundColor:'#BCCDB6',

@@ -232,6 +232,7 @@ export default function App() {
               <Stack.Screen name="ProConnectionScreen" component={ProConnectionScreen} />
               <Stack.Screen name="ProHome" component={ProHome} />
               <Stack.Screen name="ProTchats" component={ProTchats} />
+              <Stack.Screen name="FicheClient" component={FicheClient} />
           </Stack.Navigator>
         </NavigationContainer>
     </Provider>
