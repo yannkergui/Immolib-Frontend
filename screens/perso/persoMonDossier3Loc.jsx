@@ -240,7 +240,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
           typeBienLoc: user.typeBienLoc,
           minSurfaceLoc: user.minSurfaceLoc,
           minPieceLoc: user.minPieceLoc,
-          nbLoc: user.nbLocataire,
+          nbLoc: user.nbLoc,
           meuble: user.meuble,
         },
         documents: {

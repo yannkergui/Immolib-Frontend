@@ -6,11 +6,13 @@ import SwitchSelector from "react-native-switch-selector";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { ipAdress } from "../../immolibTools";
+import { monBienData } from '../../reducers/monBien';
+import { maVilleData } from '../../reducers/maVille';
 
 export default function ProAnnonces( {navigation} ) {
 
 
-
+  const dispatch = useDispatch();
   const pro = useSelector((state) => state.pro.value);
 
  
@@ -31,9 +33,20 @@ export default function ProAnnonces( {navigation} ) {
       })
   }, []);
 
- // Fetch du backend psupprimer un bien 
-
- 
+  const goToMonAnnonce = (e) => {;
+    dispatch(monBienData(e));
+    fetch (`https://api-adresse.data.gouv.fr/search/?q=${e.numeroRue}+${e.rue}+${e.codePostal}`)
+    .then((response) => response.json())
+    .then((data) => {console.log(data.features[0]);
+      const newAdress = {
+        latitude:  data.features[0].geometry.coordinates[1],
+        longitude:  data.features[0].geometry.coordinates[0],
+      };
+      dispatch(maVilleData(newAdress))
+    
+    })
+    navigation.navigate('MonAnnonce')
+  };
 
  // constante relative au switch de changement de page 
 
@@ -51,10 +64,10 @@ const handleCreerAnnonce = () => {navigation.navigate("CreationAnnonce")}
 // 1er map relatif aux annonces Vente
 
 const annoncesVente = biensPro.map((data) => {
-  console.log("test", data)
   if (data.transaction === "vente") {
     return (
-      <View style={styles.annonceCard}>
+      <TouchableOpacity style={styles.annonceCard}
+      onPress={() => { goToMonAnnonce(data) }}>
         <View style={styles.lineCard}>
           <View style={styles.imageConatainer}>
           <Image
@@ -70,7 +83,7 @@ const annoncesVente = biensPro.map((data) => {
             </TouchableOpacity>
           </View>
         </View>    
-      </View>
+      </TouchableOpacity>
     );
   }
 });
@@ -80,7 +93,8 @@ const annoncesVente = biensPro.map((data) => {
   const annoncesLocation = biensPro.map((data) => {
     if (data.transaction === "location") {
       return (
-        <View style={styles.annonceCard}>
+        <TouchableOpacity style={styles.annonceCard}
+        onPress={() => { goToMonAnnonce(data) }}>
         <View style={styles.lineCard}>
           <View style={styles.imageConatainer}>
           <Image
@@ -96,7 +110,7 @@ const annoncesVente = biensPro.map((data) => {
             </TouchableOpacity>
           </View>
         </View>    
-      </View>
+      </TouchableOpacity>
       );
     }
   });
