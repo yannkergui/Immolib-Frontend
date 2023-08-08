@@ -18,6 +18,7 @@ import MonDossierPro from "./screens/pro/monDossierpro"
 import ProConnectionScreen from "./screens/pro/proConnectionScreen";
 import ProPreferences from "./screens/pro/proPreferences";
 import CameraScreen from "./screens/pro/cameraScreen";
+import ProPriseDeVisite from "./screens/pro/proPriseDeVisite";
 
 import PersoConnectionScreen from "./screens/perso/persoConnectionScreen";
 import PersoHome from "./screens/perso/persoHome";
@@ -202,6 +203,7 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
             <Stack.Screen name="ProVisites" component={ProVisites} /> 
+            <Stack.Screen name="ProPriseDeVisite" component={ProPriseDeVisite} />
             <Stack.Screen name="ProPreferences" component={ProPreferences} />
             <Stack.Screen name="ProConnexionScreen" component={ProConnectionScreen} />
             <Stack.Screen
