@@ -16,13 +16,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { userDatas } from "../../reducers/user";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import * as DocumentPicker from "expo-document-picker";
-import { ipAdress } from "../../immolibTools";
+import moment from "moment"; 
 
 export default function PersoMonDossier3Achat({ navigation }) {
   
 
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
+
+  const maVisite = useSelector((state) => state.maVisite.value);
+
+  // formattage de la date afin d'avoir un affichage plus fluide
+  let selectedDate = maVisite.newVisit.dateOfVisit
+  let frenchDate = moment(selectedDate).format("DD/MM/YYYY");
 
   const handleBudgetChange = (text) => {
     const formattedText = text.replace(/[^0-9]/g, ""); // élimine tous les caractères non numériques
@@ -50,7 +56,7 @@ export default function PersoMonDossier3Achat({ navigation }) {
       name: "PreAccord",
       type: "image/*",
     });
-    fetch(`http://${ipAdress}/users/upload`, {
+    fetch(`http://192.168.10.155:3000/users/upload`, {
       method: "POST",
       body: formData,
     })
@@ -71,7 +77,7 @@ export default function PersoMonDossier3Achat({ navigation }) {
         accordBanque: valuePreAccord,
       })
     );
-    fetch(`http://${ipAdress}/users/${user.email}`, {
+    fetch(`http://192.168.10.155:3000/users/${user.email}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -96,11 +102,11 @@ export default function PersoMonDossier3Achat({ navigation }) {
       .then((data) => {
         console.log(data);
       });
-    navigation.navigate("PersoHome");
+    navigation.navigate("TabNavigatorPerso");
   };
 
   const handlePasserCetteEtape = () => {
-    fetch(`http://${ipAdress}/users/${user.email}`, {
+    fetch(`http://192.168.10.155:3000/users/${user.email}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -118,7 +124,7 @@ export default function PersoMonDossier3Achat({ navigation }) {
       .then((data) => {
         console.log(data);
       });
-    navigation.navigate("PersoHome");
+    navigation.navigate("TabNavigatorPerso");
   };
 
   //mise en place des options pour les switchs selectors :
@@ -169,10 +175,10 @@ export default function PersoMonDossier3Achat({ navigation }) {
           </View>
 
           {/* {Il faudra ajouter ici le composant des visites} */}
-          <View style={styles.textContainer}>
-            <Text>15/03/2023 à 17h</Text>
-            <Text>66 rue Victor Hugo, 75001 Paris</Text>
-          </View>
+          <View style={styles.lineCard}>
+        <Text style={styles.Title}>Visite Enregistrée le :</Text>
+        <Text style={styles.Title}> {frenchDate} à {maVisite.newVisit.startTimeVisit}</Text>
+        </View>
 
           <Text style={styles.title}> Mon Dossier</Text>
 
@@ -387,24 +393,40 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: "40%",
-    height: "80%",
-    backgroundColor: "transparent",
+    height: "60%",
+    backgroundColor: "#47AFA5",
     borderColor: "white",
     borderWidth: 1,
     borderRadius: 10,
     marginRight: 3,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+    elevation: 18,
   },
 
   next: {
     alignItems: "center",
     justifyContent: "center",
     width: "40%",
-    height: "80%",
+    height: "60%",
     backgroundColor: "#47AFA5",
     borderColor: "white",
     borderWidth: 1,
     borderRadius: 10,
     marginRight: 3,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+    elevation: 18,
   },
 
   formContainer: {
@@ -470,5 +492,31 @@ const styles = StyleSheet.create({
 
   lastBloc: {
     alignItems: "center",
+  },
+  lineCard: {
+    alignItems:'center',
+    justifyContent:'center',
+    width: 370,
+    height:70,
+    borderRadius: 20,
+    backgroundColor: "#BCCDB6",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+    elevation: 18,
+    marginBottom: 25,
+    marginTop: 30,
+  },
+  Title: {
+    color: 'white',
+    fontSize: 25,
+    fontStyle: 'normal',
+    fontWeight: '600', 
+    letterSpacing: -1.5, 
+    textAlign:'center',
   },
 });

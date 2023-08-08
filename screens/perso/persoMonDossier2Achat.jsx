@@ -14,6 +14,8 @@ import { useState } from "react";
 import SwitchSelector from "react-native-switch-selector";
 import { useDispatch, useSelector } from 'react-redux';
 import {userDatas} from '../../reducers/user'
+import moment from "moment"; 
+
 
 export default function PersoMonDossier2Achat({ navigation }) {
 
@@ -22,6 +24,12 @@ export default function PersoMonDossier2Achat({ navigation }) {
   const [monBudget, setMonBudget] = useState(0);
   const [inputSurface, setInputSurface] = useState("");
   const [inputNbPiece, setInputNbPiece] = useState("");
+
+  const maVisite = useSelector((state) => state.maVisite.value);
+
+  // formattage de la date afin d'avoir un affichage plus fluide
+  let selectedDate = maVisite.newVisit.dateOfVisit
+  let frenchDate = moment(selectedDate).format("DD/MM/YYYY");
 
   const handleBudgetChange = (text) => {
     const formattedText = text.replace(/[^0-9]/g, ""); // élimine tous les caractères non numériques
@@ -74,10 +82,10 @@ export default function PersoMonDossier2Achat({ navigation }) {
           </View>
 
           {/* {Il faudra ajouter ici le composant des visites} */}
-          <View style={styles.textContainer}>
-            <Text>15/03/2023 à 17h</Text>
-            <Text>66 rue Victor Hugo, 75001 Paris</Text>
-          </View>
+          <View style={styles.lineCard}>
+        <Text style={styles.Title}>Visite Enregistrée le :</Text>
+        <Text style={styles.Title}> {frenchDate} à {maVisite.newVisit.startTimeVisit}</Text>
+        </View>
 
           <Text style={styles.title}> Mon Dossier</Text>
 
@@ -249,26 +257,42 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: "40%",
-    height: "80%",
-    backgroundColor: "transparent",
+    height: "60%",
+    backgroundColor: "#47AFA5",
     borderColor: "white",
     borderWidth: 1,
     borderRadius: 10,
     marginRight: 3,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+    elevation: 18,
   },
 
   next: {
     alignItems: "center",
     justifyContent: "center",
     width: "40%",
-    height: "80%",
+    height: "60%",
     backgroundColor: "#47AFA5",
     borderColor: "white",
     borderWidth: 1,
     borderRadius: 10,
     marginRight: 3,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+    elevation: 18,
   },
-
+  
   formContainer: {
     width: "90%",
   },
@@ -324,5 +348,31 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 15,
     letterSpacing: 1,
+  },
+  Title: {
+    color: 'white',
+    fontSize: 25,
+    fontStyle: 'normal',
+    fontWeight: '600', 
+    letterSpacing: -1.5, 
+    textAlign:'center',
+  },
+  lineCard: {
+    alignItems:'center',
+    justifyContent:'center',
+    width: 370,
+    height:70,
+    borderRadius: 20,
+    backgroundColor: "#BCCDB6",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+    elevation: 18,
+    marginBottom: 25,
+    marginTop: 30,
   },
 });

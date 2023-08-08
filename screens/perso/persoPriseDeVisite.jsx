@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import moment from "moment"; 
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from 'react-redux';
 import { maVisiteData } from '../../reducers/maVisite';
+import {userDatas} from '../../reducers/user'
 
 
 
 export default function PersoPriseDeVisite({navigation}) {
   const [selectedDate, setSelectedDate] = useState(Date);
   const [timeSlots, setTimeSlots] = useState(null);
+  const [userId, setUserId] = useState('')
 
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.value);
-
-  console.log('check',user.dejaInscrit);
 
   const bienData = {
     "_id": {
@@ -82,9 +82,8 @@ export default function PersoPriseDeVisite({navigation}) {
    // Fetch du backend au chargement de la page pour récupérer les créneaux du jour
    useEffect((date) => {
     setTimeSlots(null);
-    // setSelectedDate(date);
     const formattedDate = moment(date).format("YYYY-MM-DD");
-    fetch(`http://172.20.10.3:3000/disponibilites/dateSearch/${proid}`, {
+    fetch(`http://192.168.10.155:3000/disponibilites/dateSearch/${proid}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ dateOfVisit: formattedDate })
@@ -96,15 +95,26 @@ export default function PersoPriseDeVisite({navigation}) {
           console.log('impossible');
         }
       })
+      fetch(`http://192.168.10.155:3000/users/${user.token}`)
+      .then(response => response.json())
+      .then(data => {
+        setUserId(data.user._id);
+        dispatch(userDatas({_id: data.user._id}))
+      })
+    
   }, []);
+
+  
 
   let formattedDate
 
+  //au click sur une date 
   const handleDateSelect = (date) => {
     setTimeSlots(null);
     setSelectedDate(date);
     formattedDate = moment(date).format("YYYY-MM-DD");
-    fetch(`http://172.20.10.3:3000/disponibilites/dateSearch/${proid}`, {
+    //fetch des dispos du pro 
+    fetch(`http://192.168.10.155:3000/disponibilites/dateSearch/${proid}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ dateOfVisit: formattedDate })
@@ -116,17 +126,22 @@ export default function PersoPriseDeVisite({navigation}) {
           console.log('impossible');
         }
       })
+
   };
 
+  //fonction pour générer des slots de 30 minutes 
   const generateTimeSlots = (availabilityData) => {
     const timeSlotsArray = [];
 
+    // boucle forEach afin de générer les slots dans l'intervalle voulu
     availabilityData.forEach(data => {
       const startTimeMoment = moment(data.startTimeDispo, 'HH:mm');
       const endTimeMoment = moment(data.endTimeDispo, 'HH:mm');
 
+      // isSameOrBefore méthode moment pour vérifier qu'on ne dépasse pas l'heure de fin 
       while (startTimeMoment.isSameOrBefore(endTimeMoment)) {
         const startTime = startTimeMoment.format('HH:mm');
+        // on retraite les exceptions du pros dans une boucle some (renvoi boolean) afin de les supprimer des slots dispo en fonction de la date 
         const isException = data.Exception.some(exception => {
           const exceptionDate = moment(exception.dateOfVisit).format('YYYY-MM-DD');
           if (exceptionDate === moment(formattedDate).format('YYYY-MM-DD')) {
@@ -137,9 +152,11 @@ export default function PersoPriseDeVisite({navigation}) {
               startTimeMoment.isBefore(exceptionEndTime)
             );
           }
+          // si les exceptions correspondent à tel jour précis alors isException sera a False 
           return false;
         });
 
+        // si isException est true (logique au dessus), on push les slots dans le tableau car ils ne sont pas des exceptions et représentent donc tous les StartTime
         if (!isException) {
           timeSlotsArray.push({ startTime });
         }
@@ -151,27 +168,26 @@ export default function PersoPriseDeVisite({navigation}) {
     setTimeSlots(timeSlotsArray);
   };
 
-  // console.log('test',selectedDate);
-
+  
+// formattage de la date afin d'avoir un affichage plus fluide
   let frenchDate = moment(selectedDate).format("DD/MM/YYYY");
 
-  
-
-
+// fonction permettant de prendre le rendez vous en appelant la route post visites
   const handleSubmit = (e) => {
+    // conversion du slot dans le format nécessaire à l'envoi en back
     const startTimeConvertit = e.split(':'); // Split hours and minutes
     const startTimeVisit = moment().hours(startTimeConvertit[0]).minutes(startTimeConvertit[1]);
     const formatedStartTimeVisit = startTimeVisit.format('HH:mm')
     const duration = 30;
+    // création de la donnée endTimeVisit nécessaire au modèle visite
+    //on clone la date de Start et on ajoute la durée de 30 
     let endTimeVisit = startTimeVisit.clone().add(duration, 'minutes');
     const formatedendTimeVisit = endTimeVisit.format('HH:mm')
     console.log(formatedStartTimeVisit); // Output endTimeVisit in HH:mm format
     let prosId = bienData.pro.proid;
-    let userId = user._id
     let bienImmoId = bienData._id.bienid
     const dateDeVisite = moment(selectedDate).format("YYYY-MM-DD");
-    console.log(formatedStartTimeVisit);
-    fetch(`http://172.20.10.3:3000/visites`, {
+    fetch(`http://192.168.10.155:3000/visites`, {
       method : 'POST',
       headers : {'Content-Type' : 'application/json'},
       body : JSON.stringify({prosId : prosId, usersId: userId, dateOfVisit: dateDeVisite, startTimeVisit: formatedStartTimeVisit, endTimeVisit: formatedendTimeVisit, duration: duration, bienImmoId: bienImmoId})
@@ -181,12 +197,12 @@ export default function PersoPriseDeVisite({navigation}) {
         if (data) {
           console.log('data récupéré : ', data)
           dispatch(maVisiteData(data));
-          // navigation.navigate('PersoPriseDeVisite');
         }
       })
+      //si le client avait déjà un compte navigation vers HomePage sinon Tunnel
       if (user.dejaInscrit === 'true'){
         navigation.navigate('TabNavigatorPerso');
-      }
+      } else { navigation.navigate('CompleteTonDossier');}
 
   };
 
@@ -198,6 +214,9 @@ export default function PersoPriseDeVisite({navigation}) {
       end={{ x: 1, y: 1 }} // End point of the gradient
       style={styles.background}
     >
+      <View style={styles.headerTitle}>
+      <Image style={styles.image} source={require('../../assets/IMMOLIB.png')} /> 
+      </View>
       <View style={styles.localContainer}>
       <Text style={styles.label}>Choissisez votre Date de visite souhaitée:</Text>
       <Calendar
@@ -218,20 +237,12 @@ export default function PersoPriseDeVisite({navigation}) {
           dayTextColor: '#2d4150',
           arrowColor: '#2d4150',
           disabledArrowColor: '#2d4150',
-          // textDayFontFamily: 'monospace',
-          // textMonthFontFamily: 'monospace',
-          // textDayHeaderFontFamily: 'monospace',
-          // textDayFontWeight: '300',
-          // textMonthFontWeight: 'bold',
-          // textDayHeaderFontWeight: '300',
-          // textDayFontSize: 16,
-          // textMonthFontSize: 16,
-          // textDayHeaderFontSize: 16
         }}
         onDayPress={(day) => handleDateSelect(new Date(day.dateString))}
       />
       <Text style={styles.label}>Créneaux de visites Disponibles pour le {frenchDate} :</Text>
       <View style={styles.displayCard1}>
+        {/* ternaire permettant l'affichage en fonction d'une dispo ou non */}
       {timeSlots ? (
         timeSlots
           .sort((a, b) => moment(a.startTime, 'HH:mm').diff(moment(b.startTime, 'HH:mm')))
@@ -246,7 +257,6 @@ export default function PersoPriseDeVisite({navigation}) {
         <Text>Pas de créneau de visite disponible à cette date</Text>
       )}
       </View>
-
       </View>
     </LinearGradient>
   </View>
@@ -321,4 +331,12 @@ width:'100%',
 alignItems: "center",
 justifyContent: "center",
   },
+  image:{
+    marginTop: 40,
+    height:100,
+  },
+  headerTitle:{
+position:"absolute",
+top: 40,
+  }
 });

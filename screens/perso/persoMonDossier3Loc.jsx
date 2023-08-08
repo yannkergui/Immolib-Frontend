@@ -14,13 +14,19 @@ import * as DocumentPicker from "expo-document-picker";
 import SwitchSelector from "react-native-switch-selector";
 import { useDispatch, useSelector } from "react-redux";
 import { userDatas } from "../../reducers/user";
-import { ipAdress } from "../../immolibTools";
+import moment from "moment"; 
 
 export default function PersoMonDossier3Loc({ navigation }) {
-  
+  const myIPAdress = "192.168.10.155";
 
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
+
+  const maVisite = useSelector((state) => state.maVisite.value);
+
+  // formattage de la date afin d'avoir un affichage plus fluide
+  let selectedDate = maVisite.newVisit.dateOfVisit
+  let frenchDate = moment(selectedDate).format("DD/MM/YYYY");
 
   //Etat relatif au revenu renseigné 
 
@@ -291,9 +297,9 @@ export default function PersoMonDossier3Loc({ navigation }) {
         <View style={styles.smallTextContainer}>
           <Text>Je cherche une location</Text>
         </View>
-        <View style={styles.textContainer}>
-          <Text>15/03/2023 à 17h</Text>
-          <Text>66 rue Victor Hugo, 75001 Paris</Text>
+        <View style={styles.lineCard}>
+        <Text style={styles.Title}>Visite Enregistrée le :</Text>
+        <Text style={styles.Title}> {frenchDate} à {maVisite.newVisit.startTimeVisit}</Text>
         </View>
         
         <Text style={styles.title}>Mon Dossier</Text>
@@ -337,6 +343,9 @@ export default function PersoMonDossier3Loc({ navigation }) {
           <View style={styles.lineContainer}>
             <Text>Je charge mes documents</Text>
           </View>
+          <View style={styles.scrollview}>
+
+          <ScrollView >
           <View style={styles.lineContainer}>
             <Text>Pièce d'identité</Text>
             {idDoc !== "" ? (
@@ -415,6 +424,8 @@ export default function PersoMonDossier3Loc({ navigation }) {
               <FontAwesome name="cloud-upload" size={30} color="#ffffff" />
             </TouchableOpacity>
           </View>
+          </ScrollView>
+          </View>
         </View>
         <View style={styles.nextBtnContainer}>
           <TouchableOpacity
@@ -462,7 +473,7 @@ const styles = StyleSheet.create({
     height: "4%",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 20,
+    marginTop: 50,
   },
 
   title: {
@@ -509,28 +520,45 @@ const styles = StyleSheet.create({
     marginTop: "5%",
   },
 
+ 
   skip: {
     alignItems: "center",
     justifyContent: "center",
     width: "40%",
-    height: "80%",
-    backgroundColor: "transparent",
+    height: "60%",
+    backgroundColor: "#47AFA5",
     borderColor: "white",
     borderWidth: 1,
     borderRadius: 10,
     marginRight: 3,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+    elevation: 18,
   },
 
   next: {
     alignItems: "center",
     justifyContent: "center",
     width: "40%",
-    height: "80%",
+    height: "60%",
     backgroundColor: "#47AFA5",
     borderColor: "white",
     borderWidth: 1,
     borderRadius: 10,
     marginRight: 3,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+    elevation: 18,
   },
 
   formContainer: {
@@ -540,6 +568,7 @@ const styles = StyleSheet.create({
   lineContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems:'center',
     marginTop: 20,
   },
 
@@ -577,27 +606,33 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
 
-  skip: {
-    alignItems: "center",
-    justifyContent: "center",
-    width: "40%",
-    height: "80%",
-    backgroundColor: "transparent",
-    borderColor: "white",
-    borderWidth: 1,
-    borderRadius: 10,
-    marginRight: 3,
+  Title: {
+    color: 'white',
+    fontSize: 25,
+    fontStyle: 'normal',
+    fontWeight: '600', 
+    letterSpacing: -1.5, 
+    textAlign:'center',
   },
-
-  next: {
-    alignItems: "center",
-    justifyContent: "center",
-    width: "40%",
-    height: "80%",
-    backgroundColor: "#47AFA5",
-    borderColor: "white",
-    borderWidth: 1,
-    borderRadius: 10,
-    marginRight: 3,
+  lineCard: {
+    alignItems:'center',
+    justifyContent:'center',
+    width: 370,
+    height:70,
+    borderRadius: 20,
+    backgroundColor: "#BCCDB6",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+    elevation: 18,
+    marginBottom: 10,
+    marginTop: 30,
   },
+  // scrollview:{
+  //   heigth: 200,
+  // },
 });
