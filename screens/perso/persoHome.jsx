@@ -7,13 +7,14 @@ import { useState, useEffect } from "react";
 import { maVisiteData } from '../../reducers/maVisite';
 import { useDispatch, useSelector } from 'react-redux';
 import {Agenda, LocaleConfig} from 'react-native-calendars';
+import moment from "moment"; 
 
 
 export default function PersoHome({navigation}) {
   
   // Déclaration des états pour stocker les données des visites et des éléments du calendrier
-  const [dateVisite, setDateVisite] = useState([]);
   const [items2, setItems2] = useState({});
+  const [closestVisit, setClosestVisit] = useState(null);
   
   // Extraction des données de l'utilisateur depuis le store Redux
   const user = useSelector((state) => state.user.value);
@@ -23,7 +24,6 @@ export default function PersoHome({navigation}) {
     fetch(`http://192.168.10.155:3000/visites/user/${user._id}`)
       .then(response => response.json())
       .then(data => {
-        console.log('test', data.VisitesTrouvees);
         const updatedItems = {};
         data.VisitesTrouvees.map(data => { 
           // Extraction des informations de chaque visite
@@ -41,27 +41,36 @@ export default function PersoHome({navigation}) {
 
         // Mise à jour de l'état items2 avec les données formatées
         setItems2(updatedItems);
+
+        const closestVisit = findClosestVisit(updatedItems);
+        setClosestVisit(closestVisit);
       })
   }, []);
 
-  const countNonEmptyFields = () => {
-    let count = 0;
-  
-    for (const key in user) {
-      if (user[key] !== "" && user[key] !== null && user[key] !== undefined) {
-        count++;
-      }
+// Fonction pour compter les champs non vides dans l'objet utilisateur
+const countNonEmptyFields = () => {
+  let count = 0;
+  // Parcours des propriétés de l'objet utilisateur
+  for (const key in user) {
+    // Vérification que la propriété a une valeur non vide avec tous les cas possibles
+    if (user[key] !== "" && user[key] !== null && user[key] !== undefined) {
+      count++;
     }
-  
-    return count;
-  };
-  
-  let completion 
-  
-  if(user.dejaInscrit){
-  completion = (countNonEmptyFields()/25)*100
-  } else {completion = (countNonEmptyFields()/15)*100}
-  
+  }
+  return count;
+};
+
+// déclaration de la variable pour la completion du dossier
+let completion;
+// Vérification si l'utilisateur est déjà inscrit
+if (user.dejaInscrit) {
+  // Calcul du taux de complétion en pourcentage (pour les utilisateurs déjà inscrits)
+  completion = (countNonEmptyFields() / 25) * 100;
+} else {
+  // Calcul du taux de complétion en pourcentage (pour les nouveaux utilisateurs)
+  completion = (countNonEmptyFields() / 15) * 100;
+}
+
 
   // Configuration des noms de mois et jours en français pour le calendrier
   LocaleConfig.locales["fr"] = {
@@ -140,6 +149,31 @@ export default function PersoHome({navigation}) {
     );
   };
 
+  const findClosestVisit = (visits) => {
+    // Obtention de la date d'aujourd'hui au format ISO (AAAA-MM-JJ) 
+    //(sans utiliser moment car probleme de compatibilité (je ne sais pas pkoi))
+    const today = new Date().toISOString().split("T")[0];
+    let closest = null; 
+  
+    // Parcours des dates de visite dans les données
+    for (const visitDate in visits) {
+      // Vérification si la date de visite est ultérieure ou égale à aujourd'hui
+      if (visitDate >= today) {
+        const visitsOnDate = visits[visitDate]; // Récupération des visites pour cette date
+        // Parcours des visites pour une date donnée
+        visitsOnDate.forEach((visit) => {
+          const visitTime = new Date(`${visitDate}T${visit.time}`); // Date et heure de la visite combinées
+          // Vérification si la visite est plus proche que la précédente visite la plus proche trouvée
+          if (!closest || visitTime < closest.time) {
+            closest = { ...visit, date: visitDate, time: visitTime }; // Stockage des informations de la visite la plus proche
+          }
+        });
+      }
+    }
+  
+    return closest; // Retourne l'objet visite la plus proche ou null si aucune visite n'est future
+  };
+
   // Configuration personnalisée de l'apparence du calendrier
   const theme = {
     calendarBackground: "#47AFA5", //agenda background
@@ -192,6 +226,17 @@ export default function PersoHome({navigation}) {
           {/* Affichage du statut du profil */}
           <View >
             <Text style={styles.subtitle}>Mon profil est complet à {completion}%</Text>
+          </View>
+          <View style={styles.closestVisitContainer}>
+            <Text style={styles.subtitle}>Ma prochaine visite :</Text>
+            {closestVisit && (
+              <View style={styles.item2}>
+                <Text style={styles.eventName}>{closestVisit.name}</Text>
+                <Text style={styles.eventTime2}>
+                 le {closestVisit.date} à {closestVisit.time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                </Text>
+              </View>
+            )}
           </View>
         </View>
       </LinearGradient>
@@ -325,5 +370,28 @@ subtitle:{
   paddingLeft: 45,
   paddingRight: 45,
   fontSize: 16,
+},
+item2 : {
+  backgroundColor:"#47AFA5",
+  borderRadius: 25,
+  padding: 10,
+  marginRight: 10,
+  marginTop: 17,
+  shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+    elevation: 18,
+    justifyContent:'center',
+    alignItems:'center',
+    height: 100,
+},
+closestVisitContainer:{
+  alignItems:'center',
+  borderTopColor:'black',
+  borderTopwidth:'2'
 },
 });
