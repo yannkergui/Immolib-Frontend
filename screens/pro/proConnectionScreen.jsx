@@ -1,15 +1,12 @@
-import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput, KeyboardAvoidingView,Image, ScrollView, Keyboard, TouchableWithoutFeedback } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import { useDispatch } from 'react-redux';
 import {proDatas} from '../../reducers/pro';
-import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 import { inseeJeton, ipAdress } from "../../immolibTools";
 
-
-export default function ProConnectionScreen({ navigation }) {
+export default function ProConnectionScreen({navigation}) {
 
    //Etats pour récupérer les inputs utilisateur
    const [email, setEmail]=useState('');
@@ -17,21 +14,8 @@ export default function ProConnectionScreen({ navigation }) {
    const [prenom, setPrenom]=useState('');
    const [nom, setNom]=useState('');
    const [tel, setTel]=useState('');
-   const [siret, setSiret]=useState(null);
-
-  //Etats pour récupérer les données de l'API Insee :
-  const [denominInsee, setDenominInsee]=useState('');
-  const [sirenInsee, setSireninsee]=useState('');
-  const [siretInsee, setSiretinsee]=useState('');
-  const [dateInsee, setDateInsee]=useState('');
-  const [adresseInsee, setAdresseInsee]=useState('');
-
-  //désactivation du regex réel pour les tests /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-   const EMAIL_REGEX = /[a-z]/
-  //désactivation du regex réel pour les tests /^(?:(?:(?:\+|00)33\s?|0)[0-9]\s?\d{8})$/
-   const TEL_REGEX = /[0-9]{1}/
-  //désactivation du regex réel pour les tests /\d{14}/g
-   const SIRET_REGEX = /\d{1}/g
+   const [siret, setSiret]=useState("");
+   console.log(siret);
 
   // Etats pour gérer les erreurs d'INSCRIPTION seulement
   const [siretError, setSiretError] = useState(false);
@@ -92,7 +76,7 @@ export default function ProConnectionScreen({ navigation }) {
             }
           ));
           setModalConnexion(false);
-          navigation.navigate('ProClients');
+          navigation.navigate("ProClients");
           setEmail('');
           setMotDePasse('')
           setEmailError(false);
@@ -111,102 +95,131 @@ export default function ProConnectionScreen({ navigation }) {
     setModalInscription(true);
   }
 
-    const handleInscriptionBis = async () => {
-      if (EMAIL_REGEX.test(email) && TEL_REGEX.test(tel) && SIRET_REGEX.test(siret)) {
-          const response1 = await fetch(`https://api.insee.fr/entreprises/sirene/V3/siret/${siret}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer 412b7176-b22c-30b4-8e4a-9fe5a9a0b108'
-            },
-          });
-    console.log("test1");
-          const data1 = await response1.json();
-          console.log("test2");
-          if (data1.header.message === "ok") {
-            // Mise à jour des états avec les données de la première requête
-            let adrInsee = data1.etablissement.adresseEtablissement;
-            setDenominInsee(data1.etablissement.uniteLegale.denominationUniteLegale);
-            setSireninsee(data1.etablissement.siren);
-            setSiretinsee(data1.etablissement.siret);
-            setDateInsee(data1.etablissement.dateCreationEtablissement);
-            setAdresseInsee(`${adrInsee.numeroVoieEtablissement}${adrInsee.indiceRepetitionEtablissement}, ${adrInsee.typeVoieEtablissement} ${adrInsee.libelleVoieEtablissement}, ${adrInsee.codePostalEtablissement} ${adrInsee.libelleCommuneEtablissement}`);
-    
-            const response2 = await fetch(`http://192.168.1.19:3000/pros/signup`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                siret: siretInsee,
-                prenom: prenom,
-                nom: nom,
-                email: email,
-                motDePasse: motDePasse,
-                tel: tel,
-                denomination: denominInsee,
-                siren: sirenInsee,
-                dateCreation: dateInsee,
-                adresse: adresseInsee
-              })
-            });
-    
-            const data2 = await response2.json();
-    
-            if (data2.result) {
-              // Mise à jour des états avec les données de la deuxième requête
-              let { prenom, nom, email, tel, motDePasse, token } = data2.newPro;
-              let { denomination, siren, siret, dateCreation, adresse } = data2.newPro.agence;
-              dispatch(proDatas({
-                siret,
-                prenom,
-                nom,
-                email,
-                tel,
-                motDePasse,
-                token,
-                agence: {
-                  denomination,
-                  siren,
-                  siret,
-                  dateCreation,
-                  adresse,
-                }
-              }));
-    
-              setModalInscription(false);
-              navigation.navigate('ProPreferences');
-            
-              setEmailError(false);
-              setTelError(false);
-              setSiretError(false);
-              setErrorEmpty(false);
 
-              setSiret('');
-              setPrenom('');
-              setNom('');
-              setEmail('');
-              setMotDePasse('');
-              setTel('');
+//désactivation du regex réel pour les tests /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const EMAIL_REGEX = /[a-z]/
+//désactivation du regex réel pour les tests /^(?:(?:(?:\+|00)33\s?|0)[0-9]\s?\d{8})$/
+ const TEL_REGEX = /[0-9]{1}/
+//désactivation du regex réel pour les tests /\d{14}/g
+ const SIRET_REGEX = /\d{1}/g
 
-            } else if (data2.error==="User already exists") {
-              setExistingEmail(true);
-            }
-          }
-      } else {
-        if (!EMAIL_REGEX.test(email)) {
-          setEmailError(true);
-        }
-        if (!TEL_REGEX.test(tel)) {
-          setTelError(true);
-        }
-        if (!SIRET_REGEX.test(siret)) {
-          setSiretError(true);
-        }
-        if (!prenom || !nom || !motDePasse) {
-          setErrorEmpty(true);
-        }
+
+  const handleInscriptionBis = async () => {
+
+    console.log("mail", EMAIL_REGEX.test(email));
+    console.log("tel", TEL_REGEX.test(tel));
+    console.log("siret", SIRET_REGEX.test(siret));
+
+    if (!prenom || !nom || !motDePasse) {
+      setErrorEmpty(true) 
+      return
+    }
+
+    if (!EMAIL_REGEX.test(email)) {
+      setEmailError(true)
+      return
+    }
+
+    if (!TEL_REGEX.test(tel)) {
+      setTelError(true)
+      return
+    }
+
+    // !!!!!!!!!! Problème avec le vrai REGEX à 14 chiffres 
+    if (!SIRET_REGEX.test(siret)) {
+      setSiretError(true)
+      return
+    }
+      
+    // Requete vers l'API INSEE
+
+    const response1 = await fetch(`https://api.insee.fr/entreprises/sirene/V3/siret/${parseInt(siret)}`, {
+      method: 'GET',
+      headers: {
+        "Authorization": `Bearer ${inseeJeton}`,
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+    });
+
+    const data1 = await response1.json();
+    const adrInsee = await data1.etablissement.adresseEtablissement
+    
+    if (data1.header.message === "ok") {
+
+      // Requete vers la bdd pour création du nouveau pro :
+
+      const response2 = await fetch(`http://${ipAdress}:3000/pros/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          siret: data1.etablissement.siret,
+          prenom: prenom,
+          nom: nom,
+          email: email,
+          motDePasse: motDePasse,
+          tel: tel,
+          denomination: data1.etablissement.uniteLegale.denominationUniteLegale,
+          siren: data1.etablissement.siren,
+          dateCreation: data1.etablissement.dateCreationEtablissement,
+          adresse: `${adrInsee.numeroVoieEtablissement}${adrInsee.indiceRepetitionEtablissement ? adrInsee.indiceRepetitionEtablissement : '' }, ${adrInsee.typeVoieEtablissement} ${adrInsee.libelleVoieEtablissement}, ${adrInsee.codePostalEtablissement} ${adrInsee.libelleCommuneEtablissement}`
+        })
+      });
+
+      const data2 = await response2.json();
+        
+      if (data2.result) { 
+
+        // !!!!!! Destructuration, PROBLEME !!!!!!!!!
+        // let { prenom, nom, email, tel, motDePasse, token } = data2.newPro;
+        // let { denomination, siren, siret, dateCreation, adresse } = data2.newPro.agence;
+
+        // Mise à jour du reducer avec les données reçues depuis la base de données
+
+        dispatch(
+          proDatas(
+              {
+                prenom : data2.newPro.prenom,
+                nom: data2.newPro.nom,
+                email: data2.newPro.email,
+                tel: data2.newPro.tel,
+                motDePasse: data2.newPro.motDePasse,
+                token: data2.newPro.token,
+                denomination : data2.newPro.agence.denomination,
+                siren: data2.newPro.agence.siren,
+                siret: data2.newPro.agence.siret,
+                dateCreation: data2.newPro.agence.dateCreation,
+                adresse: data2.newPro.agence.adresse,
+              }
+          )
+        );
+
+        // Nettoyage écran et vidange des états
+
+        setModalInscription(false);
+
+        setEmailError(false);
+        setTelError(false);
+        setSiretError(false);
+        setErrorEmpty(false);
+
+        setSiret('');
+        setPrenom('');
+        setNom('');
+        setEmail('');
+        setMotDePasse('');
+        setTel('');
+
+        // !!!!!!! Passage à l'écran suivant PROBLEME !!!!!!!!!
+
+        navigation.navigate("ProHome");
+
       }
-    };
-    
+      if (data2.error==="User already exists") {
+        setExistingEmail(true)
+      }
+    }                
+  }
+
 
   const closeModal = () => {
     setModalConnexion(false);
