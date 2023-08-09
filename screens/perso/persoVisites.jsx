@@ -47,7 +47,7 @@ export default function PersoVisites({navigation}) {
     dispatch(maVisiteData(e));
     fetch (`https://api-adresse.data.gouv.fr/search/?q=${e.bienImmoId.numeroRue}+${e.bienImmoId.rue}+${e.bienImmoId.codePostal}`)
     .then((response) => response.json())
-    .then((data) => {console.log(data.features[0]);
+    .then((data) => {
       const newAdress = {
         latitude:  data.features[0].geometry.coordinates[1],
         longitude:  data.features[0].geometry.coordinates[0],
@@ -67,7 +67,6 @@ function handleCancelVisit (e) {
         body : JSON.stringify({statut : "annulé"})
   })
   .then(response => response.json())
-  .then(()=> console.log("c'est fait"))
 }
 
   // fonction pour gérer les appels lorsqu'on clique sur le numéro de téléphone
@@ -82,10 +81,12 @@ function handleCancelVisit (e) {
     Linking.openURL(phoneNumber);
   }
 
-  //Ouverture modale maj visite
+  //Redirection vers la page de modification des visites :
 
-  function openModaleMaj () {
-    setModaleMaj (true)
+  function handleMajVisit (e) {
+    console.log(e);
+    dispatch(maVisiteData(e));
+    navigation.navigate('PersoPriseDeVisite')
   }
 
 
@@ -101,7 +102,7 @@ function handleCancelVisit (e) {
             <FontAwesome name="calendar" size={25} color="white" />
             <Text  style={styles.Textheader}> Le {data.dateOfVisit} à {data.startTimeVisit}</Text>
             </View>
-            <TouchableOpacity onPress={()=> openModaleMaj()}>
+            <TouchableOpacity onPress={()=> handleMajVisit(data)}>
               <FontAwesome name="edit" size={30} color="white" />
             </TouchableOpacity>
           </View>
@@ -137,7 +138,7 @@ function handleCancelVisit (e) {
 
   // 2iem map relatif aux visites passées
 
-  const visitePassees = visitesPerso.map((data) => { console.log(data);
+  const visitePassees = visitesPerso.map((data) => {;
     const today = new Date()
     const ConvertedDateOfVisit = new Date(data.dateOfVisit)
 

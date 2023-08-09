@@ -209,6 +209,7 @@ export default function App() {
           <Stack.Screen name="ProConnexionScreen" component={ProConnectionScreen} />
           <Stack.Screen name="CameraScreen" component={CameraScreen} />
           <Stack.Screen name="PersoMaVisite" component={PersoMaVisite} />
+          <Stack.Screen name="PersoPriseDeVisite" component={PersoPriseDeVisite} />
           <Stack.Screen name="FirstScreen" component={FirstScreen} />
           <Stack.Screen name="PersoMonDossier1" component={PersoMonDossier1} />
           <Stack.Screen name="PersoMonDossier2Achat" component={PersoMonDossier2Achat} />
