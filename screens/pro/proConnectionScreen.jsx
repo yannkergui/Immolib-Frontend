@@ -76,7 +76,7 @@ export default function ProConnectionScreen({navigation}) {
             }
           ));
           setModalConnexion(false);
-          navigation.navigate("ProClients");
+          navigation.navigate("TabNavigatorPro");
           setEmail('');
           setMotDePasse('')
           setEmailError(false);
@@ -148,7 +148,7 @@ const EMAIL_REGEX = /[a-z]/
 
       // Requete vers la bdd pour création du nouveau pro :
 
-      const response2 = await fetch(`http://${ipAdress}:3000/pros/signup`, {
+      const response2 = await fetch(`http://${ipAdress}/pros/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -209,7 +209,7 @@ const EMAIL_REGEX = /[a-z]/
         setMotDePasse('');
         setTel('');
 
-        // !!!!!!! Passage à l'écran suivant PROBLEME !!!!!!!!!
+        // !!!!!!! Passage à l'écran ProPreferences PROBLEME !!!!!!!!!
 
         navigation.navigate("ProHome");
 
