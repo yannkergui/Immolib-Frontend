@@ -38,8 +38,6 @@ import PersoMonDossier3Achat from "./screens/perso/persoMonDossier3Achat";
 import PersoMaVisite from "./screens/perso/persoMaVisite";
 import PersoPriseDeVisite from "./screens/perso/persoPriseDeVisite";
 import CompleteTonDossier from "./screens/perso/completeTonDossierPerso";
-import CreationAnnonce from "./screens/pro/creationAnnonce";
-import MonAnnonce from "./screens/pro/monAnnonce";
 
 import FirstScreen from "./screens/firstScreen";
 
@@ -211,12 +209,9 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
-
-            <Stack.Screen name="ProConnectionScreen" component={ProConnectionScreen} />
-            <Stack.Screen name="ProPreferences" component={ProPreferences} />
-            <Stack.Screen name="ProHome" component={ProHome} />
-
             <Stack.Screen name="PersoConnexionScreen" component={PersoConnectionScreen} />
+            <Stack.Screen name="ProConnectionScreen" component={ProConnectionScreen} />
+            <Stack.Screen name="ProDisponibilites" component={ProDisponibilites} />
             <Stack.Screen name="CompleteTonDossier" component={CompleteTonDossier} />
             <Stack.Screen name="PersoPriseDeVisite" component={PersoPriseDeVisite} />
 

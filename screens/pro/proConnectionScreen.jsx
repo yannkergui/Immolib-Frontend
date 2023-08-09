@@ -3,7 +3,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import { useDispatch } from 'react-redux';
 import {proDatas} from '../../reducers/pro';
-import { ipAdress } from "../../immolibTools";
 
 
 import { inseeJeton, ipAdress } from "../../immolibTools";
