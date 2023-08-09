@@ -11,6 +11,8 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from "react";
+import { ipAdress } from "../../immolibTools";
+
 
 
 export default function PersoProfil({ navigation }) {

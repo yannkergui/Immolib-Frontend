@@ -16,6 +16,7 @@ import * as DocumentPicker from "expo-document-picker";
 import { useSelector } from "react-redux";
 import { ipAdress } from "../../immolibTools";
 
+
 export default function CreationAnnonce( {navigation} ) { 
   
 

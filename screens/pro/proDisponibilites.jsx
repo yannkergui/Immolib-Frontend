@@ -19,7 +19,9 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import SwitchSelector from "react-native-switch-selector";
 import Slider from '@react-native-community/slider';
 import moment from 'moment';
-import {refresh} from "../../reducers/refresher"
+import {refresh} from "../../reducers/refresher";
+import { ipAdress } from "../../immolibTools";
+
 
 
 export default function ProDisponibilites({ navigation }) {

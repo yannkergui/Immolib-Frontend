@@ -5,6 +5,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useFonts } from 'expo-font';
 import { useSelector } from 'react-redux';
+import { ipAdress } from "../../immolibTools";
+
 
 
 export default function FicheClient({navigation}) {

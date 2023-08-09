@@ -9,6 +9,7 @@ import { ipAdress } from "../../immolibTools";
 import { monBienData } from '../../reducers/monBien';
 import { maVilleData } from '../../reducers/maVille';
 
+
 export default function ProAnnonces( {navigation} ) {
 
 
