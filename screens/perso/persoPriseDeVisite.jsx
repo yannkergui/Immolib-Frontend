@@ -201,11 +201,11 @@ export default function PersoPriseDeVisite({navigation}) {
           console.log('data récupéré : ', data)
           dispatch(maVisiteData(data));
         }
+        if (user.dejaInscrit === 'true'){
+          navigation.navigate('TabNavigatorPerso');
+        } else { navigation.navigate('CompleteTonDossier');}
       })
       //si le client avait déjà un compte navigation vers HomePage sinon Tunnel
-      if (user.dejaInscrit === 'true'){
-        navigation.navigate('TabNavigatorPerso');
-      } else { navigation.navigate('CompleteTonDossier');}
 
   };
 
