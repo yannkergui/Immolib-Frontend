@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Modal,
-  TouchableWithoutFeedback,
-  KeyboardAvoidingView,
-  FontAwesome,
-} from "react-native";
+import {View, Text, StyleSheet, TouchableOpacity, Modal, TouchableWithoutFeedback, KeyboardAvoidingView } from "react-native";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
@@ -27,6 +19,8 @@ export default function ProPriseDeVisite({ navigation }) {
   const user = useSelector((state) => state.user.value);
   const maVisite = useSelector((state) => state.maVisite.value);
   const refresher = useSelector((state) => state.refresher.value);
+
+
 
   // console.log("reducer ma visite", maVisite);
 
@@ -143,7 +137,7 @@ export default function ProPriseDeVisite({ navigation }) {
         if (data.data) {
           generateTimeSlots(data.data);
         } else {
-          console.log("impossible");
+          //console.log("impossible");
         }
       });
   }, []);
@@ -251,23 +245,18 @@ export default function ProPriseDeVisite({ navigation }) {
           console.log("data récupéré : ", data.data);
           dispatch(maVisiteData(data.data));
           dispatch(refresh());
-          navigation.navigate("TabNavigatorPro");
+          setRdvModifié(true)
+          // navigation.navigate("TabNavigatorPro");
         }
       });
     if (user.dejaInscrit === "true") {
-      navigation.goBack();
+      // navigation.goBack();
     }
   };
 
   //constante relative à la modale de changement de page
   const [modalModifOuverte, setModalModifOuverte] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState(null);
-
-  //fonction pour ouvrir la modale de changement de page
-  const openModalModifOuverte = (data) => {
-    setModalModifOuverte(!modalModifOuverte);
-    setSelectedSlot(data);
-  };
 
   //constante pour message de confirmation de rendez-vous dans la modale
   const [RdvModifié, setRdvModifié] = useState(false);
@@ -278,7 +267,8 @@ export default function ProPriseDeVisite({ navigation }) {
       setTimeout(() => {
         setRdvModifié(false);
         setModalModifOuverte(false); // Ferme la modale
-      }, 1500);
+        navigation.navigate("TabNavigatorPro")
+           }, 1500)
     }
   }, [RdvModifié]);
 
@@ -290,6 +280,28 @@ export default function ProPriseDeVisite({ navigation }) {
         end={{ x: 1, y: 1 }} // End point of the gradient
         style={styles.background}
       >
+
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <FontAwesome
+              style={styles.icon}
+              name="chevron-left"
+              size={20}
+              color="#1F2937"
+              right={60}
+            />
+          </TouchableOpacity>
+          <Text style={styles.Title}>Mon annonce</Text>
+          <TouchableOpacity style={styles.iconcontainer}>
+            <FontAwesome
+              style={styles.icon}
+              name="user"
+              size={30}
+              color="#1F2937"
+            />
+          </TouchableOpacity>
+        </View>
+
         <View style={styles.localContainer}>
           <Text style={styles.label}>
             Choisissez votre date de visite souhaitée :
@@ -328,14 +340,8 @@ export default function ProPriseDeVisite({ navigation }) {
                 )
                 .map((timeSlot, index) => (
                   <View style={styles.displayCard}>
-                    <TouchableOpacity
-                      style={styles.Card}
-                      onPress={() => {
-                        setModalModifOuverte(true);
-                        setSelectedSlot(timeSlot);
-                        console.log("timeSlot", timeSlot);
-                      }}
-                    >
+                    <TouchableOpacity style={styles.Card} onPress={() => { setModalModifOuverte(true)
+                      setSelectedSlot(timeSlot)}}>
                       <Text key={index}>{timeSlot.startTime}</Text>
                     </TouchableOpacity>
                   </View>
@@ -345,72 +351,32 @@ export default function ProPriseDeVisite({ navigation }) {
             )}
           </View>
         </View>
-        <Modal
-          style={styles.modalModifOuverte}
-          visible={modalModifOuverte}
-          animationType="fade"
-          transparent
-        >
-          {/* <KeyboardAvoidingView behavior={"padding"} style={styles.container}>
-            <TouchableWithoutFeedback
-              onPress={() => {
-                openModalModifOuverte(selectedSlot);
-              }}
-              accessible={false}
-            >
+        
+        <Modal style={styles.modalModifOuverte} visible={modalModifOuverte} animationType="fade" transparent>
+          <KeyboardAvoidingView behavior={"padding"} style={styles.container}>
+            <TouchableWithoutFeedback onPress={() => setModalModifOuverte(false)} accessible={false}>
               <View style={styles.centeredView}>
                 <View style={styles.modalContainer}>
                   <View style={styles.inputsEtDelete}>
-                    {RdvModifié ? (
-                      <Text style={styles.textModaleConfirm}>
-                        Rendez-vous confirmé ! ✅
-                      </Text>
-                    ) : (
-                      <Text style={styles.inputs}>Confirmer ?</Text>
-                    )}
-                  </View>
-
-                  {!RdvModifié && selectedSlot ? (
-                    <Text style={styles.textButton}>
-                      Voulez-vous confirmer ce rendez-vous du{" "}
-                      {/* {formatDate(selectedSlot.dateOfVisit)} à{" "} */}
-                      {/* {selectedSlot.startTimeVisit} pour le bien du{" "}
-                      {selectedSlot.bienImmoId.numeroRue},{" "}
-                      {selectedSlot.bienImmoId.rue} à{" "}
-                      {selectedSlot.bienImmoId.codePostal} ? */}
-                    {/* </Text>
-                  ) : null}
-
-                  <View style={styles.choixModal}>
-                    {!RdvModifié && (
-                      <TouchableOpacity
-                        style={styles.btnModal}
-                        onPress={() => {
-                          setRdvModifié(true);
-                          // handleModif(timeSlot.startTime);
-                        }}
-                      >
-                        <FontAwesome name="check" size={30} color="#1F2937" />
-                      </TouchableOpacity>
-                    )}
-                    <TouchableOpacity
-                      style={styles.btnModal}
-                      onPress={() => {
-                        
-                          setRdvModifié(false),
-                          setSelectedSlot(null);
-                      }}
-                    >
-                      {!RdvModifié ? (
-                        <FontAwesome name="remove" size={30} color="#1F2937" />
-                      ) : null}
+                    {!RdvModifié?
+                    <>
+                    <Text>Modification de visite</Text>
+                    <TouchableOpacity style={styles.btnInscription} onPress={()=>{handleModif(selectedSlot.startTime)}}>
+                    <Text style={styles.textButton}>Confirmer</Text>
                     </TouchableOpacity>
+                    <TouchableOpacity style={styles.btnInscription} onPress={()=>setModalModifOuverte(false)}>
+                      <Text style={styles.textButton}>Annuler</Text>
+                    </TouchableOpacity>
+                    </>
+                     :
+                    <Text style={styles.textModaleConfirm}>Rendez-vous modifié ! ✅</Text>}
                   </View>
                 </View>
               </View>
             </TouchableWithoutFeedback>
-          </KeyboardAvoidingView> */} 
+          </KeyboardAvoidingView>
         </Modal>
+            
       </LinearGradient>
     </View>
   );
@@ -419,16 +385,37 @@ export default function ProPriseDeVisite({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: "column",
+  
   },
+
   background: {
     flex: 1,
     width: "100%",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
+    // borderColor: 'red',
+    // borderWidth: 5,
   },
+  header: {
+    flexDirection: "row",
+    width: "100%",
+    marginTop: 30,
+    top: 40,
+    alignItems: "center",
+    justifyContent: "center",
+    // borderColor: 'black',
+    // borderWidth: 1,
+    zIndex: 1, 
+  },
+  localContainer: {
+    width: "90%",
+    height: 600,
+    justifyContent: "center",
+    // borderColor: 'yellow',
+    // borderWidth: 1,
+  },
+  
   label: {
     fontSize: 18,
     fontWeight: "bold",
@@ -449,10 +436,7 @@ const styles = StyleSheet.create({
     elevation: 18,
     paddingBottom: 15,
   },
-  localContainer: {
-    width: "90%",
-    justifyContent: "center",
-  },
+  
   Card: {
     backgroundColor: "#47AFA5",
     borderRadius: 10,
@@ -495,10 +479,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalContainer: {
-    backgroundColor: "rgba(255, 255, 255, 1)",
-    width: "80%",
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    width: "100%",
     padding: 10,
     borderRadius: 10,
+    justifyContent: 'center',
     alignItems: "center",
   },
   inputs: {
@@ -524,4 +509,45 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  btnInscription : {
+    marginTop : 15,
+    backgroundColor : 'white',
+    padding : 10,
+    borderRadius : 10,
+    width : '70%',
+  },
+  textButton : {
+    color: '#47AFA5',
+    // height: 30,
+    fontWeight: "600",
+    fontSize: 14,
+    // borderColor : 'black',
+    // borderWidth : 1,
+    textAlign:'center',
+    paddingTop:3
+  },
+
+  iconcontainer: {
+    position: "absolute",
+    left: 330,
+    top: 0,
+    backgroundColor: "white",
+    width: 50,
+    height: 50,
+    paddingLeft: 15,
+    paddingTop: 8.5,
+    borderRadius: 100,
+  },
+  Title: {
+    fontFamily: "Nunitobold",
+    color: "white",
+    fontSize: 35,
+    fontStyle: "normal",
+    fontWeight: "600",
+    letterSpacing: -1.5,
+    textAlign: "center",
+  },
 });
+
+
+
