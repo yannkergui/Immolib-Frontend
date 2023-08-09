@@ -18,6 +18,7 @@ import MonDossierPro from "./screens/pro/monDossierpro"
 import ProConnectionScreen from "./screens/pro/proConnectionScreen";
 import ProPreferences from "./screens/pro/proPreferences";
 import CameraScreen from "./screens/pro/cameraScreen";
+import ProPriseDeVisite from "./screens/pro/proPriseDeVisite";
 
 import PersoConnectionScreen from "./screens/perso/persoConnectionScreen";
 import PersoHome from "./screens/perso/persoHome";
@@ -32,6 +33,7 @@ import PersoMonDossier2Achat from "./screens/perso/persoMonDossier2Achat";
 import PersoMonDossier3Achat from "./screens/perso/persoMonDossier3Achat";
 import PersoMaVisite from "./screens/perso/persoMaVisite";
 import PersoPriseDeVisite from "./screens/perso/persoPriseDeVisite";
+import CompleteTonDossier from "./screens/perso/completeTonDossierPerso";
 
 import FirstScreen from "./screens/firstScreen";
 
@@ -133,7 +135,7 @@ const TabNavigatorPerso = () => {
         let iconName = "";
         if (route.name === "Home") {
           iconName = "home";
-          size = focused ? 40 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné),
+          size = focused ? 38 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné),
         } else if (route.name === "Mes tchats") {
           iconName = "commenting-o";
           size = focused ? 40 : 24; // on initialise les tailles pour les icones (sélectionné et non sélectionné),

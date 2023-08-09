@@ -9,6 +9,9 @@ import {
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { LinearGradient } from "expo-linear-gradient";
+import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect } from "react";
+
 
 export default function PersoProfil({ navigation }) {
   //Il faudra rajouter les components ={nomducomposant} dans les Tab.Screen pour rendre la navigation fonctionnelle.
@@ -19,6 +22,30 @@ export default function PersoProfil({ navigation }) {
     navigation.navigate("PersoMonDossier3Loc");
   };
 
+  const maVisite = useSelector((state) => state.maVisite.value);
+  const user = useSelector((state) => state.user.value);
+
+
+const countNonEmptyFields = () => {
+  let count = 0;
+
+  for (const key in user) {
+    if (user[key] !== "" && user[key] !== null && user[key] !== undefined) {
+      count++;
+    }
+  }
+
+  return count;
+};
+
+let completion 
+
+if(user.dejaInscrit){
+completion = (countNonEmptyFields()/25)*100
+} else {completion = (countNonEmptyFields()/15)*100}
+
+
+
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -28,41 +55,28 @@ export default function PersoProfil({ navigation }) {
         style={styles.background}
       >
         <SafeAreaView>
-          <View style={styles.Titre}>
-            <Text style={styles.Titre}>Mon Profil</Text>
-          </View>
-          <View style={styles.logoutBtnContainer}>
-            <FontAwesome
-            name="sign-out"
-            style={styles.logoutBtn}
-            size={30}
-            />
-          </View>
-          <View style={styles.InfosProfil}>
-            <View style={styles.photoContainer}>
-              <FontAwesome
-                name="facebook"
-                size={30}
-                style={styles.photoProfil}
-              />
-              {/* <Image alt="photoContainer"></Image> */}
-              <Text>Ajoute une photo</Text>
-            </View>
+        <View style={styles.header}>
+            <TouchableOpacity  onPress={() => navigation.goBack()}>
+                <FontAwesome style={styles.icon} name='chevron-left' size={20} color='#1F2937' />
+            </TouchableOpacity> 
+            <Text style={styles.Title}>Mon Profil</Text>
+            <TouchableOpacity style={styles.iconcontainer} onPress={() => { handleSubmit()}}>
+                <FontAwesome style={styles.icon} name='sign-out' size={30} color='#1F2937' />
+            </TouchableOpacity>
+        </View>
+          <View style={styles.lineCard}>
             <View style={styles.caractProfil}>
-              <Text style={styles.caract}>Nom</Text>
-
-              <Text style={styles.caract}>Prénom</Text>
-
-              <Text style={styles.caractEmail}>Email</Text>
+              <Text style={styles.lineTitle2}>{user.prenom} {user.nom}</Text>
+              <Text style={styles.lineTitle2}>{user.email}</Text>
             </View>
           </View>
 
           <View style={styles.monDossierContainer}>
-            <Text style={styles.monDossierTitre}> Mon dossier</Text>
+            <Text style={styles.Title}> Mon dossier</Text>
 
             <View style={styles.dossierCompletion}>
               <Text style={styles.pourcentageCompletion}>
-                Ton profil est complet à ... %
+                Ton profil est complet à {completion} %
               </Text>
 
               <Text style={styles.msgIncomplet}>
@@ -72,16 +86,16 @@ export default function PersoProfil({ navigation }) {
 
             <View style={styles.BtnContainer}>
               <TouchableOpacity
-                style={styles.Btn}
+                style={styles.button}
                 onPress={() => handleRecherche()}
               >
-                <Text style={styles.texteBtn}>Modifer ma recherche</Text>
+                <Text >Modifer ma recherche</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={styles.Btn}
+                style={styles.button}
                 onPress={() => handleDocuments()}
               >
-                <Text style={styles.texteBtn}>Compléter mes documents</Text>
+                <Text >Compléter mes documents</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -101,6 +115,8 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
   },
   Titre: {
     alignItems: "center",
@@ -108,34 +124,13 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: "bold",
   },
-  logoutBtnContainer:{
-    position:"absolute",
-    right:30,
-    top:60,
-    
-  },
-  logoutBtn:{
-    // size:60,
-  },
   InfosProfil: {
     flexDirection: "row",
     alignItems: "center",
   },
-  photoContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    margin: 15,
-  },
-  photoProfil: {
-    borderRadius: "50%",
-    // backgroundColor:"red",
-    size: 20,
-    padding: 20,
-  },
   caractProfil: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems:'center',
     width: 225,
   },
   caract: {
@@ -175,7 +170,6 @@ const styles = StyleSheet.create({
   },
   dossierCompletion: {
     marginBottom: 20,
-    flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     flexWrap: "wrap",
@@ -184,16 +178,18 @@ const styles = StyleSheet.create({
     marginBottom:50,
   },
   pourcentageCompletion: {
-    fontSize: 14,
-    width: 210,
-   
+    fontSize: 20,
+    width: 280,
     padding: 10,
     borderRadius: 10,
     marginRight: 20,
+    textAlign:'center',
+
   },
   msgIncomplet: {
     width: 120,
-    fontSize: 10,
+    fontSize: 15,
+    textAlign:'center',
   // 
   },
 
@@ -219,4 +215,68 @@ const styles = StyleSheet.create({
 
     letterSpacing: 1,
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center', // Center the content horizontally
+    justifyContent: 'space-between',
+    zIndex: 1, 
+  },
+  iconcontainer :{
+    top : 0,
+    backgroundColor : 'white',
+    width : 50,
+    height: 50,
+    paddingLeft : 15,
+    paddingTop : 8.5,
+    borderRadius : 100
+    },
+    Title: {
+      color: 'white',
+      fontSize: 35,
+      fontStyle: 'normal',
+      fontWeight: '600', 
+      letterSpacing: -1.5, 
+      textAlign:'center',
+    },
+    lineCard: {
+      justifyContent: "center",
+      alignItems:'center',
+      width: 350,
+      height:90,
+      borderRadius: 25,
+      backgroundColor: "#BCCDB6",
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 9,
+      },
+      shadowOpacity: 0.48,
+      shadowRadius: 11.95,
+      elevation: 18,
+  marginTop:40,
+  marginLeft:20
+    },
+    lineTitle2:{
+      fontSize: 20,
+    },
+    inline:{
+      flexDirection:'row',
+    },
+    button : {
+      alignItems: "center",
+      justifyContent: "center",
+      width: 200,
+      height: "18%",
+      backgroundColor: "#47AFA5",
+      borderRadius: 15,
+      marginBottom: "15%",
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 9,
+      },
+      shadowOpacity: 0.48,
+      shadowRadius: 11.95,
+      elevation: 18,
+    },
 });
