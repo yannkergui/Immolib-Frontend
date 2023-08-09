@@ -34,6 +34,8 @@ import PersoMonDossier3Achat from "./screens/perso/persoMonDossier3Achat";
 import PersoMaVisite from "./screens/perso/persoMaVisite";
 import PersoPriseDeVisite from "./screens/perso/persoPriseDeVisite";
 import CompleteTonDossier from "./screens/perso/completeTonDossierPerso";
+import CreationAnnonce from "./screens/pro/creationAnnonce";
+import MonAnnonce from "./screens/pro/monAnnonce";
 
 import FirstScreen from "./screens/firstScreen";
 
@@ -46,11 +48,12 @@ import monClient from "./reducers/monClient";
 import maVisite from "./reducers/maVisite";
 import maVille from "./reducers/maVille";
 import refresher from "./reducers/refresher";
+import monBien from "./reducers/monBien";
 
 import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
-  reducer: { user, pro, monClient, maVisite, maVille, refresher },
+  reducer: { user, pro, monClient, maVisite, maVille, refresher, monBien },
 });
 
 const TabNavigatorPro = () => {
@@ -227,6 +230,8 @@ export default function App() {
           <Stack.Screen name="ProConnectionScreen" component={ProConnectionScreen} />
           <Stack.Screen name="ProHome" component={ProHome} />
           <Stack.Screen name="ProTchats" component={ProTchats} />
+          <Stack.Screen name="MonAnnonce" component={MonAnnonce} />
+          <Stack.Screen name="CreationAnnonce" component={CreationAnnonce} />
           <Stack.Screen
             name="TabNavigatorPerso"
             component={TabNavigatorPerso}

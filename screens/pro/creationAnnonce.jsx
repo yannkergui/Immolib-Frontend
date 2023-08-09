@@ -13,13 +13,15 @@ import { useState } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import SwitchSelector from "react-native-switch-selector";
 import * as DocumentPicker from "expo-document-picker";
-import { useSelector } from "react-redux";
 import { ipAdress } from "../../immolibTools";
+import { refresh } from "../../reducers/refresher";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function CreationAnnonce( {navigation} ) { 
   
-
+  const dispatch = useDispatch();
   const pro = useSelector((state) => state.pro.value);
+  
 
 
 
@@ -102,10 +104,12 @@ export default function CreationAnnonce( {navigation} ) {
     })
   .then((response) => response.json())
       .then((data) => {
+        dispatch(refresh())
         navigation.navigate("Mes annonces");
       });
     
   };
+
 
  
   
@@ -119,7 +123,7 @@ export default function CreationAnnonce( {navigation} ) {
         style={styles.container}
       >
         <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => {navigation.goBack()}}>
             <FontAwesome
               style={styles.icon}
               name="chevron-left"

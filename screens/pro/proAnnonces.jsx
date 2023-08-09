@@ -8,12 +8,16 @@ import { useState, useEffect } from "react";
 import { ipAdress } from "../../immolibTools";
 import { monBienData } from '../../reducers/monBien';
 import { maVilleData } from '../../reducers/maVille';
+import {refresh} from "../../reducers/refresher"
 
 export default function ProAnnonces( {navigation} ) {
 
 
   const dispatch = useDispatch();
   const pro = useSelector((state) => state.pro.value);
+  const refresher = useSelector((state) => state.refresher.value);
+
+  console.log(refresher)
 
  
 
@@ -31,7 +35,7 @@ export default function ProAnnonces( {navigation} ) {
         setBiensPro(data.biens)
         // console.log(data.bien)
       })
-  }, []);
+  }, [refresher]);
 
   const goToMonAnnonce = (e) => {;
     dispatch(monBienData(e));
@@ -127,7 +131,7 @@ const annoncesVente = biensPro.map((data) => {
         <View style={styles.header}> 
         <Text style={styles.Title}>Mes Annonces</Text>
         <TouchableOpacity style={styles.iconcontainer}>
-          <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' onPress={navigation.navigate('ProPreferences')}  />
+          <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' />
         </TouchableOpacity>
         </View>
       <View style={styles.pageContainer}>
