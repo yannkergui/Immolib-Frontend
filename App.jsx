@@ -38,6 +38,8 @@ import PersoMonDossier3Achat from "./screens/perso/persoMonDossier3Achat";
 import PersoMaVisite from "./screens/perso/persoMaVisite";
 import PersoPriseDeVisite from "./screens/perso/persoPriseDeVisite";
 import CompleteTonDossier from "./screens/perso/completeTonDossierPerso";
+import CreationAnnonce from "./screens/pro/creationAnnonce";
+import MonAnnonce from "./screens/pro/monAnnonce";
 
 import FirstScreen from "./screens/firstScreen";
 
