@@ -145,7 +145,7 @@ console.log("proid", proid);
     // console.log("date", date);
     formattedDate = moment(date).format("YYYY-MM-DD");
     // console.log("dateformatee2", formattedDate);
-    fetch(`http://192.168.10.147:3000/disponibilites/dateSearch/${proid}`, {
+    fetch(`http://${ipAdress}/disponibilites/dateSearch/${proid}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ dateOfVisit: formattedDate }),
@@ -218,7 +218,7 @@ console.log("proid", proid);
     let bienImmoId = bienData._id.bienid;
     const dateDeVisite = moment(selectedDate).format("YYYY-MM-DD");
     console.log(formatedStartTimeVisit);
-    fetch(`http://192.168.10.147:3000/visites`, {
+    fetch(`http://${ipAdress}/visites`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

@@ -203,10 +203,10 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
+            <Stack.Screen name="ProConnectionScreen" component={ProConnectionScreen} />
+            <Stack.Screen name="ProVisites" component={ProVisites} />
             <Stack.Screen name="PersoConnexionScreen" component={PersoConnectionScreen} />
             <Stack.Screen name="PersoPriseDeVisite" component={PersoPriseDeVisite} />
-          <Stack.Screen name="ProConnectionScreen" component={ProConnectionScreen} />
-            <Stack.Screen name="ProVisites" component={ProVisites} />
             <Stack.Screen name="CompleteTonDossier" component={CompleteTonDossier} />
               <Stack.Screen
                 name="TabNavigatorPerso"

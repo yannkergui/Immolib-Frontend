@@ -35,7 +35,7 @@ export default function ProVisites({ navigation }) {
   //création d'un useEffect pour récupérer les visites d'un pro
   useEffect(() => {
     fetch(
-      `http://192.168.10.147:3000/visites/pro/${pro.token}`
+      `http://${ipAdress}/visites/pro/${pro.token}`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -77,7 +77,7 @@ export default function ProVisites({ navigation }) {
   //création d'une fonction pour confirmer une visite en attente
 
   const confirmVisite = (id) => {
-    fetch(`http://192.168.10.147:3000/visites/statut/${id}`, {
+    fetch(`http://${ipAdress}/visites/statut/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
