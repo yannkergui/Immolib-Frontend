@@ -8,6 +8,8 @@ import { maVisiteData } from '../../reducers/maVisite';
 import { useDispatch, useSelector } from 'react-redux';
 import {Calendar,Calendarlist,Agenda, LocaleConfig} from 'react-native-calendars';
 
+import { ipAdress } from "../../immolibTools";
+
 
 export default function ProHome({navigation}) {
 
@@ -20,7 +22,7 @@ export default function ProHome({navigation}) {
 
 
   useEffect(() => {
-    fetch(`http://172.20.10.3:3000/visites/user/${user._id}`)
+    fetch(`http://${ipAdress}/visites/user/${user._id}`)
       .then(response => response.json())
       .then(data => {console.log('test',data.VisitesTrouvees);
         const updatedItems = {};
