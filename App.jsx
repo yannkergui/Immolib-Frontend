@@ -209,8 +209,8 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
-            <Stack.Screen name="ProDisponibilites" component={ProDisponibilites} />
             <Stack.Screen name="ProConnectionScreen" component={ProConnectionScreen} />
+            <Stack.Screen name="ProDisponibilites" component={ProDisponibilites} />
             <Stack.Screen name="PersoConnexionScreen" component={PersoConnectionScreen} />
             <Stack.Screen name="CompleteTonDossier" component={CompleteTonDossier} />
             <Stack.Screen name="PersoPriseDeVisite" component={PersoPriseDeVisite} />
@@ -236,6 +236,7 @@ export default function App() {
               <Stack.Screen name="ProHome" component={ProHome} />
               <Stack.Screen name="ProTchats" component={ProTchats} />
               <Stack.Screen name="FicheClient" component={FicheClient} />
+              <Stack.Screen name="CreationAnnonce" component={CreationAnnonce} />
               <Stack.Screen name="ProPreferences" component={ProPreferences} />
           </Stack.Navigator>
         </NavigationContainer>

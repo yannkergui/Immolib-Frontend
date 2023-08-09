@@ -17,12 +17,17 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import SwitchSelector from "react-native-switch-selector";
-import { maVisiteData } from "../../reducers/maVisite";
 import Slider from '@react-native-community/slider';
 import moment from 'moment';
+import {refresh} from "../../reducers/refresher"
 
 
 export default function ProDisponibilites({ navigation }) {
+
+    const dispatch = useDispatch();
+    const proId = useSelector((state) => state.pro.value);
+    const refresher = useSelector((state) => state.refresher.value);
+
 
     const [isLundiEnabled, setLundiEnabled] = useState({
         isEnabled: false,
@@ -94,15 +99,12 @@ export default function ProDisponibilites({ navigation }) {
         dayOfWeek: 'dimanche'
     });
 
-
-//   const pro = useSelector((state) => state.pro.value);
-    let pro= '64d046c3588b8ddd65d8cbcf'
-
     useEffect(() => {
-        fetch(`http://192.168.10.142:3000/disponibilites/64d046c3588b8ddd65d8cbcf`)
+        fetch(`http://${ipAdress}/disponibilites/${proId._id}`)
           .then(response => response.json())
           .then(data => {
-            data.data.forEach(item => {
+          if(data)
+            {data.data.forEach(item => {
               if (item.dayOfWeek === 'lundi') {
                 setLundiEnabled({
                   isEnabled: true,
@@ -179,9 +181,9 @@ export default function ProDisponibilites({ navigation }) {
 
                 });
               }
-            });
+            });}
           });
-      }, []);
+      }, [refresher]);
       
 
       const renderDaySwitch = (dayState, setDayState) => {
@@ -190,20 +192,32 @@ export default function ProDisponibilites({ navigation }) {
             <Switch
               trackColor={{ false: "#767577", true: "#81b0ff" }}
               thumbColor={dayState.isEnabled ? "#f5dd4b" : "#f4f3f4"}
-              onValueChange={() => setDayState(prevState => ({ ...prevState, isEnabled: !prevState.isEnabled }))}
-              value={dayState.isEnabled}
+              onValueChange={() => {
+                if (dayState.isEnabled) {
+                    console.log(dayState);
+                    fetch(`http://${ipAdress}/disponibilites/${dayState.dispoId}`, {
+                    method: 'DELETE'})
+                    .then(response => response.json())
+                    .then(data => {
+                    console.log(data)
+                    dispatch(refresh())
+                    })
+                }
+                setDayState(prevState => ({ ...prevState, isEnabled: !prevState.isEnabled }));
+            }}
+            value={dayState.isEnabled}
             />
           </View>
         );
     }
       
-    let handleSubmit = (e, dayStateSetter) => {
+    let handleSubmit = (e) => {
         console.log(e);
      let endTime=moment().startOf('day').add(e.endSelectedHours, 'hours').format('HH:mm')
      let startTime=moment().startOf('day').add(e.startSelectedHours, 'hours').format('HH:mm')
 
-        if(e.startTime) {console.log('ok')
-        fetch(`http://192.168.10.142:3000/disponibilites/dateSearch/${pro}`, {
+        if(e.startTime) {
+        fetch(`http://${ipAdress}/disponibilites/dateSearch/${proId._id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({dayOfWeek: e.dayOfWeek , startTimeDispo:startTime , endTimeDispo: endTime})
@@ -211,24 +225,26 @@ export default function ProDisponibilites({ navigation }) {
             .then(response => response.json())
             .then(data => {
               console.log(data)
-              dayStateSetter(prevState => ({ ...prevState, isEnabled: true }));
+              dispatch(refresher())
               })
     
     }
-        else {console.log('toto');
-        fetch(`http://192.168.10.142:3000/disponibilites`, {
+        else {
+        fetch(`http://${ipAdress}/disponibilites`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ pro: pro , dayOfWeek: e.dayOfWeek , startTimeDispo:startTime , endTimeDispo: endTime})
+            body: JSON.stringify({ pro: proId._id , dayOfWeek: e.dayOfWeek , startTimeDispo:startTime , endTimeDispo: endTime})
           })
             .then(response => response.json())
             .then(data => {
               console.log(data)
-              
+              dispatch(refresh())
               })
-              
+
     }
     }
+
+
     
 
     return (

@@ -24,6 +24,8 @@ export default function ProPreferences({navigation}) {
 
   const pro = useSelector((state) => state.pro.value);
 
+  console.log('test',pro._id);
+
   const [emailError, setEmailError] = useState(false);
   const [telError, setTelError] = useState(false);
   // Etat pour gérer les champs vides
@@ -217,23 +219,19 @@ function handlePhoto () {
             <View style={styles.cardAgence}>
                     <View style={styles.lineAgence}>
                         <Text style={styles.labelsAgence}>Raison sociale :</Text>
-                        <Text style={styles.inputAgence}>{pro.agence.denomination}</Text>
+                        <Text style={styles.inputAgence}>{pro.denomination}</Text>
                     </View>
                     <View style={styles.lineAgence}>
                         <Text style={styles.labelsAgence}>Siren :</Text>
-                        <Text style={styles.inputAgence}>{pro.agence.siren}</Text>
+                        <Text style={styles.inputAgence}>{pro.siren}</Text>
                     </View>
                     <View style={styles.lineAgence}>
                         <Text style={styles.labelsAgence}>Siret :</Text>
-                        <Text style={styles.inputAgence}>{pro.agence.siret}</Text>
-                    </View>
-                    <View style={styles.lineAgence}>
-                        <Text style={styles.labelsAgence}>Date de création :</Text>
-                        <Text style={styles.inputAgence}>{pro.agence.dateCreation}</Text>
+                        <Text style={styles.inputAgence}>{pro.siret}</Text>
                     </View>
                     <View style={styles.lineAgence}>
                         <Text style={styles.labelsAgence}>Adresse :</Text>
-                        <Text style={styles.inputAgence}>{pro.agence.adresse}</Text>
+                        <Text style={styles.inputAgence}>{pro.adresse}</Text>
                     </View>
             </View>
             <Text style={styles.cardTitle}>Mes Disponibilités</Text>

@@ -144,6 +144,8 @@ const EMAIL_REGEX = /[a-z]/
     const data1 = await response1.json();
     const adrInsee = await data1.etablissement.adresseEtablissement
     
+    console.log(adrInsee);
+
     if (data1.header.message === "ok") {
 
       // Requete vers la bdd pour création du nouveau pro :
@@ -211,7 +213,7 @@ const EMAIL_REGEX = /[a-z]/
 
         // !!!!!!! Passage à l'écran ProPreferences PROBLEME !!!!!!!!!
 
-        navigation.navigate("ProHome");
+        navigation.navigate("ProPreferences");
 
       }
       if (data2.error==="User already exists") {
