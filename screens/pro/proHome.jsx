@@ -29,7 +29,7 @@ export default function ProHome({ navigation }) {
   const updatedItems = {};
 
   useEffect(() => {
-    fetch(`http://${ipAdress}/visites/pro/${pro.token}`)
+    fetch(`http://192.168.10.142:3000/visites/pro/${pro.token}`)
       .then((response) => response.json())
       .then((data) => {
         data.visitesTrouvees.forEach((data) => {

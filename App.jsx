@@ -19,6 +19,9 @@ import ProConnectionScreen from "./screens/pro/proConnectionScreen";
 import ProPreferences from "./screens/pro/proPreferences";
 import CameraScreen from "./screens/pro/cameraScreen";
 import ProPriseDeVisite from "./screens/pro/proPriseDeVisite";
+import CreationAnnonce from "./screens/pro/creationAnnonce";
+import MonAnnonce from "./screens/pro/monAnnonce";
+
 
 import PersoConnectionScreen from "./screens/perso/persoConnectionScreen";
 import PersoHome from "./screens/perso/persoHome";
@@ -45,11 +48,12 @@ import pro from "./reducers/pro";
 import monClient from "./reducers/monClient";
 import maVisite from "./reducers/maVisite";
 import maVille from "./reducers/maVille";
+import monBien from "./reducers/monBien";
 
 import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
-  reducer: { user, pro, monClient, maVisite, maVille},
+  reducer: { user, pro, monClient, maVisite, maVille, monBien},
 });
 
 const TabNavigatorPro = () => {
@@ -203,6 +207,7 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
+            <Stack.Screen name="ProConnectionScreen" component={ProConnectionScreen} />
             <Stack.Screen name="PersoConnexionScreen" component={PersoConnectionScreen} />
             <Stack.Screen name="CompleteTonDossier" component={CompleteTonDossier} />
             <Stack.Screen name="PersoPriseDeVisite" component={PersoPriseDeVisite} />
@@ -224,8 +229,9 @@ export default function App() {
               <Stack.Screen name="PersoMonDossier2Loc" component={PersoMonDossier2Loc} />
               <Stack.Screen name="PersoMonDossier3Loc" component={PersoMonDossier3Loc} />
               <Stack.Screen name="PersoMonDossier3Achat" component={PersoMonDossier3Achat} />
-              <Stack.Screen name="ProConnectionScreen" component={ProConnectionScreen} />
-              <Stack.Screen name="ProPreferences" component={ProPreferences} />
+              <Stack.Screen name="w" component={ProPreferences} />
+              <Stack.Screen name="MonAnnonce" component={MonAnnonce} />
+              <Stack.Screen name="CreationAnnonce" component={CreationAnnonce} />
           </Stack.Navigator>
         </NavigationContainer>
     </Provider>
