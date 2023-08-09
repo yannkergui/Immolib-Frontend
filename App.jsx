@@ -229,9 +229,10 @@ export default function App() {
               <Stack.Screen name="PersoMonDossier2Loc" component={PersoMonDossier2Loc} />
               <Stack.Screen name="PersoMonDossier3Loc" component={PersoMonDossier3Loc} />
               <Stack.Screen name="PersoMonDossier3Achat" component={PersoMonDossier3Achat} />
-              <Stack.Screen name="w" component={ProPreferences} />
-              <Stack.Screen name="MonAnnonce" component={MonAnnonce} />
-              <Stack.Screen name="CreationAnnonce" component={CreationAnnonce} />
+              <Stack.Screen name="ProConnectionScreen" component={ProConnectionScreen} />
+              <Stack.Screen name="ProHome" component={ProHome} />
+              <Stack.Screen name="ProTchats" component={ProTchats} />
+              <Stack.Screen name="FicheClient" component={FicheClient} />
           </Stack.Navigator>
         </NavigationContainer>
     </Provider>
