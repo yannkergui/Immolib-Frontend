@@ -1,24 +1,29 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, TouchableOpacity, Linking, Platform, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Linking, Platform, ScrollView, Modal, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, TextInput } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import SwitchSelector from "react-native-switch-selector";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from "react";
 import { maVisiteData } from '../../reducers/maVisite';
 import { maVilleData } from '../../reducers/maVille';
 
+import { ipAdress } from "../../immolibTools";
 
 export default function PersoVisites({navigation}) {
 
   const dispatch = useDispatch();
 
+  const [modaleMaj, setModaleMaj]=useState(false);
+
   // etat pour stocker les infos reçues du backend
   const [visitesPerso, setVisitesPerso] = useState([]);
 
+  const user = useSelector((state) => state.user.value);
+
   // Fetch du backend au chargement de la page pour récupérer les visites liées au user
   useEffect(() => {
-    fetch('http://192.168.10.155:3000/visites/user/64cccd2e0fd39de6f4a550dd')
+    fetch(`http://${ipAdress}/visites/user/${user._id}`)
       .then(response => response.json())
       .then(data => {
         setVisitesPerso(data.VisitesTrouvees);
@@ -42,7 +47,7 @@ export default function PersoVisites({navigation}) {
     dispatch(maVisiteData(e));
     fetch (`https://api-adresse.data.gouv.fr/search/?q=${e.bienImmoId.numeroRue}+${e.bienImmoId.rue}+${e.bienImmoId.codePostal}`)
     .then((response) => response.json())
-    .then((data) => {console.log(data.features[0]);
+    .then((data) => {
       const newAdress = {
         latitude:  data.features[0].geometry.coordinates[1],
         longitude:  data.features[0].geometry.coordinates[0],
@@ -54,22 +59,40 @@ export default function PersoVisites({navigation}) {
 
   };
 
+//fonction click sur icône annuler une visite :
+function handleCancelVisit (e) {
+  fetch(`http://${ipAdress}/visites/statut/${e._id}`, {
+  method : 'PUT',
+        headers : {'Content-Type' : 'application/json'},
+        body : JSON.stringify({statut : "annulé"})
+  })
+  .then(response => response.json())
+}
+
+  // fonction pour gérer les appels lorsqu'on clique sur le numéro de téléphone
+  const onPressMobileNumberClick = (number) => {
+
+    let phoneNumber = '';
+    if (Platform.OS === 'android') {
+      phoneNumber = `tel:${number}`;
+    } else {
+      phoneNumber = `telprompt:${number}`;
+    }
+    Linking.openURL(phoneNumber);
+  }
+
+  //Redirection vers la page de modification des visites :
+
+  function handleMajVisit (e) {
+    console.log(e);
+    dispatch(maVisiteData(e));
+    navigation.navigate('PersoPriseDeVisite')
+  }
+
+
   // 1er map relatif aux visites en attente 
   const visiteEnAttente = visitesPerso.map((data) => {
     
-    // fonction pour gérer les appels lorsqu'on clique sur le numéro de téléphone
-    const onPressMobileNumberClick = (number) => {
-
-      let phoneNumber = '';
-      if (Platform.OS === 'android') {
-        phoneNumber = `tel:${number}`;
-      } else {
-        phoneNumber = `telprompt:${number}`;
-      }
-  
-      Linking.openURL(phoneNumber);
-   }
-
     if (data.statut === "en attente") { 
       return (
     <TouchableOpacity style={styles.touchable} onPress={() => { handleSubmit(data) }}>
@@ -79,7 +102,7 @@ export default function PersoVisites({navigation}) {
             <FontAwesome name="calendar" size={25} color="white" />
             <Text  style={styles.Textheader}> Le {data.dateOfVisit} à {data.startTimeVisit}</Text>
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=> handleMajVisit(data)}>
               <FontAwesome name="edit" size={30} color="white" />
             </TouchableOpacity>
           </View>
@@ -98,8 +121,8 @@ export default function PersoVisites({navigation}) {
               <TouchableOpacity style={styles.iconcontainer}  onPress={() => { onPressMobileNumberClick(data.prosId.tel)}}>
                     <FontAwesome style={styles.icon} name='phone' size={30} color='#1F2937' />
                 </TouchableOpacity>
-              <TouchableOpacity style={styles.iconcontainer}>
-                <FontAwesome name="remove" size={30} color="#1F2937" />
+              <TouchableOpacity style={styles.iconcontainer} onPress={()=> handleCancelVisit(data)}>
+                <FontAwesome name="ban" size={30} color="#1F2937" />
               </TouchableOpacity>
               </View>
               </View>
@@ -115,8 +138,11 @@ export default function PersoVisites({navigation}) {
 
   // 2iem map relatif aux visites passées
 
-  const visitePassees = visitesPerso.map((data) => { console.log(data);
-    if (data.statut === "passées") {
+  const visitePassees = visitesPerso.map((data) => {;
+    const today = new Date()
+    const ConvertedDateOfVisit = new Date(data.dateOfVisit)
+
+    if (ConvertedDateOfVisit<today) {
       return (
         <TouchableOpacity style={styles.touchable} onPress={() => { handleSubmit(data) }}>
             <View style={styles.visiteCard}>
@@ -144,8 +170,8 @@ export default function PersoVisites({navigation}) {
                   <TouchableOpacity style={styles.iconcontainer}  onPress={() => { onPressMobileNumberClick(data.prosId.tel)}}>
                         <FontAwesome style={styles.icon} name='phone' size={30} color='#1F2937' />
                     </TouchableOpacity>
-                  <TouchableOpacity style={styles.iconcontainer}>
-                    <FontAwesome name="remove" size={30} color="#1F2937" />
+                  <TouchableOpacity style={styles.iconcontainer} onPress={()=> handleCancelVisit(data)}>
+                    <FontAwesome name="ban" size={30} color="#1F2937" />
                   </TouchableOpacity>
                   </View>
                   </View>
@@ -188,8 +214,8 @@ export default function PersoVisites({navigation}) {
                   <TouchableOpacity style={styles.iconcontainer}  onPress={() => { onPressMobileNumberClick(data.prosId.tel)}}>
                         <FontAwesome style={styles.icon} name='phone' size={30} color='#1F2937' />
                     </TouchableOpacity>
-                  <TouchableOpacity style={styles.iconcontainer}>
-                    <FontAwesome name="remove" size={30} color="#1F2937" />
+                  <TouchableOpacity style={styles.iconcontainer} onPress={()=> handleCancelVisit(data)}>
+                    <FontAwesome name="ban" size={30} color="#1F2937" />
                   </TouchableOpacity>
                   </View>
                   </View>
@@ -264,6 +290,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginLeft: 3,
   },
+
   page: {
     alignItems: "center",
     justifyContent: "center",
@@ -275,6 +302,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginRight: 3,
   },
+
   title: {
     color: "white",
     fontSize: 40,
@@ -365,6 +393,70 @@ const styles = StyleSheet.create({
     iconCard:{
       flexDirection:'row',
       marginLeft: 160,
-    }
+    },
+    modalConnect : {
+      flex : 1,
+      width : '100%',
+      alignItems:'center',
+      justifyContent : 'center',
+    },
+    centeredView : {
+      flex : 1,
+      justifyContent : 'center',
+      alignItems : 'center',
+    },
+    modalContainer : {
+      backgroundColor : 'rgba(255, 255, 255, 1)',
+      width : '80%',
+      padding : 10,
+      borderRadius : 10, 
+      alignItems : 'center',
+    },
+    inputsEtDelete:{
+      flexDirection : 'row',
+    },
+    inputModal: {
+      borderBottomColor : '#47AFA5',
+      borderBottomWidth : 1,
+      padding : 0,
+      fontSize : 20,
+      margin : 6,
+      width : '100%',
+    },
+    errorInput: {
+      borderBottomColor: 'red',
+      borderColor: 'red',
+      borderWidth : 2,
+      padding : 0,
+      fontSize : 20,
+      margin : 0,
+      width : '100%',
+    },
+    error: {
+      marginTop: 2,
+      color: 'red',
+      width: 200,
+      textAlign: 'center',
+    },
+    textDelete : {
+      fontSize : 25,
+    },
+    btnSeConnecter : {
+      marginTop : 15,
+      backgroundColor : '#47AFA5',
+      padding : 10,
+      borderRadius : 10,
+      width : '90%',
+    },
+    textButton : {
+      color: "#ffffff",
+      height: 30,
+      fontWeight: "600",
+      fontSize: 18,
+      // borderColor : 'black',
+      // borderWidth : 1,
+      textAlign:'center',
+      paddingTop:3
+    },
 });
 

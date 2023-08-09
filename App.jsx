@@ -50,11 +50,12 @@ import monClient from "./reducers/monClient";
 import maVisite from "./reducers/maVisite";
 import maVille from "./reducers/maVille";
 import monBien from "./reducers/monBien";
+import refresher from "./reducers/refresher"
 
 import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
-  reducer: { user, pro, monClient, maVisite, maVille, monBien},
+  reducer: { user, pro, monClient, maVisite, maVille, monBien, refresher},
 });
 
 const TabNavigatorPro = () => {

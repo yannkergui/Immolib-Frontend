@@ -354,7 +354,7 @@ function handlePhoto () {
                           <View style={styles.modalContainer}>
                             <View style={styles.inputsEtDelete}>
                               <View style={styles.deleteModal}>
-                                  <TouchableOpacity  onPress={()=>closeModal()}>
+                                  <TouchableOpacity onPress={()=>closeModal()}>
                                       <Text style={styles.textDelete}>X</Text>
                                   </TouchableOpacity>
                               </View>

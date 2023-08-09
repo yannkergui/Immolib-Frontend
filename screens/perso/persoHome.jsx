@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import {Agenda, LocaleConfig} from 'react-native-calendars';
 import moment from "moment"; 
 
+import { ipAdress } from "../../immolibTools";
+
 
 export default function PersoHome({navigation}) {
   
@@ -21,7 +23,7 @@ export default function PersoHome({navigation}) {
 
   // useEffect de chargement qui récupère la route Get Visite Users
   useEffect(() => {
-    fetch(`http://192.168.10.155:3000/visites/user/${user._id}`)
+    fetch(`http://${ipAdress}/visites/user/${user._id}`)
       .then(response => response.json())
       .then(data => {
         const updatedItems = {};

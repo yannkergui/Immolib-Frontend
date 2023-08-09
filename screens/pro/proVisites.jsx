@@ -17,24 +17,41 @@ import { useSelector, useDispatch } from "react-redux";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import SwitchSelector from "react-native-switch-selector";
 import { maVisiteData } from "../../reducers/maVisite";
-
+import { proDatas } from "../../reducers/pro";
+import { ipAdress } from "../../immolibTools";
+import { use } from "bcrypt/promises";
+import {refresh} from "../../reducers/refresher"
 
 export default function ProVisites({ navigation }) {
+  // constante relative à la connexion du pro
+  const pro = useSelector((state) => state.pro.value);
+
+  console.log("pro dans proVisites", pro);
+  
+  // constante relative au dispatch
+  const dispatch = useDispatch();
+
   // etat pour stocker les infos reçues du backend
   const [visitesPro, setVisitesPro] = useState([]);
 
   // etat pour rafraichir la page après la validation de la visite
-  const [refresher, setRefresher] = useState(false);
+  const refresher = useSelector((state) => state.refresher.value);
+  console.log("refresher", refresher);
 
   //création d'un useEffect pour récupérer les visites d'un pro
   useEffect(() => {
-    fetch(
-      "http://192.168.10.147:3000/visites/pro/OM41xNKcm6LscivHh9Y7l5MlIluKCYDb"
-    )
+    fetch(`http://${ipAdress}/visites/pro/${pro.token}`)
       .then((res) => res.json())
       .then((data) => {
-        // console.log("data du 1er useEffect", data.visitesTrouvees);
-        setVisitesPro(data.visitesTrouvees);
+        if (data.visitesTrouvees) {
+          let sortedData = data.visitesTrouvees.sort((a, b) => {
+            // convertissez les dates et heures en objets Date pour le tri
+            let dateA = new Date(a.dateOfVisit + " " + a.startTimeVisit);
+            let dateB = new Date(b.dateOfVisit + " " + b.startTimeVisit);
+            return dateA - dateB; // retourne les données triées de la plus ancienne à la plus récente
+          });
+          setVisitesPro(sortedData);
+        }
       });
   }, [refresher]);
   // constante relative au switch de changement de page
@@ -71,7 +88,7 @@ export default function ProVisites({ navigation }) {
   //création d'une fonction pour confirmer une visite en attente
 
   const confirmVisite = (id) => {
-    fetch(`http://192.168.10.147:3000/visites/statut/${id}`, {
+    fetch(`http://${ipAdress}/visites/statut/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -85,7 +102,8 @@ export default function ProVisites({ navigation }) {
         // console.log("data", data);
         // setVisitesPro(visitesPro.filter((visite) => visite._id !== id));
         setRdvConfirmé(true);
-        setRefresher(!refresher);
+        dispatch(refresh());
+        console.log("refresh", refresh);
         setSelectedVisite(null);
       });
   };
@@ -110,7 +128,6 @@ export default function ProVisites({ navigation }) {
   };
 
   //const pour stocker dans le reducer la visite sélectionnée
-  const dispatch = useDispatch();
   const visiteSelected = (data) => {
     dispatch(maVisiteData(data));
     console.log("data", data);
@@ -120,7 +137,7 @@ export default function ProVisites({ navigation }) {
     // console.log("data visites en attente", data);
     if (data.statut === "en attente") {
       return (
-        <View style={styles.visiteCard}>
+        <View key={data._id} style={styles.visiteCard}>
           <View style={styles.lineCard}>
             <Text>
               {" "}
@@ -242,7 +259,7 @@ export default function ProVisites({ navigation }) {
 
     if (data.statut === "confirmé") {
       return (
-        <View style={styles.visiteCard}>
+        <View key={data._id} style={styles.visiteCard}>
           <View style={styles.lineCard}>
             <Text>
               {" "}
@@ -352,7 +369,7 @@ const styles = StyleSheet.create({
   },
 
   Title: {
-    fontFamily: "Nunitobold",
+    // fontFamily: "Nunitobold",
     color: "white",
     fontSize: 35,
     fontStyle: "normal",
