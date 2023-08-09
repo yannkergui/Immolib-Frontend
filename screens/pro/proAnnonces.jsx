@@ -1,16 +1,21 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import SwitchSelector from "react-native-switch-selector";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
+import { ipAdress } from "../../immolibTools";
+import { monBienData } from '../../reducers/monBien';
+import { maVilleData } from '../../reducers/maVille';
 
 export default function ProAnnonces( {navigation} ) {
 
-  const myIPAdress='192.168.10.156';
 
+  const dispatch = useDispatch();
   const pro = useSelector((state) => state.pro.value);
+
+ 
 
 
   const [biensPro, setBiensPro] = useState([]);
@@ -19,15 +24,29 @@ export default function ProAnnonces( {navigation} ) {
    // Fetch du backend pour récupérer les annonces liées au pro 
 
    useEffect(() => {
-    fetch(`http://${myIPAdress}:3000/biens/pro/64d046c3588b8ddd65d8cbcf`)
+    fetch(`http://${ipAdress}/biens/pro/${pro._id}`)
       .then(response => response.json())
       .then(data => {
+       
         setBiensPro(data.biens)
         // console.log(data.bien)
       })
   }, []);
 
- 
+  const goToMonAnnonce = (e) => {;
+    dispatch(monBienData(e));
+    fetch (`https://api-adresse.data.gouv.fr/search/?q=${e.numeroRue}+${e.rue}+${e.codePostal}`)
+    .then((response) => response.json())
+    .then((data) => {console.log(data.features[0]);
+      const newAdress = {
+        latitude:  data.features[0].geometry.coordinates[1],
+        longitude:  data.features[0].geometry.coordinates[0],
+      };
+      dispatch(maVilleData(newAdress))
+    
+    })
+    navigation.navigate('MonAnnonce')
+  };
 
  // constante relative au switch de changement de page 
 
@@ -47,7 +66,8 @@ const handleCreerAnnonce = () => {navigation.navigate("CreationAnnonce")}
 const annoncesVente = biensPro.map((data) => {
   if (data.transaction === "vente") {
     return (
-      <View style={styles.annonceCard}>
+      <TouchableOpacity style={styles.annonceCard}
+      onPress={() => { goToMonAnnonce(data) }}>
         <View style={styles.lineCard}>
           <View style={styles.imageConatainer}>
           <Image
@@ -58,9 +78,12 @@ const annoncesVente = biensPro.map((data) => {
           <View style={styles.textContainer}>
           <Text style={styles.annonceTitre}>{data.titre} </Text>
           <Text style={styles.annonceAdresse}> {data.numeroRue} {data.rue} {data.ville} {data.codePostal}</Text>
+          <TouchableOpacity>
+              <FontAwesome name="remove" size={30} color="#1F2937" />
+            </TouchableOpacity>
           </View>
         </View>    
-      </View>
+      </TouchableOpacity>
     );
   }
 });
@@ -70,7 +93,8 @@ const annoncesVente = biensPro.map((data) => {
   const annoncesLocation = biensPro.map((data) => {
     if (data.transaction === "location") {
       return (
-        <View style={styles.annonceCard}>
+        <TouchableOpacity style={styles.annonceCard}
+        onPress={() => { goToMonAnnonce(data) }}>
         <View style={styles.lineCard}>
           <View style={styles.imageConatainer}>
           <Image
@@ -80,10 +104,13 @@ const annoncesVente = biensPro.map((data) => {
           </View>
           <View style={styles.textContainer}>
           <Text style={styles.annonceTitre}>{data.titre} </Text>
-          <Text style={styles.annonceAdresse}> {data.numeroRue} {data.rue} {data.ville} {data.codePostal}</Text>
+          <Text style={styles.annonceAdresse}>{data.numeroRue} {data.rue} {data.ville}{data.codePostal}</Text>
+          <TouchableOpacity>
+              <FontAwesome name="remove" size={30} color="#1F2937" />
+            </TouchableOpacity>
           </View>
         </View>    
-      </View>
+      </TouchableOpacity>
       );
     }
   });
@@ -118,6 +145,8 @@ const annoncesVente = biensPro.map((data) => {
           />
         </View>
         <StatusBar style="auto" />
+        <ScrollView style={styles.scroll}
+        contentContainerStyle={styles.contentContainer}>
         <View style={styles.cardContainer}>
           {activPage === "location" && annoncesLocation}
           {activPage === "vente" && annoncesVente}
@@ -125,6 +154,9 @@ const annoncesVente = biensPro.map((data) => {
         <TouchableOpacity style={styles.next} onPress={handleCreerAnnonce}>
           <Text>Créer une annonce</Text>
         </TouchableOpacity>
+
+        </ScrollView>
+        
     </LinearGradient>
   </View>
 );
@@ -245,7 +277,6 @@ annonceTitre: {
   fontWeight: 'bold',
   marginBottom:10,
   
-  
 },
 textContainer: {
   justifyContent: "space-between",
@@ -262,6 +293,12 @@ next: {
   borderColor: "white",
   borderWidth: 1,
   borderRadius: 10,
-  marginTop: 10,
+  marginTop: 80,
+  bottom: 80,
 },
+contentContainer: { 
+  alignItems: "center",
+  justifyContent: "center",
+},
+
 });

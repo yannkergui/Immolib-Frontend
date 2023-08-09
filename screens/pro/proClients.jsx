@@ -12,27 +12,35 @@ import { useEffect, useState} from 'react';
 
 export default function ProClients({navigation}) {
   
-  const prosId = useSelector((state) => state.pro.value._id);
+  const token = useSelector((state) => state.pro.value.token);
   const [clientsPro, setClientsPro]=useState([]);
- // const [datesTriees, setDatesTriees]=useState([]);
 
   useEffect(() => {
     //Récupération des visites (connexion Backend)
-    fetch(`http://${ipAdress}/visites/pro/${prosId}`)
+    fetch(`http://${ipAdress}/visites/pro/${token}`)
     .then(response => response.json())
     .then(dataVisit => { 
-
       //trie des visites de la plus récente à la plus ancienne    
-      dataVisit.VisitesTrouvees.sort((a, b) => {
-        date1=new Date(a.dateOfVisit);
-        date2=new Date(b.dateOfVisit);
+      dataVisit.visitesTrouvees.sort((a, b) => {
+        const date1=new Date(a.dateOfVisit);
+        const date2=new Date(b.dateOfVisit);
         return date1 - date2;
       })
 
+      //Filtrer les dates passées (antérieures à aujourd'hui) 
+      const visitesFiltreesDate = dataVisit.visitesTrouvees.filter(e=> new Date(e.dateOfVisit)>=new Date())
+
       //Filtre pour éviter les doublons des users
-      // const visitesSansDoublons=dataVisit.VisitesTrouvees.filter((visite, i) => {indexOf(visite.usersId._id)===i
-      // })
-      setClientsPro(dataVisit.VisitesTrouvees);
+      const visitesFiltreesDoublon=visitesFiltreesDate.filter((visite, i, tab) => {
+        //findIndex renvoie le premier index qui correspond à la condition de la fonction callback
+        const premierIndex = tab.findIndex(e => {  
+          if (e.usersId && visite.usersId) {
+            return(e.usersId.token === visite.usersId.token)
+          } })
+        return(premierIndex===i)
+      });
+
+      setClientsPro(visitesFiltreesDoublon);
     })
   }, []);
   
@@ -52,14 +60,6 @@ export default function ProClients({navigation}) {
     NunitoSans: require('../../assets/fonts/Nunito_Sans/static/NunitoSans_7pt-Medium.ttf')
   });
   
-// tableau d'exemples
-  // const clientsPro = [
-  //   {nom: 'theBest', prénom: 'Adrien', prochainevisite : '21/09/2023', téléphone : '0102030405'},
-  //   {nom: 'Beauty', prénom: 'thibaut', prochainevisite : '24/12/2023',téléphone : '0102030405'},
-  //   {nom: 'Queen', prénom: 'Alice', prochainevisite : '11/01/2024',téléphone : '0102030405'},
-  //   {nom: 'Ugly', prénom:' Yann-Erwan', prochainevisite : '21/09/2023',téléphone : '0102030405'},
-  //   {nom: 'Teacher', prénom: 'Amine', prochainevisite : '',téléphone : '0102030405'},
-  // ]
 
   // mapping du back pour afficher les cards des clients
   const clientsCards = clientsPro.map((data, key) => {
@@ -83,7 +83,7 @@ export default function ProClients({navigation}) {
       const annee = dateFormatee.getFullYear();
 
       if (data.dateOfVisit !== '') {
-        nextvisite = `prochaine visite : ${jour}/${mois}/${annee} à ${data.startTimeVisit} h`
+        nextvisite = `Prochaine visite :\n${jour}/${mois}/${annee} à ${data.startTimeVisit} h`
       } else {nextvisite = 'pas de visite prévue'}
 
       return (

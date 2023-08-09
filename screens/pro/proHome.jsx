@@ -19,6 +19,7 @@ import {
   Agenda,
   LocaleConfig,
 } from "react-native-calendars";
+import { ipAdress } from "../../immolibTools";
 
 export default function ProHome({ navigation }) {
   const [items2, setItems2] = useState({});
@@ -28,7 +29,7 @@ export default function ProHome({ navigation }) {
   const updatedItems = {};
 
   useEffect(() => {
-    fetch(`http://192.168.10.175:3000/visites/pro/${pro.token}`)
+    fetch(`http://${ipAdress}/visites/pro/${pro.token}`)
       .then((response) => response.json())
       .then((data) => {
         data.visitesTrouvees.forEach((data) => {
