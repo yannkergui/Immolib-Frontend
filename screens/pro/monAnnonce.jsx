@@ -13,6 +13,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import MapView, { Marker } from "react-native-maps";
 import maVille from "../../reducers/maVille";
+import { ipAdress } from "../../immolibTools";
+
 
 export default function MonAnnonce({ navigation }) {
   const monBien = useSelector((state) => state.monBien.value);
@@ -105,7 +107,6 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     width: "100%",
-    top: 40,
     alignItems: "center",
     justifyContent: "center",
     zIndex: 1, 

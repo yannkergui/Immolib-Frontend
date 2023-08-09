@@ -19,6 +19,10 @@ import ProConnectionScreen from "./screens/pro/proConnectionScreen";
 import ProPreferences from "./screens/pro/proPreferences";
 import CameraScreen from "./screens/pro/cameraScreen";
 import ProPriseDeVisite from "./screens/pro/proPriseDeVisite";
+import CreationAnnonce from "./screens/pro/creationAnnonce";
+import MonAnnonce from "./screens/pro/monAnnonce";
+import ProDisponibilites from "./screens/pro/proDisponibilites";
+
 
 import PersoConnectionScreen from "./screens/perso/persoConnectionScreen";
 import PersoHome from "./screens/perso/persoHome";
@@ -34,6 +38,8 @@ import PersoMonDossier3Achat from "./screens/perso/persoMonDossier3Achat";
 import PersoMaVisite from "./screens/perso/persoMaVisite";
 import PersoPriseDeVisite from "./screens/perso/persoPriseDeVisite";
 import CompleteTonDossier from "./screens/perso/completeTonDossierPerso";
+import CreationAnnonce from "./screens/pro/creationAnnonce";
+import MonAnnonce from "./screens/pro/monAnnonce";
 
 import FirstScreen from "./screens/firstScreen";
 
@@ -45,11 +51,13 @@ import pro from "./reducers/pro";
 import monClient from "./reducers/monClient";
 import maVisite from "./reducers/maVisite";
 import maVille from "./reducers/maVille";
+import monBien from "./reducers/monBien";
+import refresher from "./reducers/refresher"
 
 import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
-  reducer: { user, pro, monClient, maVisite, maVille},
+  reducer: { user, pro, monClient, maVisite, maVille, monBien, refresher},
 });
 
 const TabNavigatorPro = () => {
@@ -211,6 +219,7 @@ export default function App() {
             <Stack.Screen name="PersoConnexionScreen" component={PersoConnectionScreen} />
             <Stack.Screen name="CompleteTonDossier" component={CompleteTonDossier} />
             <Stack.Screen name="PersoPriseDeVisite" component={PersoPriseDeVisite} />
+
               <Stack.Screen
                 name="TabNavigatorPerso"
                 component={TabNavigatorPerso}
@@ -233,6 +242,8 @@ export default function App() {
              
               <Stack.Screen name="ProTchats" component={ProTchats} />
               <Stack.Screen name="FicheClient" component={FicheClient} />
+              <Stack.Screen name="CreationAnnonce" component={CreationAnnonce} />
+              <Stack.Screen name="ProPreferences" component={ProPreferences} />
           </Stack.Navigator>
         </NavigationContainer>
     </Provider>

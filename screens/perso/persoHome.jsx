@@ -10,6 +10,9 @@ import {Agenda, LocaleConfig} from 'react-native-calendars';
 import moment from "moment"; 
 
 
+import { ipAdress } from "../../immolibTools";
+
+
 export default function PersoHome({navigation}) {
   
   // Déclaration des états pour stocker les données des visites et des éléments du calendrier
@@ -21,7 +24,7 @@ export default function PersoHome({navigation}) {
 
   // useEffect de chargement qui récupère la route Get Visite Users
   useEffect(() => {
-    fetch(`http://192.168.10.155:3000/visites/user/${user._id}`)
+    fetch(`http://${ipAdress}/visites/user/${user._id}`)
       .then(response => response.json())
       .then(data => {
         const updatedItems = {};
