@@ -45,11 +45,12 @@ import pro from "./reducers/pro";
 import monClient from "./reducers/monClient";
 import maVisite from "./reducers/maVisite";
 import maVille from "./reducers/maVille";
+import refresher from "./reducers/refresher";
 
 import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
-  reducer: { user, pro, monClient, maVisite, maVille},
+  reducer: { user, pro, monClient, maVisite, maVille, refresher },
 });
 
 const TabNavigatorPro = () => {
@@ -203,10 +204,11 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
+          <Stack.Screen name="ProConnexionScreen" component={ProConnectionScreen} />
+          <Stack.Screen name="ProPriseDeVisite" component={ProPriseDeVisite} />
           <Stack.Screen name="PersoConnexionScreen" component={PersoConnectionScreen} />
           <Stack.Screen name="PersoVisites" component={PersoVisites} />
           <Stack.Screen name="ProPreferences" component={ProPreferences} />
-          <Stack.Screen name="ProConnexionScreen" component={ProConnectionScreen} />
           <Stack.Screen name="CameraScreen" component={CameraScreen} />
           <Stack.Screen name="PersoMaVisite" component={PersoMaVisite} />
           <Stack.Screen name="PersoPriseDeVisite" component={PersoPriseDeVisite} />
