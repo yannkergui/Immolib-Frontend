@@ -381,9 +381,6 @@ const styles = StyleSheet.create({
     height: 40,
     backgroundColor: "#47AFA5",
     borderRadius: 10,
-
-    // paramètrage de l'ombre des boutons. utiliser : (https://ethercreative.github.io/react-native-shadow-generator/) si besoin
-
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -398,8 +395,6 @@ const styles = StyleSheet.create({
     height: 30,
     fontWeight: "600",
     fontSize: 18,
-    // borderColor : 'black',
-    // borderWidth : 1,
     textAlign:'center',
     paddingTop:3
   },

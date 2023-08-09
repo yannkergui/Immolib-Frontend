@@ -78,7 +78,7 @@ const annoncesVente = biensPro.map((data) => {
           <View style={styles.textContainer}>
           <Text style={styles.annonceTitre}>{data.titre} </Text>
           <Text style={styles.annonceAdresse}> {data.numeroRue} {data.rue} {data.ville} {data.codePostal}</Text>
-          <TouchableOpacity>
+            <TouchableOpacity>
               <FontAwesome name="remove" size={30} color="#1F2937" />
             </TouchableOpacity>
           </View>
@@ -146,7 +146,7 @@ const annoncesVente = biensPro.map((data) => {
         </View>
         <StatusBar style="auto" />
         <ScrollView style={styles.scroll}
-        contentContainerStyle={styles.contentContainer}>
+          contentContainerStyle={styles.contentContainer}>
         <View style={styles.cardContainer}>
           {activPage === "location" && annoncesLocation}
           {activPage === "vente" && annoncesVente}

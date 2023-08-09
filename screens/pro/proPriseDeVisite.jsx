@@ -265,15 +265,6 @@ useEffect(() => {
               dayTextColor: "#2d4150",
               arrowColor: "#2d4150",
               disabledArrowColor: "#2d4150",
-              // textDayFontFamily: 'monospace',
-              // textMonthFontFamily: 'monospace',
-              // textDayHeaderFontFamily: 'monospace',
-              // textDayFontWeight: '300',
-              // textMonthFontWeight: 'bold',
-              // textDayHeaderFontWeight: '300',
-              // textDayFontSize: 16,
-              // textMonthFontSize: 16,
-              // textDayHeaderFontSize: 16
             }}
             onDayPress={(day) => handleDateSelect(new Date(day.dateString))}
           />
