@@ -76,7 +76,7 @@ export default function ProConnectionScreen({navigation}) {
             }
           ));
           setModalConnexion(false);
-          navigation.navigate("ProClients");
+          navigation.navigate("TabNavigatorPro");
           setEmail('');
           setMotDePasse('')
           setEmailError(false);
@@ -211,7 +211,7 @@ const EMAIL_REGEX = /[a-z]/
 
         // !!!!!!! Passage à l'écran suivant PROBLEME !!!!!!!!!
 
-        navigation.navigate("ProHome");
+        navigation.navigate("TabNavigatorPro");
 
       }
       if (data2.error==="User already exists") {

@@ -90,7 +90,7 @@ export default function ProClients({navigation}) {
         <View style={styles.clientsCard}>
           <View style={styles.clientsCardOrientation}>
             <View >
-              <TouchableOpacity style={styles.cardIcon} onPress={() => { handleSubmit(data) }}>
+              <TouchableOpacity style={styles.cardIcon} onPress={() => { handleSubmit(data.usersId) }}>
                 <FontAwesome style={styles.iconClient} name='user' size={40} color='#1F2937' />
               </TouchableOpacity>
             </View>
@@ -121,10 +121,13 @@ export default function ProClients({navigation}) {
       <View style={styles.container}>
  
         <View style={styles.header}> 
-        <Text style={styles.Title}>Mes Clients</Text>
-        <TouchableOpacity style={styles.iconcontainer} onPress={() => { goingHome() }}>
-          <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' />
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.iconcontainerLeft} onPress={() => navigation.goBack()}>
+            <FontAwesome style={styles.icon} name='chevron-left' size={20} color='#1F2937' />
+          </TouchableOpacity> 
+          <Text style={styles.Title}>Mes Clients</Text>
+          <TouchableOpacity style={styles.iconcontainerRight} onPress={() => { goingHome() }}>
+            <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' />
+          </TouchableOpacity>
         </View>
         <ScrollView style={styles.cardsContainer}>
           {clientsCards}
@@ -152,18 +155,22 @@ header: {
   position: 'absolute',
   top: 80, 
   alignItems: 'center', // Center the content horizontally
-  justifyContent: 'center',
+  justifyContent: 'space-between',
 },
-iconcontainer :{
-position :'absolute',
-left : 330,
+iconcontainerLeft : {
+  alignItems : 'center',
+  justifyContent : 'center',
+  marginLeft : '2%',
+},
+iconcontainerRight :{
 top : 0,
 backgroundColor : 'white',
 width : 50,
 height: 50,
 paddingLeft : 15,
 paddingTop : 8.5,
-borderRadius : 100
+borderRadius : 100,
+marginRight : '2%',
 },
 Title: {
   fontFamily: 'Nunitobold',
