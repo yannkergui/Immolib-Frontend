@@ -1,28 +1,39 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Modal,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  FontAwesome,
+} from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from "react-redux";
 import { maVisiteData } from "../../reducers/maVisite";
+import { ipAdress } from "../../immolibTools";
+import { refresh } from "../../reducers/refresher";
 
-export default function ProPriseDeVisite({ navigation })  {
+export default function ProPriseDeVisite({ navigation }) {
   const [selectedDate, setSelectedDate] = useState(Date);
   const [timeSlots, setTimeSlots] = useState(null);
-  const [bienDataState, setBienDataState]=useState(null);
+  const [bienDataState, setBienDataState] = useState(null);
 
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.value);
   const maVisite = useSelector((state) => state.maVisite.value);
+  const refresher = useSelector((state) => state.refresher.value);
 
-  console.log("reducer ma visite", maVisite.bienImmoId);
+  // console.log("reducer ma visite", maVisite);
 
   useEffect(() => {
-    fetch(`http://192.168.10.147:3000/biens/${maVisite.bienImmoId._id}`)
+    fetch(`http://${ipAdress}/biens/${maVisite.bienImmoId._id}`)
       .then((response) => response.json())
       .then((data) => {
-    
         setBienDataState(data.data);
         // console.log("resultat du fetch", data.data);
       });
@@ -54,8 +65,8 @@ export default function ProPriseDeVisite({ navigation })  {
     },
   };
 
-  let proid = maVisite.bienImmoId.pro;
-console.log("proid", proid);
+  let proid = maVisite.prosId;
+  // console.log("proid", proid);
   LocaleConfig.locales["fr"] = {
     monthNames: [
       "Janvier",
@@ -121,7 +132,7 @@ console.log("proid", proid);
     // console.log("proid", proid);
 
     // console.log("dateformatee1", formattedDate);
-    fetch(`http://192.168.10.147:3000/disponibilites/dateSearch/${proid}`, {
+    fetch(`http://${ipAdress}/disponibilites/dateSearch/${proid}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ dateOfVisit: formattedDate }),
@@ -203,7 +214,7 @@ console.log("proid", proid);
 
   let frenchDate = moment(selectedDate).format("DD/MM/YYYY");
 
-  const handleSubmit = (e) => {
+  const handleModif = (e) => {
     const startTimeConvertit = e.split(":"); // Split hours and minutes
     const startTimeVisit = moment()
       .hours(startTimeConvertit[0])
@@ -213,36 +224,63 @@ console.log("proid", proid);
     let endTimeVisit = startTimeVisit.clone().add(duration, "minutes");
     const formatedendTimeVisit = endTimeVisit.format("HH:mm");
     console.log(formatedStartTimeVisit); // Output endTimeVisit in HH:mm format
-    let prosId = bienData.pro.proid;
+    let prosId = maVisite.prosId;
     let userId = user._id;
     let bienImmoId = bienData._id.bienid;
     const dateDeVisite = moment(selectedDate).format("YYYY-MM-DD");
     console.log(formatedStartTimeVisit);
-    fetch(`http://${ipAdress}/visites`, {
-      method: "POST",
+
+    const idVisite = maVisite._id;
+
+    fetch(`http://${ipAdress}/visites/${idVisite}`, {
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        prosId: prosId,
-        usersId: userId,
+        // prosId: prosId,
+        // usersId: userId,
         dateOfVisit: dateDeVisite,
         startTimeVisit: formatedStartTimeVisit,
-        endTimeVisit: formatedendTimeVisit,
+        // endTimeVisit: formatedendTimeVisit,
         duration: duration,
-        bienImmoId: bienImmoId,
+        // bienImmoId: bienImmoId,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
         if (data) {
-          console.log("data récupéré : ", data);
-          dispatch(maVisiteData(data));
-          // navigation.navigate('PersoPriseDeVisite');
+          console.log("data récupéré : ", data.data);
+          dispatch(maVisiteData(data.data));
+          dispatch(refresh());
+          navigation.navigate("TabNavigatorPro");
         }
       });
     if (user.dejaInscrit === "true") {
-      navigation.navigate("TabNavigatorPerso");
+      navigation.goBack();
     }
   };
+
+  //constante relative à la modale de changement de page
+  const [modalModifOuverte, setModalModifOuverte] = useState(false);
+  const [selectedSlot, setSelectedSlot] = useState(null);
+
+  //fonction pour ouvrir la modale de changement de page
+  const openModalModifOuverte = (data) => {
+    setModalModifOuverte(!modalModifOuverte);
+    setSelectedSlot(data);
+  };
+
+  //constante pour message de confirmation de rendez-vous dans la modale
+  const [RdvModifié, setRdvModifié] = useState(false);
+
+  //mise en place d'un useEffect pour gérer la fermeture de la modale de confirmation de rendez-vous
+  useEffect(() => {
+    if (RdvModifié) {
+      setTimeout(() => {
+        setRdvModifié(false);
+        setModalModifOuverte(false); // Ferme la modale
+      }, 1500);
+    }
+  }, [RdvModifié]);
 
   return (
     <View style={styles.container}>
@@ -254,7 +292,7 @@ console.log("proid", proid);
       >
         <View style={styles.localContainer}>
           <Text style={styles.label}>
-            Choissisez votre Date de visite souhaitée:
+            Choisissez votre date de visite souhaitée :
           </Text>
           <Calendar
             style={styles.calendar}
@@ -274,15 +312,6 @@ console.log("proid", proid);
               dayTextColor: "#2d4150",
               arrowColor: "#2d4150",
               disabledArrowColor: "#2d4150",
-              // textDayFontFamily: 'monospace',
-              // textMonthFontFamily: 'monospace',
-              // textDayHeaderFontFamily: 'monospace',
-              // textDayFontWeight: '300',
-              // textMonthFontWeight: 'bold',
-              // textDayHeaderFontWeight: '300',
-              // textDayFontSize: 16,
-              // textMonthFontSize: 16,
-              // textDayHeaderFontSize: 16
             }}
             onDayPress={(day) => handleDateSelect(new Date(day.dateString))}
           />
@@ -302,7 +331,9 @@ console.log("proid", proid);
                     <TouchableOpacity
                       style={styles.Card}
                       onPress={() => {
-                        handleSubmit(timeSlot.startTime);
+                        setModalModifOuverte(true);
+                        setSelectedSlot(timeSlot);
+                        console.log("timeSlot", timeSlot);
                       }}
                     >
                       <Text key={index}>{timeSlot.startTime}</Text>
@@ -314,6 +345,72 @@ console.log("proid", proid);
             )}
           </View>
         </View>
+        <Modal
+          style={styles.modalModifOuverte}
+          visible={modalModifOuverte}
+          animationType="fade"
+          transparent
+        >
+          {/* <KeyboardAvoidingView behavior={"padding"} style={styles.container}>
+            <TouchableWithoutFeedback
+              onPress={() => {
+                openModalModifOuverte(selectedSlot);
+              }}
+              accessible={false}
+            >
+              <View style={styles.centeredView}>
+                <View style={styles.modalContainer}>
+                  <View style={styles.inputsEtDelete}>
+                    {RdvModifié ? (
+                      <Text style={styles.textModaleConfirm}>
+                        Rendez-vous confirmé ! ✅
+                      </Text>
+                    ) : (
+                      <Text style={styles.inputs}>Confirmer ?</Text>
+                    )}
+                  </View>
+
+                  {!RdvModifié && selectedSlot ? (
+                    <Text style={styles.textButton}>
+                      Voulez-vous confirmer ce rendez-vous du{" "}
+                      {/* {formatDate(selectedSlot.dateOfVisit)} à{" "} */}
+                      {/* {selectedSlot.startTimeVisit} pour le bien du{" "}
+                      {selectedSlot.bienImmoId.numeroRue},{" "}
+                      {selectedSlot.bienImmoId.rue} à{" "}
+                      {selectedSlot.bienImmoId.codePostal} ? */}
+                    {/* </Text>
+                  ) : null}
+
+                  <View style={styles.choixModal}>
+                    {!RdvModifié && (
+                      <TouchableOpacity
+                        style={styles.btnModal}
+                        onPress={() => {
+                          setRdvModifié(true);
+                          // handleModif(timeSlot.startTime);
+                        }}
+                      >
+                        <FontAwesome name="check" size={30} color="#1F2937" />
+                      </TouchableOpacity>
+                    )}
+                    <TouchableOpacity
+                      style={styles.btnModal}
+                      onPress={() => {
+                        
+                          setRdvModifié(false),
+                          setSelectedSlot(null);
+                      }}
+                    >
+                      {!RdvModifié ? (
+                        <FontAwesome name="remove" size={30} color="#1F2937" />
+                      ) : null}
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
+          </KeyboardAvoidingView> */} 
+        </Modal>
       </LinearGradient>
     </View>
   );
@@ -385,5 +482,46 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
+  },
+  modalConfirmation: {
+    flex: 1,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContainer: {
+    backgroundColor: "rgba(255, 255, 255, 1)",
+    width: "80%",
+    padding: 10,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  inputs: {
+    fontSize: 25,
+    fontWeight: "bold",
+    margin: 5,
+    marginBottom: 10,
+  },
+  choixModal: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    margin: 10,
+  },
+  btnModal: {
+    borderRadius: "50%",
+    padding: 15,
+    // margin: 10,
+  },
+  textModaleConfirm: {
+    fontSize: 20,
+    fontWeight: "bold",
+    margin: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
