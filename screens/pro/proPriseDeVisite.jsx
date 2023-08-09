@@ -6,53 +6,56 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from "react-redux";
 import { maVisiteData } from "../../reducers/maVisite";
 
-export default function ProPriseDeVisite({ navigation }) {
+export default function ProPriseDeVisite({ navigation })  {
   const [selectedDate, setSelectedDate] = useState(Date);
   const [timeSlots, setTimeSlots] = useState(null);
-  const [bienDataState, setBienDataState] = useState(null);
+  const [bienDataState, setBienDataState]=useState(null);
 
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.value);
   const maVisite = useSelector((state) => state.maVisite.value);
 
-  console.log("reducer ma visite", maVisite);
+  console.log("reducer ma visite", maVisite.bienImmoId);
 
-useEffect(() => {
-  fetch(`http://192.168.10.147:3000/bienImmo/${maVisite.bienImmoId._id}`)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("dataBien", data);
-      setBienDataState(data);
-    });
+  useEffect(() => {
+    fetch(`http://192.168.10.147:3000/biens/${maVisite.bienImmoId._id}`)
+      .then((response) => response.json())
+      .then((data) => {
+    
+        setBienDataState(data.data);
+        // console.log("resultat du fetch", data.data);
+      });
   }, []);
-  
+
+  // console.log("bienDataState", bienDataState);
 
   const bienData = {
-    "_id": {
-      "bienid": "64d1029e1aef158673603b54"
+    _id: {
+      bienid: "64d1029e1aef158673603b54",
     },
-    "titre": "Appartement 4 pièces Paris 15",
-    "description": "Appartement de charme avec balcon à procimité de la mairie",
-    "surface": 60,
-    "type": "appartement",
-    "transaction": "vente",
-    "numeroRue": "3",
-    "rue": "rue de viroflay",
-    "codePostal": 75015,
-    "ville": "Paris",
-    "nbChambres": 2,
-    "meuble": false,
-    "photo": "https://res.cloudinary.com/dnzrnfglq/image/upload/v1691152139/jsbft2cm7u4j1cmstygm.jpg",
-    "prixVente": 700000,
-    "visites": [],
-    "pro": {
-      "proid": "64d046c3588b8ddd65d8cbcf"
+    titre: "Appartement 4 pièces Paris 15",
+    description: "Appartement de charme avec balcon à procimité de la mairie",
+    surface: 60,
+    type: "appartement",
+    transaction: "vente",
+    numeroRue: "3",
+    rue: "rue de viroflay",
+    codePostal: 75015,
+    ville: "Paris",
+    nbChambres: 2,
+    meuble: false,
+    photo:
+      "https://res.cloudinary.com/dnzrnfglq/image/upload/v1691152139/jsbft2cm7u4j1cmstygm.jpg",
+    prixVente: 700000,
+    visites: [],
+    pro: {
+      proid: "64cccc590fd39de6f4a550da",
     },
-  }
+  };
 
-  let proid = bienData.pro.proid;
-
+  let proid = maVisite.bienImmoId.pro;
+console.log("proid", proid);
   LocaleConfig.locales["fr"] = {
     monthNames: [
       "Janvier",
@@ -115,14 +118,17 @@ useEffect(() => {
     setTimeSlots(null);
     // setSelectedDate(date);
     const formattedDate = moment(date).format("YYYY-MM-DD");
+    // console.log("proid", proid);
 
-    fetch(`http://172.20.10.3:3000/disponibilites/dateSearch/${proid}`, {
+    // console.log("dateformatee1", formattedDate);
+    fetch(`http://192.168.10.147:3000/disponibilites/dateSearch/${proid}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ dateOfVisit: formattedDate }),
     })
       .then((response) => response.json())
       .then((data) => {
+        // console.log("retourdubackend", data);
         if (data.data) {
           generateTimeSlots(data.data);
         } else {
@@ -136,14 +142,17 @@ useEffect(() => {
   const handleDateSelect = (date) => {
     setTimeSlots(null);
     setSelectedDate(date);
+    // console.log("date", date);
     formattedDate = moment(date).format("YYYY-MM-DD");
-    fetch(`http://172.20.10.3:3000/disponibilites/dateSearch/${proid}`, {
+    // console.log("dateformatee2", formattedDate);
+    fetch(`http://192.168.10.147:3000/disponibilites/dateSearch/${proid}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ dateOfVisit: formattedDate }),
     })
       .then((response) => response.json())
       .then((data) => {
+        // console.log("retourdubackend2", data)
         if (data.data) {
           generateTimeSlots(data.data);
         } else {
@@ -209,7 +218,7 @@ useEffect(() => {
     let bienImmoId = bienData._id.bienid;
     const dateDeVisite = moment(selectedDate).format("YYYY-MM-DD");
     console.log(formatedStartTimeVisit);
-    fetch(`http://172.20.10.3:3000/visites`, {
+    fetch(`http://192.168.10.147:3000/visites`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -328,7 +337,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
     marginTop: 20,
-    justifyText: "center",
     color: "#2d4150",
   },
   calendar: {

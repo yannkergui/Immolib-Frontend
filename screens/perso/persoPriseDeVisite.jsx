@@ -187,6 +187,7 @@ export default function PersoPriseDeVisite({navigation}) {
     let prosId = bienData.pro.proid;
     let bienImmoId = bienData._id.bienid
     const dateDeVisite = moment(selectedDate).format("YYYY-MM-DD");
+    
     fetch(`http://192.168.10.155:3000/visites`, {
       method : 'POST',
       headers : {'Content-Type' : 'application/json'},

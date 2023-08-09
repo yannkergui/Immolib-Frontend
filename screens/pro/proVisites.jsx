@@ -17,9 +17,15 @@ import { useSelector, useDispatch } from "react-redux";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import SwitchSelector from "react-native-switch-selector";
 import { maVisiteData } from "../../reducers/maVisite";
-
+import { proDatas } from "../../reducers/pro";
 
 export default function ProVisites({ navigation }) {
+
+  // constante relative à la connexion du pro
+  const pro = useSelector((state) => state.pro.value);
+
+  console.log("pro dans proVisites", pro);
+
   // etat pour stocker les infos reçues du backend
   const [visitesPro, setVisitesPro] = useState([]);
 
@@ -29,11 +35,11 @@ export default function ProVisites({ navigation }) {
   //création d'un useEffect pour récupérer les visites d'un pro
   useEffect(() => {
     fetch(
-      "http://192.168.10.147:3000/visites/pro/OM41xNKcm6LscivHh9Y7l5MlIluKCYDb"
+      `http://192.168.10.147:3000/visites/pro/${pro.token}`
     )
       .then((res) => res.json())
       .then((data) => {
-        // console.log("data du 1er useEffect", data.visitesTrouvees);
+        console.log("data du 1er useEffect", data.visitesTrouvees);
         setVisitesPro(data.visitesTrouvees);
       });
   }, [refresher]);
@@ -120,7 +126,7 @@ export default function ProVisites({ navigation }) {
     // console.log("data visites en attente", data);
     if (data.statut === "en attente") {
       return (
-        <View style={styles.visiteCard}>
+        <View key={data._id} style={styles.visiteCard}>
           <View style={styles.lineCard}>
             <Text>
               {" "}
@@ -242,7 +248,7 @@ export default function ProVisites({ navigation }) {
 
     if (data.statut === "confirmé") {
       return (
-        <View style={styles.visiteCard}>
+        <View key={data._id} style={styles.visiteCard}>
           <View style={styles.lineCard}>
             <Text>
               {" "}
@@ -352,7 +358,7 @@ const styles = StyleSheet.create({
   },
 
   Title: {
-    fontFamily: "Nunitobold",
+    // fontFamily: "Nunitobold",
     color: "white",
     fontSize: 35,
     fontStyle: "normal",
