@@ -81,7 +81,9 @@ export default function ProVisites({ navigation }) {
       setTimeout(() => {
         setRdvConfirmé(false);
         setModalConfirmation(false); // Ferme la modale
-      }, 1500);
+      }, 1500).then(() => {
+        navigation.navigate("TabNavigatorPro");
+      });
     }
   }, [RdvConfirmé]);
 
@@ -455,6 +457,7 @@ const styles = StyleSheet.create({
   },
   centeredView: {
     flex: 1,
+
     justifyContent: "center",
     alignItems: "center",
   },
