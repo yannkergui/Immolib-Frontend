@@ -15,9 +15,11 @@ import SwitchSelector from "react-native-switch-selector";
 import { useDispatch, useSelector } from "react-redux";
 import { userDatas } from "../../reducers/user";
 import moment from "moment"; 
+import { ipAdress } from "../../immolibTools";
+
 
 export default function PersoMonDossier3Loc({ navigation }) {
-  const myIPAdress = "192.168.10.155";
+ 
 
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
@@ -110,7 +112,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
       name: "salaire1",
       type: "image/*",
     });
-    fetch(`http://${myIPAdress}:3000/users/upload`, {
+    fetch(`http://${ipAdress}/users/upload`, {
       method: "POST",
       body: formData,
     })
@@ -132,7 +134,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
       name: "salaire2",
       type: "image/*",
     });
-    fetch(`http://${myIPAdress}:3000/users/upload`, {
+    fetch(`http://${ipAdress}/users/upload`, {
       method: "POST",
       body: formData,
     })
@@ -154,7 +156,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
       name: "salaire3",
       type: "image/*",
     });
-    fetch(`http://${myIPAdress}:3000/users/upload`, {
+    fetch(`http://${ipAdress}/users/upload`, {
       method: "POST",
       body: formData,
     })
@@ -176,7 +178,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
       name: "AvisImpot",
       type: "image/*",
     });
-    fetch(`http://${myIPAdress}:3000/users/upload`, {
+    fetch(`http://${ipAdress}/users/upload`, {
       method: "POST",
       body: formData,
     })
@@ -198,7 +200,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
       name: "AvisImpot",
       type: "image/*",
     });
-    fetch(`http://${myIPAdress}:3000/users/upload`, {
+    fetch(`http://${ipAdress}/users/upload`, {
       method: "POST",
       body: formData,
     })

@@ -1,6 +1,8 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import { useState } from "react";
+import { ipAdress } from "../../immolibTools";
+
 
 export default function MonDossierPro() {
   // 3 Etats relatif à la situation actuelle  choisie (util au changement de couleur du choix)

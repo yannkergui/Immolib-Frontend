@@ -10,6 +10,7 @@ import { monBienData } from '../../reducers/monBien';
 import { maVilleData } from '../../reducers/maVille';
 import {refresh} from "../../reducers/refresher"
 
+
 export default function ProAnnonces( {navigation} ) {
 
 
@@ -82,7 +83,7 @@ const annoncesVente = biensPro.map((data) => {
           <View style={styles.textContainer}>
           <Text style={styles.annonceTitre}>{data.titre} </Text>
           <Text style={styles.annonceAdresse}> {data.numeroRue} {data.rue} {data.ville} {data.codePostal}</Text>
-          <TouchableOpacity>
+            <TouchableOpacity>
               <FontAwesome name="remove" size={30} color="#1F2937" />
             </TouchableOpacity>
           </View>
@@ -153,7 +154,7 @@ const annoncesVente = biensPro.map((data) => {
           <Text>Créer une annonce</Text>
         </TouchableOpacity>
         <ScrollView style={styles.scroll}
-        contentContainerStyle={styles.contentContainer}>
+          contentContainerStyle={styles.contentContainer}>
         <View style={styles.cardContainer}>
           {activPage === "location" && annoncesLocation}
           {activPage === "vente" && annoncesVente}

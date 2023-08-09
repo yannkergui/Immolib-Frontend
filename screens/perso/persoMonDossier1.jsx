@@ -5,6 +5,8 @@ import SwitchSelector from "react-native-switch-selector";
 import { useDispatch, useSelector } from "react-redux";
 import { userDatas } from "../../reducers/user";
 import moment from "moment"; 
+import { ipAdress } from "../../immolibTools";
+
 
 
 export default function PersoMonDossier1({ navigation }) {

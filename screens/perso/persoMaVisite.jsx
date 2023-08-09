@@ -6,6 +6,8 @@ import { useFonts } from 'expo-font';
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import MapView, { Marker } from 'react-native-maps';
+import { ipAdress } from "../../immolibTools";
+
 
 
 export default function PersoMaVisite({navigation}) {
