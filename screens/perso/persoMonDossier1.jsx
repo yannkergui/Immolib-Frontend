@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Image, TextInput, KeyboardAvoidingView } from "react-native";
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import { useState } from "react";
 import SwitchSelector from "react-native-switch-selector";
@@ -14,7 +14,9 @@ export default function PersoMonDossier1({ navigation }) {
   const maVisite = useSelector((state) => state.maVisite.value);
 
   console.log(maVisite.newVisit.dateOfVisit);
+
     // formattage de la date afin d'avoir un affichage plus fluide
+
     let selectedDate = maVisite.newVisit.dateOfVisit
     let frenchDate = moment(selectedDate).format("DD/MM/YYYY");
  
@@ -23,6 +25,7 @@ export default function PersoMonDossier1({ navigation }) {
 
   const [situationActuelle, setSituationActuelle] = useState("locataire");
   const [recherche, setRecherche] = useState("achat");
+  const [zone, setZone] = useState("");
 
   // 2 constantes composants des switchs
 
@@ -43,13 +46,14 @@ export default function PersoMonDossier1({ navigation }) {
     } else {
       navigation.navigate("PersoMonDossier2Loc");
     }
-    dispatch(userDatas({recherche : recherche, situation : situationActuelle}));
+    dispatch(userDatas({recherche : recherche, situation : situationActuelle, zone : zone}));
   };
 
   // Boutton passer cette étape pour le moment, pour des sujet de mis à jour sur les creens suivants (a discuter)
 
 
   return (
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
     <View style={styles.container}>
       {/* Use LinearGradient as the container's background */}
       <LinearGradient
@@ -104,6 +108,11 @@ export default function PersoMonDossier1({ navigation }) {
             height={45}
           />
         </View>
+        <Text style={styles.title}>Ma zone de recherche</Text>
+        <View style={styles.zoneDeRecherche}>
+          <TextInput  onChangeText={(value) => setZone(value)}
+              value={zone}></TextInput>
+        </View>
         <View style={styles.nextBtnContainer}>
           <TouchableOpacity
             style={styles.next}
@@ -114,6 +123,7 @@ export default function PersoMonDossier1({ navigation }) {
         </View>
       </LinearGradient>
     </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -134,7 +144,7 @@ const styles = StyleSheet.create({
     height: "4%",
     alignItems: "center",
     justifyContent: "space-between",
-    marginTop: 40,
+    marginTop: 35,
   },
 
   //page sur laquelle se trouve l'utilisateur (background visible)
@@ -164,10 +174,10 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: "Nunito",
     color: "white",
-    fontSize: 40,
+    fontSize: 30,
     fontStyle: "normal",
     fontWeight: "600",
-    marginTop: "10%",
+    marginTop: "8%",
   },
 
   textContainer: {
@@ -178,12 +188,12 @@ const styles = StyleSheet.create({
     height: "8%",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 20,
+    marginTop: 15,
   },
 
   situationContainer: {
     width: "80%",
-    marginTop: 40,
+    marginTop: 15,
   },
 
   // selector = les boutons cliquables dans le champs situation et recherche. selectorActiv = le choix de l'utilisateur (en surbrillance + push en BDD )
@@ -218,7 +228,7 @@ const styles = StyleSheet.create({
     height: "7%",
     alignItems: "center",
     justifyContent: "space-around",
-    marginTop: 40,
+    marginTop: 20,
   },
 
   nextBtnContainer: {
@@ -291,4 +301,16 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 30,
   },
+  zoneDeRecherche: {  
+    borderWidth: 1,
+    borderColor: "rgba(128, 128, 128, 0.4)",
+    backgroundColor: "rgba(128, 128, 128, 0.4)",
+    width: "70%",
+    height: 40,
+    borderRadius: 10,
+    top: 30,
+    alignItems: "center",  
+    justifyContent: "center",
+    color: "white",
+  }
 });

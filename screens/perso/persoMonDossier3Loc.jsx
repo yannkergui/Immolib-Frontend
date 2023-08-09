@@ -239,6 +239,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
       body: JSON.stringify({
         recherche: user.recherche,
         situation: user.situation,
+        zone: user.zone,
         salaire: monRevenu,
         contrat: contrat,
         location: {
@@ -271,6 +272,7 @@ export default function PersoMonDossier3Loc({ navigation }) {
       body: JSON.stringify({
         recherche: user.recherche,
         situation: user.situation,
+        zone: user.zone,
         location: {
           budgetMois: user.budgetMois,
           typeBienLoc: user.typeBienLoc,

@@ -83,6 +83,7 @@ export default function PersoMonDossier3Achat({ navigation }) {
       body: JSON.stringify({
         recherche: user.recherche,
         situation: user.situation,
+        zone: user.zone,
         achat: {
           budgetMax: user.budgetMax,
           typeBienAchat: user.typeBienAchat,
@@ -112,6 +113,7 @@ export default function PersoMonDossier3Achat({ navigation }) {
       body: JSON.stringify({
         recherche: user.recherche,
         situation: user.situation,
+        zone: user.zone,
         achat: {
           budgetMax: user.budgetMax,
           typeBienAchat: user.typeBienAchat,

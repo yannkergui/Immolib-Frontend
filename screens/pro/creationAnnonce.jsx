@@ -119,15 +119,17 @@ export default function CreationAnnonce( {navigation} ) {
         style={styles.container}
       >
         <View style={styles.header}>
-          <Text style={styles.Title}>Mon annonce</Text>
-          <TouchableOpacity style={styles.iconcontainer}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
             <FontAwesome
               style={styles.icon}
-              name="user"
-              size={30}
+              name="chevron-left"
+              size={20}
               color="#1F2937"
+              right={60}
             />
           </TouchableOpacity>
+          <Text style={styles.Title}>Mon Annonce</Text>
+          
         </View>
         <ScrollView style={styles.formContainer}>
           <View style={styles.lineCard}>
@@ -198,7 +200,7 @@ export default function CreationAnnonce( {navigation} ) {
                 style={styles.input}
                 keyboardType="numeric"
                 onChangeText={(value) => setLoyer(value)}
-                value={loyer.toString()}
+                value={loyer}
               />
             </View>
           ) : (
@@ -353,13 +355,21 @@ const styles = StyleSheet.create({
   next: {
     alignItems: "center",
     justifyContent: "center",
-    width: 150,
-    height: 50,
+    width: "50%",
+    height: 30,
     backgroundColor: "#47AFA5",
     borderColor: "white",
     borderWidth: 1,
     borderRadius: 10,
-    marginTop: 10,
+    marginRight: 3,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+    elevation: 18,
   },
 
   SwitchSelector: {

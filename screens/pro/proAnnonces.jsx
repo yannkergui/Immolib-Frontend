@@ -127,7 +127,7 @@ const annoncesVente = biensPro.map((data) => {
         <View style={styles.header}> 
         <Text style={styles.Title}>Mes Annonces</Text>
         <TouchableOpacity style={styles.iconcontainer}>
-          <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' />
+          <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' onPress={navigation.navigate('ProPreferences')}  />
         </TouchableOpacity>
         </View>
       <View style={styles.pageContainer}>
@@ -145,15 +145,16 @@ const annoncesVente = biensPro.map((data) => {
           />
         </View>
         <StatusBar style="auto" />
+        <TouchableOpacity style={styles.next} onPress={handleCreerAnnonce}>
+          <Text>Créer une annonce</Text>
+        </TouchableOpacity>
         <ScrollView style={styles.scroll}
         contentContainerStyle={styles.contentContainer}>
         <View style={styles.cardContainer}>
           {activPage === "location" && annoncesLocation}
           {activPage === "vente" && annoncesVente}
         </View>
-        <TouchableOpacity style={styles.next} onPress={handleCreerAnnonce}>
-          <Text>Créer une annonce</Text>
-        </TouchableOpacity>
+        
 
         </ScrollView>
         
@@ -287,15 +288,23 @@ textContainer: {
 next: {
   alignItems: "center",
   justifyContent: "center",
-  width: 150,
-  height: 50,
+  width: "40%",
+  height: 30,
   backgroundColor: "#47AFA5",
   borderColor: "white",
   borderWidth: 1,
   borderRadius: 10,
-  marginTop: 80,
-  bottom: 80,
+  marginRight: 3,
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 9,
+  },
+  shadowOpacity: 0.48,
+  shadowRadius: 11.95,
+  elevation: 18,
 },
+
 contentContainer: { 
   alignItems: "center",
   justifyContent: "center",
