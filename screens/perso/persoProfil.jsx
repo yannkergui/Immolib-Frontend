@@ -12,10 +12,14 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from "react";
 import { ipAdress } from "../../immolibTools";
+import {removeDatas} from "../../reducers/user"
 
 
 
 export default function PersoProfil({ navigation }) {
+
+  const dispatch = useDispatch();
+
   //Il faudra rajouter les components ={nomducomposant} dans les Tab.Screen pour rendre la navigation fonctionnelle.
   const handleRecherche = () => {
     navigation.navigate("PersoMonDossier1");
@@ -23,6 +27,11 @@ export default function PersoProfil({ navigation }) {
   const handleDocuments = () => {
     navigation.navigate("PersoMonDossier3Loc");
   };
+
+  const handleSubmit= () => {
+    navigation.navigate("FirstScreen");
+    dispatch(removeDatas())
+  }
 
   const maVisite = useSelector((state) => state.maVisite.value);
   const user = useSelector((state) => state.user.value);
@@ -70,6 +79,7 @@ completion = Math.floor((countNonEmptyFields()/25)*100)
             <View style={styles.caractProfil}>
               <Text style={styles.lineTitle2}>{user.prenom} {user.nom}</Text>
               <Text style={styles.lineTitle2}>{user.email}</Text>
+              <Text style={styles.lineTitle2}>{user.tel}</Text>
             </View>
           </View>
 
