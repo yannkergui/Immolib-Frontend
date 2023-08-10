@@ -1,5 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, Linking, Platform, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Linking, Platform, ScrollView, Image } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useFonts } from 'expo-font';
@@ -15,6 +14,9 @@ export default function ProClients({navigation}) {
   
   const token = useSelector((state) => state.pro.value.token);
   const [clientsPro, setClientsPro]=useState([]);
+
+  const pro = useSelector((state) => state.pro.value);
+
 
   useEffect(() => {
     //Récupération des visites (connexion Backend)
@@ -126,8 +128,9 @@ export default function ProClients({navigation}) {
             <FontAwesome style={styles.icon} name='chevron-left' size={20} color='#1F2937' />
           </TouchableOpacity> 
           <Text style={styles.Title}>Mes Clients</Text>
-          <TouchableOpacity style={styles.iconcontainerRight} onPress={() => { goingHome() }}>
-            <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' />
+          <TouchableOpacity onPress={() => { goingHome() }}>
+              {pro.photo && <Image source={{url: pro.photo}} style={styles.photo}/>}
+              {!pro.photo && <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' />}
           </TouchableOpacity>
         </View>
         <ScrollView style={styles.cardsContainer}>
@@ -191,7 +194,7 @@ clientsCard :{
   alignItems : 'center',
   height : 100,
   width : '90%',
-  borderRadius: 60,
+  borderRadius: 25,
   backgroundColor:'#BCCDB6',
   shadowColor: "#000",
     shadowOffset: {
@@ -234,5 +237,11 @@ centerCardOrientation:{
 },
 subCard:{
   fontFamily: 'NunitoSans',
-}
+},
+photo: {
+  width: 60,
+  height: 60,
+  borderRadius: 50,
+  marginBottom: 4,
+},
 });

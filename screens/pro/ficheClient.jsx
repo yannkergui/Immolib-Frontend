@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, Linking, Platform, SafeAreaView, ScrollView, Switch } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Linking, Platform, SafeAreaView, ScrollView, Switch, Image } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useFonts } from 'expo-font';
@@ -20,6 +19,8 @@ export default function FicheClient({navigation}) {
   const [switchValuePret, setSwitchValuePret] = useState(false);
 
   const client = useSelector((state) => state.monClient.value);
+  const pro = useSelector((state) => state.pro.value);
+
 
   // Fonction pour calculer la complétude du dossier
   const countNonEmptyFields = () => {
@@ -89,8 +90,9 @@ export default function FicheClient({navigation}) {
                     <FontAwesome style={styles.icon} name='chevron-left' size={20} color='#1F2937' />
                 </TouchableOpacity> 
                 <Text style={styles.Title}>Mon Client</Text>
-                <TouchableOpacity style={styles.iconcontainer} onPress={() => { handleSubmit()}}>
-                    <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' />
+                <TouchableOpacity onPress={() => { handleSubmit()}}>
+                {pro.photo && <Image source={{url: pro.photo}} style={styles.photo}/>}
+                {!pro.photo && <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' />}
                 </TouchableOpacity>
             </View>
             <View style={styles.dossier}>
@@ -98,9 +100,9 @@ export default function FicheClient({navigation}) {
               <View style={[styles.pastille, {backgroundColor : couleur }]}></View>
             </View> 
           </View>
-        <ScrollView style={styles.scrollContainer}>
-        <View style={styles.CardsGroup}>
-                <Text style={styles.cardTitle}>Infos Client :</Text>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+            <View style={styles.CardsGroup}>
+                <Text style={styles.cardTitle}>Infos client :</Text>
                 <View style={styles.clientsCard1}>
                     <View style={styles.rowInfos}>
                         <Text style={styles.InfosGauche}>Nom :</Text>
@@ -119,12 +121,12 @@ export default function FicheClient({navigation}) {
                         <Text style={styles.InfosDroite}>{client.email}</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.InfosGauche}>salaire Mensuel :</Text>
+                        <Text style={styles.InfosGauche}>Salaire mensuel :</Text>
                         <Text style={styles.InfosDroite}>{client.salaire} €</Text>
                     </View>
                 </View>
             
-                <Text style={styles.cardTitle}>Sa Recherche :</Text>
+                <Text style={styles.cardTitle}>Sa recherche :</Text>
                 {client.recherche==='location' &&
                 <View style={styles.clientsCard2}>
                     <View style={styles.rowInfos}>
@@ -132,23 +134,23 @@ export default function FicheClient({navigation}) {
                         <Text style={styles.Infos2Droite}>{client.recherche}</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2Gauche}>Zone de Recherche :</Text>
+                        <Text style={styles.Infos2Gauche}>Zone de recherche :</Text>
                         <Text style={styles.Infos2Droite}>{/*client.zone*/}Paris</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2Gauche}>Budget Mensuel Max :</Text>
+                        <Text style={styles.Infos2Gauche}>Budget mensuel max :</Text>
                         <Text style={styles.Infos2Droite}>{client.location.budgetMois} euros</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2Gauche}>Type de Bien recherché :</Text>
+                        <Text style={styles.Infos2Gauche}>Type de bien recherché :</Text>
                         <Text style={styles.Infos2Droite}>{client.location.typeBienLoc}</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2Gauche}>Surface Minimum :</Text>
+                        <Text style={styles.Infos2Gauche}>Surface minimum :</Text>
                         <Text style={styles.Infos2Droite}>{client.location.minSurfaceLoc} m²</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2Gauche}>Nbre de pièces Minimum :</Text>
+                        <Text style={styles.Infos2Gauche}>Nbre de pièces minimum :</Text>
                         <Text style={styles.Infos2Droite}>{client.location.minPieceLoc}</Text>
                     </View>
                     <View style={styles.rowInfos}>
@@ -156,7 +158,7 @@ export default function FicheClient({navigation}) {
                         <Text style={styles.Infos2Droite}>{client.location.nbLoc}</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2Gauche}>Bien Meublé :</Text>
+                        <Text style={styles.Infos2Gauche}>Bien meublé :</Text>
                         <Text style={styles.Infos2Droite}>{client.location.meuble}</Text>
                     </View>
                 </View> }
@@ -168,23 +170,23 @@ export default function FicheClient({navigation}) {
                         <Text style={styles.Infos2Droite}>{client.recherche}</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2Gauche}>Zone de Recherche :</Text>
+                        <Text style={styles.Infos2Gauche}>Zone de recherche :</Text>
                         <Text style={styles.Infos2Droite}>{/*client.zone*/}Paris</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2Gauche}>Budget Mensuel Max :</Text>
+                        <Text style={styles.Infos2Gauche}>Budget mensuel max :</Text>
                         <Text style={styles.Infos2Droite}>{client.achat.budgetMax} euros</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2Gauche}>Type de Bien recherché :</Text>
+                        <Text style={styles.Infos2Gauche}>Type de bien recherché :</Text>
                         <Text style={styles.Infos2Droite}>{client.achat.typeBienAchat}</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2Gauche}>Surface Minimum :</Text>
+                        <Text style={styles.Infos2Gauche}>Surface minimum :</Text>
                         <Text style={styles.Infos2Droite}>{client.achat.minSurfaceAchat} m²</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2Gauche}>Nbre de pièces Minimum :</Text>
+                        <Text style={styles.Infos2Gauche}>Nbre de pièces minimum :</Text>
                         <Text style={styles.Infos2Droite}>{client.achat.minPieceAchat}</Text>
                     </View>
                     <View style={styles.rowInfos}>
@@ -200,12 +202,12 @@ export default function FicheClient({navigation}) {
                         <Text style={styles.Infos2Droite}>{client.achat.financement}</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2Gauche}>accord Banque ?</Text>
+                        <Text style={styles.Infos2Gauche}>Accord banque ?</Text>
                         <Text style={styles.Infos2Droite}>{client.achat.accordBanque ? "oui" : "non"}</Text>
                     </View>
                 </View> }
 
-                <Text style={styles.cardTitle}>Pièces Justificatives :</Text>
+                <Text style={styles.cardTitle}>Pièces justificatives :</Text>
                 {client.recherche==='location' &&
                 <View style={styles.clientsCard3}>
                     <View style={styles.rowInfos}>
@@ -220,7 +222,7 @@ export default function FicheClient({navigation}) {
                             />
                     </View> 
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos3Gauche}>{`\u2022`} Justificatif de Domicile</Text>
+                        <Text style={styles.Infos3Gauche}>{`\u2022`} Justificatif de domicile</Text>
                         <Switch
                             style={styles.switch}
                             trackColor={{ false: "#767577", true: "#f4f3f4"}}
@@ -264,7 +266,7 @@ export default function FicheClient({navigation}) {
                             />
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos3Gauche}>{`\u2022`} avis d'imposition</Text>
+                        <Text style={styles.Infos3Gauche}>{`\u2022`} Avis d'imposition</Text>
                         <Switch
                             style={styles.switch}
                             trackColor={{ false: "#767577", true: "#f4f3f4"}}
@@ -317,6 +319,7 @@ header: {
   flexDirection: 'row',
   width :'90%',
   marginTop : '15%', 
+  
   alignItems: 'center', // Center the content horizontally
   justifyContent: 'space-between',
   padding : '2%',
@@ -341,6 +344,14 @@ pastille : {
   marginLeft : '3%',
 },
 scrollContainer : {
+  //flex: 1,
+//  justifyContent : 'center',
+//   alignItems : 'center',
+  marginTop: 30,
+  borderColor: 'red',
+  borderWidth: 1,
+  width: '90%',
+  
 
 },
 iconcontainer :{
@@ -370,18 +381,21 @@ Title: {
   textAlign:'center',
 },
 CardsGroup :{
-    marginTop : '2%',
+    //marginTop : '2%',
     justifyContent: 'center',
     alignItems: 'center',
+    width: "80%",
+    borderColor: 'black',
+    borderWidth: 1,
 },
 
 clientsCard1 :{
   justifyContent : 'center',
   alignItems : 'center',
   height: 220,
-  width : 400,
-  borderRadius: 80,
-  backgroundColor:'#BCCDB6',
+  width : 350,
+  borderRadius: 25,
+  backgroundColor:'rgba(188, 205, 182, 0.85)',
   shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -397,9 +411,9 @@ clientsCard2 :{
     justifyContent : 'center',
     alignItems : 'center',
     height: 350,
-    width : 400,
-    borderRadius: 80,
-    backgroundColor:'#BCCDB6',
+    width : 350,
+    borderRadius: 25,
+    backgroundColor: 'rgba(188, 205, 182, 0.85)',
     shadowColor: "#000",
       shadowOffset: {
         width: 0,
@@ -414,9 +428,9 @@ clientsCard2 :{
   clientsCard3 :{
     justifyContent : 'center',
     alignItems : 'center',
-    //height:350,
-    width : 400,
-    borderRadius: 100,
+    //height: 350,
+    width : 350,
+    borderRadius: 15,
     backgroundColor:'#BCCDB6',
     shadowColor: "#000",
       shadowOffset: {
@@ -427,8 +441,9 @@ clientsCard2 :{
       shadowRadius: 11.95,
       elevation: 18,
       margin: 10,
-      padding : 8,
+      padding : 5,
   },
+
 clientsCardOrientation:{
   width : '100%',
   height : '90%',
@@ -436,6 +451,7 @@ clientsCardOrientation:{
   justifyContent:'space-around',
   alignItems:'center',
 },
+
 cardIcon:{
 backgroundColor : 'white',
 width : 60,
@@ -444,6 +460,7 @@ justifyContent:'center',
 alignItems:'center',
 borderRadius : 40
 },
+
 titleCard: {
   fontFamily: 'Nunitobold',
   color: 'white',
@@ -453,11 +470,13 @@ titleCard: {
   letterSpacing: -1.5, 
   textAlign:'center',
 },
+
 centerCardOrientation:{
   height : '80%',
   justifyContent: 'space-around',
   alignItems : 'center',
 },
+
 InfosGauche:{
     paddingBottom: 10,
     paddingLeft: 20,
@@ -470,25 +489,28 @@ InfosDroite:{
   fontFamily: 'NunitoSans',
   fontSize: 16,
 },
+
 Infos2Gauche:{
   paddingBottom: 10,
   paddingLeft: 30,
   fontFamily: 'NunitoSans',
   fontSize: 16,
+  color: "black",
+  maxWidth: 230,
 },
-Infos2Droite:{
+Infos2Droite: {
   paddingBottom: 10,
   paddingRight: 30,
   fontFamily: 'NunitoSans',
   fontSize: 16,
 },
-Infos3Gauche:{
+Infos3Gauche: {
   paddingLeft: 30,
   fontFamily: 'NunitoSans',
   fontSize: 16,
   paddingTop : 10,
 },
-cardTitle:{
+cardTitle: {
     marginTop:5,   
     fontFamily: 'Nunitobold',
     color: 'white',
@@ -530,6 +552,12 @@ button: {
     height: 30,
     fontWeight: "600",
     fontSize: 20,
+  },
+  photo: {
+    width: 60,
+    height: 60,
+    borderRadius: 50,
+    marginBottom: 4,
   },
   
 });

@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
   Text,
@@ -149,7 +148,7 @@ export default function ProHome({ navigation }) {
         <View style={styles.container}>
           <View style={styles.header}>
             <Text style={styles.title}>Home</Text>
-            <TouchableOpacity style={styles.iconContainer} onPress={()=> navigation.navigate('ProPreferences')}>
+            <TouchableOpacity onPress={()=> navigation.navigate('ProPreferences')}>
               {pro.photo && <Image source={{url: pro.photo}} style={styles.photo}/>}
               {!pro.photo && <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' />}
             </TouchableOpacity>

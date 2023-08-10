@@ -311,6 +311,7 @@ const styles = StyleSheet.create({
     flex : 1,
     justifyContent : 'center',
     alignItems : 'center',
+    backgroundColor: 'rgba(208, 0, 108, 0.5)',
   },
   modalContainer : {
     backgroundColor : 'rgba(255, 255, 255, 1)',

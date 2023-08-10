@@ -54,6 +54,8 @@ import maVille from "./reducers/maVille";
 import refresher from "./reducers/refresher";
 import monBien from "./reducers/monBien";
 
+import { LogBox } from 'react-native';
+LogBox.ignoreAllLogs();//Ignore all log notifications
 
 import { configureStore } from "@reduxjs/toolkit";
 
@@ -208,6 +210,8 @@ const TabNavigatorPerso = () => {
 };
 
 export default function App() {
+
+  
   return (
     <Provider store={store}>
 
