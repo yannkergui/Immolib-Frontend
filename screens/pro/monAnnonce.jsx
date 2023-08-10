@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  SafeAreaView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -31,6 +32,8 @@ export default function MonAnnonce({ navigation }) {
         end={{ x: 1, y: 1 }} // End point of the gradient
         style={styles.container}
       >
+        <SafeAreaView>
+
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <FontAwesome
@@ -39,7 +42,7 @@ export default function MonAnnonce({ navigation }) {
               size={20}
               color="#1F2937"
               right={60}
-            />
+              />
           </TouchableOpacity>
           <Text style={styles.Title}>Mon annonce</Text>
           <TouchableOpacity style={styles.iconcontainer}>
@@ -48,7 +51,7 @@ export default function MonAnnonce({ navigation }) {
               name="user"
               size={30}
               color="#1F2937"
-            />
+              />
           </TouchableOpacity>
         </View>
         <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -82,16 +85,17 @@ export default function MonAnnonce({ navigation }) {
           <View style= {styles.mapView}>
             <MapView style= {styles.map}
                     initialRegion={{
-                        latitude: `${coordonnees.latitude}`,
-                        longitude: `${coordonnees.longitude}`,
-                        latitudeDelta: 0.008,
-                        longitudeDelta: 0.007,
+                      latitude: `${coordonnees.latitude}`,
+                      longitude: `${coordonnees.longitude}`,
+                      latitudeDelta: 0.008,
+                      longitudeDelta: 0.007,
                     }}
                     >
                       <Marker style= {styles.marker} coordinate={{latitude:`${coordonnees.latitude}` ,longitude:`${coordonnees.longitude}`}} />
             </MapView>
           </View>
         </ScrollView>
+                      </SafeAreaView>
       </LinearGradient>
     </View>
   );
