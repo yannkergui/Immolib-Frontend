@@ -213,8 +213,8 @@ export default function App() {
 
         <NavigationContainer>
           {/* ne pas toucher à cette partie */}
-          <Stack.Screen name="FirstScreen" component={FirstScreen} />
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
+          <Stack.Screen name="FirstScreen" component={FirstScreen} />
         
           <Stack.Screen
                 name="TabNavigatorPerso"
