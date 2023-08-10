@@ -7,18 +7,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from "react";
 import { maVisiteData } from '../../reducers/maVisite';
 import { maVilleData } from '../../reducers/maVille';
+import {refresh} from "../../reducers/refresher";
 
 import { ipAdress } from "../../immolibTools";
 
 export default function PersoVisites({navigation}) {
 
   const dispatch = useDispatch();
-
-  const [modaleMaj, setModaleMaj]=useState(false);
+  const refresher = useSelector((state) => state.refresher.value);
+  console.log(refresher);
 
   // etat pour stocker les infos reçues du backend
   const [visitesPerso, setVisitesPerso] = useState([]);
-
+  
+  
   const user = useSelector((state) => state.user.value);
 
   // Fetch du backend au chargement de la page pour récupérer les visites liées au user
@@ -28,7 +30,7 @@ export default function PersoVisites({navigation}) {
       .then(data => {
         setVisitesPerso(data.VisitesTrouvees);
       })
-  }, []);
+  }, [refresher]);
 
   // constante relative au switch de changement de page 
   const page = [
@@ -66,6 +68,8 @@ function handleCancelVisit (e) {
         body : JSON.stringify({statut : "annulé"})
   })
   .then(response => response.json())
+  .then(() => dispatch(refresh()))
+  
 }
 
   // fonction pour gérer les appels lorsqu'on clique sur le numéro de téléphone

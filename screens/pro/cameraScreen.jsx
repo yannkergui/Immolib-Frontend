@@ -8,7 +8,7 @@ import { useIsFocused } from "@react-navigation/native";
 
 import { proDatas } from '../../reducers/pro';
 
-import ipAdress from "../../immolibTools"
+import {ipAdress} from "../../immolibTools"
 
 export default function CameraScreen({navigation}) {
 
@@ -40,7 +40,7 @@ export default function CameraScreen({navigation}) {
       name: 'proProfilePhotoTest.jpeg',
       type: 'image/jpeg',
      });
-    fetch(`http://192.168.10.155:3000/pros/uploadPhoto`, {
+    fetch(`http://${ipAdress}/pros/uploadPhoto`, {
       method: 'POST',
       body: formData,
     })
@@ -48,7 +48,7 @@ export default function CameraScreen({navigation}) {
     .then((data) => {
         data.result && dispatch(updateProProfilePhoto(data.url))
         console.log("la photo est là :", pro.photo);
-        fetch(`http://192.168.10.175:3000/pros/${pro.token}`, {
+        fetch(`http://${ipAdress}/pros/${pro.token}`, {
       method : 'PUT',
       headers : {'Content-Type' : 'application/json'},
       body : JSON.stringify ({
@@ -56,7 +56,7 @@ export default function CameraScreen({navigation}) {
       })
     })
       .then(response => response.json())
-      navigation.navigate ('ProPreferences')
+      navigation.goBack ()
     })
       ;
     

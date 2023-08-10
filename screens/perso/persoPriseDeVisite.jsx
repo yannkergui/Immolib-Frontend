@@ -21,26 +21,29 @@ export default function PersoPriseDeVisite({navigation}) {
   const user = useSelector((state) => state.user.value);
 
   const bienData = {
-    "_id": {
-      "bienid": "64d1029e1aef158673603b54"
-    },
-    "titre": "Appartement 4 pièces Paris 15",
-    "description": "Appartement de charme avec balcon à procimité de la mairie",
-    "surface": 60,
-    "type": "appartement",
-    "transaction": "vente",
-    "numeroRue": "3",
-    "rue": "rue de viroflay",
-    "codePostal": 75015,
-    "ville": "Paris",
-    "nbChambres": 2,
-    "meuble": false,
-    "photo": "https://res.cloudinary.com/dnzrnfglq/image/upload/v1691152139/jsbft2cm7u4j1cmstygm.jpg",
-    "prixVente": 700000,
-    "visites": [],
-    "pro": {
-      "proid": "64d046c3588b8ddd65d8cbcf"
-    },
+      "_id": {
+        "bienid": "64d498e5a3ca8066a1a3b49e"
+      },
+      "titre": "Appartement de grand Standing",
+      "description": "Superbe appartement dans le quartier le plus prisé de la capitale.  ",
+      "surface": 160,
+      "type": "appartement",
+      "transaction": "location",
+      "numeroRue": "20",
+      "rue": "Avenue des Champs-Elysées ",
+      "codePostal": 75008,
+      "ville": "Paris",
+      "nbPièces": 6,
+      "nbChambres": 4,
+      "meuble": true,
+      "photo": "https://res.cloudinary.com/dnzrnfglq/image/upload/v1691654372/k0revbl847ngig7txvsp.jpg",
+      "loyerMensuel": 5000,
+      "prixVente": 0,
+      "visites": [],
+      "pro": {
+        "proid": "64d4978ca3ca8066a1a3b480"
+      },
+      "__v": 0
   }
 
   let proid = bienData.pro.proid

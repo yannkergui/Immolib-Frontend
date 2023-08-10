@@ -1,22 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
- value: { _id : '',
-          prenom : '',
-          nom: '',
-          email: '',
-          tel : '',
-          motDePasse : '',
-          token: '',
-          photo: '',
-          agence: {
-            denomination: '',
-            siren: '',
-            siret: '',
-            dateCreation: '',
-            adresse :'',
-          }
-        },
+ value: '',
 };
 
 export const proSlice = createSlice({

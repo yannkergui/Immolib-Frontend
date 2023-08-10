@@ -31,17 +31,17 @@ export default function WelcomeScreenPro({ navigation }) {
     {
       id: '1',
       title: 'Immolib me simplifie la vie',
-      subtitle: "un outil simple pour gérer mes visites",
+      subtitle: "Un outil simple pour gérer mes visites",
     },
     {
       id: '2',
       title: "Ne ratez aucune opportunité",
-      subtitle: "augmentez votre nombre d'entrée en relations et votre taux de visite",
+      subtitle: "Augmentez votre nombre d'entrées en relation et votre taux de visite",
     },
     {
       id: '3',
       title: "Des dossiers préremplis et qualifiés",
-      subtitle: "Les clients vous donne accès à leurs informations afin d'améliorer votre ciblage",
+      subtitle: "Les clients vous donnent accès à leurs informations afin d'améliorer votre ciblage",
     },
   ];
 
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'Nunitobold',
     color: 'white',
-    fontSize: 60,
+    fontSize: 50,
     fontStyle: 'normal',
     fontWeight: '600',
     lineHeight: 60, 

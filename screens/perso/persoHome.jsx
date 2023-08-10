@@ -8,16 +8,23 @@ import { maVisiteData } from '../../reducers/maVisite';
 import { useDispatch, useSelector } from 'react-redux';
 import {Agenda, LocaleConfig} from 'react-native-calendars';
 import moment from "moment"; 
+import {refresh} from "../../reducers/refresher";
+
 
 
 import { ipAdress } from "../../immolibTools";
 
 
 export default function PersoHome({navigation}) {
+  const dispatch = useDispatch();
+
   
   // Déclaration des états pour stocker les données des visites et des éléments du calendrier
   const [items2, setItems2] = useState({});
   const [closestVisit, setClosestVisit] = useState(null);
+
+  const refresher = useSelector((state) => state.refresher.value);
+
   
   // Extraction des données de l'utilisateur depuis le store Redux
   const user = useSelector((state) => state.user.value);
@@ -26,12 +33,14 @@ export default function PersoHome({navigation}) {
   useEffect(() => {
     fetch(`http://${ipAdress}/visites/user/${user._id}`)
       .then(response => response.json())
-      .then(data => {
+      .then(data => { 
         const updatedItems = {};
-        data.VisitesTrouvees.map(data => { 
+        data.VisitesTrouvees.map(data => {  
+          if(data.statut !== 'annulé')
+         { 
           // Extraction des informations de chaque visite
           const visitedate = data.dateOfVisit;
-          const name = `${data.prosId.nom} ${data.prosId.prenom} - ${data.prosId.agence.denomination} - ${data.bienImmoId.titre}`;
+          const name = `${data.prosId.nom} ${data.prosId.prenom} - ${data.prosId.agence.denomination} - ${data.bienImmoId.titre}- ${data.bienImmoId.numeroRue} ${data.bienImmoId.rue} ${data.bienImmoId.codePostal} ${data.bienImmoId.ville}`;
           const time = `${data.startTimeVisit}`;
           
           // Ajout des informations dans l'objet items2 pour le rendu du calendrier
@@ -39,7 +48,7 @@ export default function PersoHome({navigation}) {
             updatedItems[visitedate] = [{ name, time }];
           } else {
             updatedItems[visitedate].push({ name, time });
-          }
+          }}
         });
 
         // Mise à jour de l'état items2 avec les données formatées
@@ -48,7 +57,7 @@ export default function PersoHome({navigation}) {
         const closestVisit = findClosestVisit(updatedItems);
         setClosestVisit(closestVisit);
       })
-  }, []);
+  }, [refresher]);
 
 // Fonction pour compter les champs non vides dans l'objet utilisateur
 const countNonEmptyFields = () => {
@@ -152,14 +161,16 @@ if (user.dejaInscrit) {
     );
   };
 
+
   const findClosestVisit = (visits) => {
+console.log('test',visits);
     // Obtention de la date d'aujourd'hui au format ISO (AAAA-MM-JJ) 
     //(sans utiliser moment car probleme de compatibilité (je ne sais pas pkoi))
     const today = new Date().toISOString().split("T")[0];
     let closest = null; 
   
     // Parcours des dates de visite dans les données
-    for (const visitDate in visits) {
+    for (const visitDate in visits) { 
       // Vérification si la date de visite est ultérieure ou égale à aujourd'hui
       if (visitDate >= today) {
         const visitsOnDate = visits[visitDate]; // Récupération des visites pour cette date
@@ -208,7 +219,7 @@ if (user.dejaInscrit) {
           {/* En-tête avec le titre et une icône de profil */}
           <View style={styles.header}> 
             <Text style={styles.Title}>Home</Text>
-            <TouchableOpacity style={styles.iconcontainer}>
+            <TouchableOpacity style={styles.iconcontainer} onPress={() => { navigation.navigate('TabNavigatorPerso', {screen : 'Mon profil'}) }}>
               <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' />
             </TouchableOpacity>
           </View>
@@ -233,12 +244,14 @@ if (user.dejaInscrit) {
           <View style={styles.closestVisitContainer}>
             <Text style={styles.subtitle}>Ma prochaine visite :</Text>
             {closestVisit && (
+              <TouchableOpacity onPress={() => { navigation.navigate('TabNavigatorPerso', {screen : 'Mes visites'}) }}>
               <View style={styles.item2}>
                 <Text style={styles.eventName}>{closestVisit.name}</Text>
                 <Text style={styles.eventTime2}>
                  le {closestVisit.date} à {closestVisit.time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                 </Text>
               </View>
+              </TouchableOpacity>
             )}
           </View>
         </View>
@@ -380,6 +393,7 @@ item2 : {
   padding: 10,
   marginRight: 10,
   marginTop: 17,
+  width:370,
   shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -391,10 +405,14 @@ item2 : {
     justifyContent:'center',
     alignItems:'center',
     height: 100,
+    color:'white',
 },
 closestVisitContainer:{
   alignItems:'center',
   borderTopColor:'black',
   borderTopwidth:'2'
 },
+eventName:{
+  color:'white',
+}
 });
