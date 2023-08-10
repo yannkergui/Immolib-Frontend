@@ -42,15 +42,16 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Provider } from "react-redux";
 import user from "./reducers/user";
 import pro from "./reducers/pro";
-import monClient from "./reducers/monClient";
+import monclient from "./reducers/monClient";
 import maVisite from "./reducers/maVisite";
 import maVille from "./reducers/maVille";
 import refresher from "./reducers/refresher";
+import monBien from "./reducers/monBien";
 
 import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
-  reducer: { user, pro, monClient, maVisite, maVille, refresher },
+  reducer: { user, pro, monclient, maVisite, maVille, refresher },
 });
 
 const TabNavigatorPro = () => {
@@ -205,9 +206,9 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
           <Stack.Screen name="PersoConnexionScreen" component={PersoConnectionScreen} />
+          <Stack.Screen name="ProConnexionScreen" component={ProConnectionScreen} />
           <Stack.Screen name="PersoVisites" component={PersoVisites} />
           <Stack.Screen name="ProPreferences" component={ProPreferences} />
-          <Stack.Screen name="ProConnexionScreen" component={ProConnectionScreen} />
           <Stack.Screen name="CameraScreen" component={CameraScreen} />
           <Stack.Screen name="PersoMaVisite" component={PersoMaVisite} />
           <Stack.Screen name="FirstScreen" component={FirstScreen} />
@@ -225,6 +226,7 @@ export default function App() {
           <Stack.Screen name="ProConnectionScreen" component={ProConnectionScreen} />
           <Stack.Screen name="ProHome" component={ProHome} />
           <Stack.Screen name="ProTchats" component={ProTchats} />
+          <Stack.Screen name="ProPriseDeVisite" component={ProPriseDeVisite} />
           <Stack.Screen
             name="TabNavigatorPerso"
             component={TabNavigatorPerso}
