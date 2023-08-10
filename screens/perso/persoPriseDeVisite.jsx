@@ -6,6 +6,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from 'react-redux';
 import { maVisiteData } from '../../reducers/maVisite';
 import {userDatas} from '../../reducers/user'
+import { ipAdress } from "../../immolibTools";
+
 
 
 
@@ -83,7 +85,7 @@ export default function PersoPriseDeVisite({navigation}) {
    useEffect((date) => {
     setTimeSlots(null);
     const formattedDate = moment(date).format("YYYY-MM-DD");
-    fetch(`http://192.168.10.155:3000/disponibilites/dateSearch/${proid}`, {
+    fetch(`http://${ipAdress}/disponibilites/dateSearch/${proid}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ dateOfVisit: formattedDate })
@@ -95,7 +97,7 @@ export default function PersoPriseDeVisite({navigation}) {
           console.log('impossible');
         }
       })
-      fetch(`http://192.168.10.155:3000/users/${user.token}`)
+      fetch(`http://${ipAdress}/users/${user.token}`)
       .then(response => response.json())
       .then(data => {
         setUserId(data.user._id);
@@ -114,7 +116,7 @@ export default function PersoPriseDeVisite({navigation}) {
     setSelectedDate(date);
     formattedDate = moment(date).format("YYYY-MM-DD");
     //fetch des dispos du pro 
-    fetch(`http://192.168.10.155:3000/disponibilites/dateSearch/${proid}`, {
+    fetch(`http://${ipAdress}/disponibilites/dateSearch/${proid}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ dateOfVisit: formattedDate })
@@ -188,7 +190,7 @@ export default function PersoPriseDeVisite({navigation}) {
     let bienImmoId = bienData._id.bienid
     const dateDeVisite = moment(selectedDate).format("YYYY-MM-DD");
 
-    fetch(`http://192.168.10.155:3000/visites`, {
+    fetch(`http://${ipAdress}/visites`, {
       method : 'POST',
       headers : {'Content-Type' : 'application/json'},
       body : JSON.stringify({prosId : prosId, usersId: userId, dateOfVisit: dateDeVisite, startTimeVisit: formatedStartTimeVisit, endTimeVisit: formatedendTimeVisit, duration: duration, bienImmoId: bienImmoId})
@@ -199,11 +201,11 @@ export default function PersoPriseDeVisite({navigation}) {
           console.log('data récupéré : ', data)
           dispatch(maVisiteData(data));
         }
+        if (user.dejaInscrit === 'true'){
+          navigation.navigate('TabNavigatorPerso');
+        } else { navigation.navigate('CompleteTonDossier');}
       })
       //si le client avait déjà un compte navigation vers HomePage sinon Tunnel
-      if (user.dejaInscrit === 'true'){
-        navigation.navigate('TabNavigatorPerso');
-      } else { navigation.navigate('CompleteTonDossier');}
 
   };
 
@@ -282,7 +284,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
     marginTop:20,
-    // justifyText:'center',
+    justifyText:'center',
     color :'#2d4150',
   },
   calendar:{

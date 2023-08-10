@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {Agenda, LocaleConfig} from 'react-native-calendars';
 import moment from "moment"; 
 
+
 import { ipAdress } from "../../immolibTools";
 
 
@@ -67,10 +68,10 @@ let completion;
 // Vérification si l'utilisateur est déjà inscrit
 if (user.dejaInscrit) {
   // Calcul du taux de complétion en pourcentage (pour les utilisateurs déjà inscrits)
-  completion = (countNonEmptyFields() / 25) * 100;
+  completion = Math.floor((countNonEmptyFields() / 25) * 100);
 } else {
   // Calcul du taux de complétion en pourcentage (pour les nouveaux utilisateurs)
-  completion = (countNonEmptyFields() / 15) * 100;
+  completion = Math.floor((countNonEmptyFields() / 15) * 100);
 }
 
 

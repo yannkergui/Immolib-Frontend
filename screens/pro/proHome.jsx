@@ -24,7 +24,6 @@ import { ipAdress } from "../../immolibTools";
 export default function ProHome({ navigation }) {
   const [items2, setItems2] = useState({});
   const pro = useSelector((state) => state.pro.value);
-  const [tableau, setTableau] = useState([]);
 
   const updatedItems = {};
 
@@ -196,19 +195,16 @@ const styles = StyleSheet.create({
     top: 80,
     alignItems: "center", // Center the content horizontally
     justifyContent: "flex-end",
-    // borderColor: "black",
-    // borderWidth: 1,
   },
   iconContainer: {
-    //position :"absolute",
     left: 0,
     top: 0,
     backgroundColor: "white",
     width: 60,
     height: 60,
-    // paddingLeft: 15,
-    // paddingTop: 8.5,
     borderRadius: 100,
+    justifyContent:'center',
+    alignItems:'center',
   },
   title: {
     color: "white",
@@ -231,9 +227,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#47AFA5",
     borderRadius: 10,
     marginBottom: "25%",
-
-    // paramètrage de l'ombre des boutons. utiliser : (https://ethercreative.github.io/react-native-shadow-generator/) si besoin
-
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -312,4 +305,9 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginBottom: 4,
   },
+  icon:{
+    justifyContent:'center',
+    alignItems:'center',
+  },
+
 });

@@ -7,6 +7,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
+//imports pro screens 
+
 import ProHome from "./screens/pro/proHome";
 import ProClients from "./screens/pro/proClients";
 import FicheClient from "./screens/pro/ficheClient"
@@ -14,11 +16,16 @@ import ProVisites from "./screens/pro/proVisites";
 import ProTchats from "./screens/pro/proTchats";
 import ProAnnonces from "./screens/pro/proAnnonces";
 import WelcomeScreenPro from "./screens/pro/WelcomeScreenPro";
-import MonDossierPro from "./screens/pro/monDossierpro"
 import ProConnectionScreen from "./screens/pro/proConnectionScreen";
 import ProPreferences from "./screens/pro/proPreferences";
 import CameraScreen from "./screens/pro/cameraScreen";
 import ProPriseDeVisite from "./screens/pro/proPriseDeVisite";
+import CreationAnnonce from "./screens/pro/creationAnnonce";
+import MonAnnonce from "./screens/pro/monAnnonce";
+import ProDisponibilites from "./screens/pro/proDisponibilites";
+
+
+//imports perso screens
 
 import PersoConnectionScreen from "./screens/perso/persoConnectionScreen";
 import PersoHome from "./screens/perso/persoHome";
@@ -34,8 +41,6 @@ import PersoMonDossier3Achat from "./screens/perso/persoMonDossier3Achat";
 import PersoMaVisite from "./screens/perso/persoMaVisite";
 import PersoPriseDeVisite from "./screens/perso/persoPriseDeVisite";
 import CompleteTonDossier from "./screens/perso/completeTonDossierPerso";
-import PersoModifVisite from "./screens/perso/persoModifVisite"; 
-
 import FirstScreen from "./screens/firstScreen";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -47,11 +52,13 @@ import monClient from "./reducers/monClient";
 import maVisite from "./reducers/maVisite";
 import maVille from "./reducers/maVille";
 import refresher from "./reducers/refresher";
+import monBien from "./reducers/monBien";
+
 
 import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
-  reducer: { user, pro, monClient, maVisite, maVille, refresher },
+  reducer: { user, pro, monClient, maVisite, maVille, refresher, monBien },
 });
 
 const TabNavigatorPro = () => {
@@ -205,39 +212,39 @@ export default function App() {
     <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
+          <Stack.Screen name="FirstScreen" component={FirstScreen} />
+
+          <Stack.Screen
+                name="TabNavigatorPerso"
+                component={TabNavigatorPerso}
+              />
+              <Stack.Screen
+                name="TabNavigatorPro"
+                component={TabNavigatorPro}
+                style={styles.tabNavigator}
+              />
+
             <Stack.Screen name="PersoConnexionScreen" component={PersoConnectionScreen} />
-            <Stack.Screen name="ProConnexionScreen" component={ProConnectionScreen} />
-            <Stack.Screen name="ProPriseDeVisite" component={ProPriseDeVisite} />
-            <Stack.Screen name="PersoVisites" component={PersoVisites} />
-            <Stack.Screen name="ProPreferences" component={ProPreferences} />
-            <Stack.Screen name="CameraScreen" component={CameraScreen} />
-            <Stack.Screen name="PersoMaVisite" component={PersoMaVisite} />
-            <Stack.Screen name="PersoPriseDeVisite" component={PersoPriseDeVisite} />
-            <Stack.Screen name="FirstScreen" component={FirstScreen} />
-            <Stack.Screen name="PersoMonDossier1" component={PersoMonDossier1} />
-            <Stack.Screen name="PersoMonDossier2Achat" component={PersoMonDossier2Achat} />
             <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
-            <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
-            <Stack.Screen name="PersoHome" component={PersoHome}/>
+            <Stack.Screen name="PersoPriseDeVisite" component={PersoPriseDeVisite} />
+            <Stack.Screen name="CompleteTonDossier" component={CompleteTonDossier} />
+            <Stack.Screen name="PersoMonDossier1" component={PersoMonDossier1} />
             <Stack.Screen name="PersoMonDossier2Loc" component={PersoMonDossier2Loc} />
             <Stack.Screen name="PersoMonDossier3Loc" component={PersoMonDossier3Loc} />
+            <Stack.Screen name="PersoMonDossier2Achat" component={PersoMonDossier2Achat} />
             <Stack.Screen name="PersoMonDossier3Achat" component={PersoMonDossier3Achat} />
-            <Stack.Screen name="PersoProfil" component={PersoProfil} />
-            <Stack.Screen name="ProAnnonces" component={ProAnnonces} />
-            <Stack.Screen name="ProClients" component={ProClients} />
+            <Stack.Screen name="PersoMaVisite" component={PersoMaVisite} />
+
             <Stack.Screen name="ProConnectionScreen" component={ProConnectionScreen} />
-            <Stack.Screen name="ProHome" component={ProHome} />
-            <Stack.Screen name="ProTchats" component={ProTchats} />
-            <Stack.Screen
-              name="TabNavigatorPerso"
-              component={TabNavigatorPerso}
-            />
-            <Stack.Screen
-              name="TabNavigatorPro"
-              component={TabNavigatorPro}
-              style={styles.tabNavigator}
-            />
-              
+            <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
+            <Stack.Screen name="ProDisponibilites" component={ProDisponibilites} />
+            <Stack.Screen name="FicheClient" component={FicheClient} />
+            <Stack.Screen name="MonAnnonce" component={MonAnnonce} />
+            <Stack.Screen name="CreationAnnonce" component={CreationAnnonce} />
+            <Stack.Screen name="ProPreferences" component={ProPreferences} />
+            <Stack.Screen name="ProPriseDeVisite" component={ProPriseDeVisite} />
+            <Stack.Screen name="CameraScreen" component={CameraScreen} />
+               
           </Stack.Navigator>
         </NavigationContainer>
     </Provider>

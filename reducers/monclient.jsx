@@ -6,6 +6,7 @@ const initialState = {
     // nom: '',
     // email : '',
     // tel: '',
+    // contrat : '',
     // location : {
     //   zoneLoc : '',
     //   budgetMois: '',

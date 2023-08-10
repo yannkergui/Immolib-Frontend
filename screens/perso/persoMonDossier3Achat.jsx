@@ -16,7 +16,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { userDatas } from "../../reducers/user";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import * as DocumentPicker from "expo-document-picker";
-import moment from "moment"; 
+import moment from "moment";
+import { ipAdress } from "../../immolibTools";
+
 
 export default function PersoMonDossier3Achat({ navigation }) {
   
@@ -56,7 +58,7 @@ export default function PersoMonDossier3Achat({ navigation }) {
       name: "PreAccord",
       type: "image/*",
     });
-    fetch(`http://192.168.10.155:3000/users/upload`, {
+    fetch(`http://${ipAdress}/users/upload`, {
       method: "POST",
       body: formData,
     })
@@ -77,12 +79,13 @@ export default function PersoMonDossier3Achat({ navigation }) {
         accordBanque: valuePreAccord,
       })
     );
-    fetch(`http://192.168.10.155:3000/users/${user.email}`, {
+    fetch(`http://${ipAdress}/users/${user.email}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         recherche: user.recherche,
         situation: user.situation,
+        zone: user.zone,
         achat: {
           budgetMax: user.budgetMax,
           typeBienAchat: user.typeBienAchat,
@@ -106,12 +109,13 @@ export default function PersoMonDossier3Achat({ navigation }) {
   };
 
   const handlePasserCetteEtape = () => {
-    fetch(`http://192.168.10.155:3000/users/${user.email}`, {
+    fetch(`http://${ipAdress}/users/${user.email}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         recherche: user.recherche,
         situation: user.situation,
+        zone: user.zone,
         achat: {
           budgetMax: user.budgetMax,
           typeBienAchat: user.typeBienAchat,

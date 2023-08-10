@@ -25,6 +25,8 @@ export default function ProPreferences({navigation}) {
   const pro = useSelector((state) => state.pro.value);
   console.log(pro);
 
+  console.log('test',pro._id);
+
   const [emailError, setEmailError] = useState(false);
   const [telError, setTelError] = useState(false);
   // Etat pour gérer les champs vides
@@ -173,6 +175,15 @@ function handlePhoto () {
   >
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.keyBoardContainer}>
       <SafeAreaView style={styles.safeArea}>
+        <View style={styles.header}>
+            <TouchableOpacity  onPress={() => navigation.goBack()}>
+                <FontAwesome style={styles.icon} name='chevron-left' size={20} color='#1F2937' />
+            </TouchableOpacity> 
+            <Text style={styles.Title}>Mes préférences</Text>
+            <TouchableOpacity style={styles.iconcontainer} onPress={() => { handleSubmit()}}>
+                <FontAwesome style={styles.icon} name='sign-out' size={30} color='#1F2937' />
+            </TouchableOpacity>
+        </View>
         <ScrollView style={styles.scrollContainer}>
           <View style={styles.main}>
 
@@ -209,24 +220,27 @@ function handlePhoto () {
             <View style={styles.cardAgence}>
                     <View style={styles.lineAgence}>
                         <Text style={styles.labelsAgence}>Raison sociale :</Text>
-                        <Text style={styles.inputAgence}>{pro.agence.denomination}</Text>
+                        <Text style={styles.inputAgence}>{pro.denomination}</Text>
                     </View>
                     <View style={styles.lineAgence}>
                         <Text style={styles.labelsAgence}>Siren :</Text>
-                        <Text style={styles.inputAgence}>{pro.agence.siren}</Text>
+                        <Text style={styles.inputAgence}>{pro.siren}</Text>
                     </View>
                     <View style={styles.lineAgence}>
                         <Text style={styles.labelsAgence}>Siret :</Text>
-                        <Text style={styles.inputAgence}>{pro.agence.siret}</Text>
-                    </View>
-                    <View style={styles.lineAgence}>
-                        <Text style={styles.labelsAgence}>Date de création :</Text>
-                        <Text style={styles.inputAgence}>{pro.agence.dateCreation}</Text>
+                        <Text style={styles.inputAgence}>{pro.siret}</Text>
                     </View>
                     <View style={styles.lineAgence}>
                         <Text style={styles.labelsAgence}>Adresse :</Text>
-                        <Text style={styles.inputAgence}>{pro.agence.adresse}</Text>
+                        <Text style={styles.inputAgence}>{pro.adresse}</Text>
                     </View>
+            </View>
+            <Text style={styles.cardTitle}>Mes Disponibilités</Text>
+            <View style={styles.dispo}>
+            <TouchableOpacity style={styles.button2} onPress={()=>navigation.navigate('ProDisponibilites')}>
+                    <Text style={styles.textButton2}>Je gère mes dispos</Text>
+                </TouchableOpacity>
+              
             </View>
 
             <Text style={styles.cardTitle}>Mes préférences</Text>
@@ -363,13 +377,14 @@ function handlePhoto () {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  main: {
+  container: {
     flex: 1,
     width: "100%",
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
-    paddingTop: 30,
+    alignItems: "center",
+    justifyContent: "center",
   },
   photoBloc: {
     justifyContent: 'center',
@@ -493,7 +508,7 @@ const styles = StyleSheet.create({
     elevation: 18,
     marginLeft: 10,
     marginTop: 25,
-    marginBottom: 15,
+    // marginBottom: 15,
     // borderColor: "white",
     // borderWidth: 1,
   },
@@ -519,8 +534,6 @@ const styles = StyleSheet.create({
     paddingRight: 5,
     fontFamily: 'Arial',
     fontSize: 16,
-    // borderColor: "purple",
-    // borderWidth: 1,
     width: 240,
   },
   inputProfile1: {
@@ -529,10 +542,7 @@ const styles = StyleSheet.create({
     paddingRight: 5,
     fontFamily: 'Arial',
     fontSize: 16,
-    // borderColor: "purple",
-    // borderWidth: 1,
     width: 210,
-    // textTransform: "uppercase",
   },
   inputProfile2: {
     paddingBottom: 4,
@@ -540,8 +550,6 @@ const styles = StyleSheet.create({
     paddingRight: 5,
     fontFamily: 'Arial',
     fontSize: 16,
-    // borderColor: "purple",
-    // borderWidth: 1,
     width: 150,
   },
 
@@ -614,13 +622,65 @@ const styles = StyleSheet.create({
     height: 25,
     fontWeight: "600",
     fontSize: 18,
-    // borderColor : 'black',
-    // borderWidth : 1,
     textAlign:'center',
-
   },
   error: {
     marginTop: 10,
     color: 'red',
   },
+  header: {
+    flexDirection: 'row',
+    width :400,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    zIndex: 1, 
+  },
+  iconcontainer :{
+    top : 0,
+    backgroundColor : 'white',
+    width : 50,
+    height: 50,
+    paddingLeft : 15,
+    paddingTop : 8.5,
+    borderRadius : 100
+    },
+    Title: {
+      color: 'white',
+      fontSize: 35,
+      fontStyle: 'normal',
+      fontWeight: '600', 
+      letterSpacing: -1.5, 
+      textAlign:'center',
+    },
+    button2 : {
+      alignItems: "center",
+      justifyContent: "center",
+      width: 200,
+      height: 40,
+      backgroundColor: "#47AFA5",
+      borderRadius: 10,
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 9,
+      },
+      shadowOpacity: 0.48,
+      shadowRadius: 11.95,
+      elevation: 18,
+    },
+    textButton2 : {
+      color: "#ffffff",
+      height: 30,
+      fontWeight: "600",
+      fontSize: 18,
+      textAlign:'center',
+      paddingTop:3
+    },
+    dispo:{
+      marginTop:15,
+      marginBottom:15,
+      justifyContent:'center',
+      alignItems:'center',
+      width:'100%',
+    },
 })
