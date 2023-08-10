@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from "react";
 import { maVisiteData } from '../../reducers/maVisite';
 import { maVilleData } from '../../reducers/maVille';
-
+import {refresh} from "../../reducers/refresher"
 import { ipAdress } from "../../immolibTools";
 
 export default function PersoVisites({navigation}) {
@@ -16,7 +16,9 @@ export default function PersoVisites({navigation}) {
 
   // etat pour stocker les infos reçues du backend
   const [visitesPerso, setVisitesPerso] = useState([]);
-  
+
+ // etat pour rafraichir la page après la validation de la visite
+ const refresher = useSelector((state) => state.refresher.value);
   
   const user = useSelector((state) => state.user.value);
 
@@ -27,8 +29,9 @@ export default function PersoVisites({navigation}) {
       .then(data => {
         setVisitesPerso(data.VisitesTrouvees);
       })
-  }, []);
+  }, [refresher]);
 
+ 
   // constante relative au switch de changement de page 
   const page = [
     { label: "en attente de validation", value: "en attente" },
@@ -84,12 +87,30 @@ function handleCancelVisit (e) {
   function handleMajVisit (e) {
     console.log(e);
     dispatch(maVisiteData(e));
-    navigation.navigate('PersoPriseDeVisite')
+    navigation.navigate('PersoModifVisite')
   }
 
 
+   //constante pour formatter la date de la visite en français
+   const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    const formattedDate = new Date(dateString).toLocaleDateString(
+      "fr-FR",
+      options
+    );
+    return formattedDate;
+  };
+
+   //fonction pour classer les visites par date
+   const sortedVisitesPerso = visitesPerso.sort((a, b) => {
+    // convertissez les dates et heures en objets Date pour le tri
+    let dateA = new Date(a.dateOfVisit + " " + a.startTimeVisit);
+    let dateB = new Date(b.dateOfVisit + " " + b.startTimeVisit);
+    return dateA - dateB; // retourne les données triées de la plus ancienne à la plus récente
+  });
+
   // 1er map relatif aux visites en attente 
-  const visiteEnAttente = visitesPerso.map((data) => {
+  const visiteEnAttente = sortedVisitesPerso.map((data) => {
     
     if (data.statut === "en attente") { 
       return (
@@ -98,7 +119,7 @@ function handleCancelVisit (e) {
           <View style={styles.lineCardheader}>
             <View style={styles.lineheader}>
             <FontAwesome name="calendar" size={25} color="white" />
-            <Text  style={styles.Textheader}> Le {data.dateOfVisit} à {data.startTimeVisit}</Text>
+            <Text  style={styles.Textheader}> Le {formatDate(data.dateOfVisit)} à {data.startTimeVisit}</Text>
             </View>
             <TouchableOpacity onPress={()=> handleMajVisit(data)}>
               <FontAwesome name="edit" size={30} color="white" />
@@ -136,7 +157,7 @@ function handleCancelVisit (e) {
 
   // 2iem map relatif aux visites passées
 
-  const visitePassees = visitesPerso.map((data) => {;
+  const visitePassees = sortedVisitesPerso.map((data) => {
     const today = new Date()
     const ConvertedDateOfVisit = new Date(data.dateOfVisit)
 
@@ -147,9 +168,9 @@ function handleCancelVisit (e) {
               <View style={styles.lineCardheader}>
                 <View style={styles.lineheader}>
                 <FontAwesome name="calendar" size={25} color="white" />
-                <Text  style={styles.Textheader}> Le {data.dateOfVisit} à {data.startTimeVisit}</Text>
+                <Text  style={styles.Textheader}> Le {formatDate(data.dateOfVisit)} à {data.startTimeVisit}</Text>
                 </View>
-                <TouchableOpacity>
+                <TouchableOpacity >
                   <FontAwesome name="edit" size={30} color="white" />
                 </TouchableOpacity>
               </View>
@@ -183,7 +204,7 @@ function handleCancelVisit (e) {
 
   // 3iem map relatif aux visites confirmées
 
-  const visiteConfirmees = visitesPerso.map((data) => {
+  const visiteConfirmees = sortedVisitesPerso.map((data) => {
     if (data.statut === "confirmé") {
       return (
         <TouchableOpacity style={styles.touchable} onPress={() => { handleSubmit(data) }}>
@@ -191,9 +212,9 @@ function handleCancelVisit (e) {
               <View style={styles.lineCardheader}>
                 <View style={styles.lineheader}>
                 <FontAwesome name="calendar" size={25} color="white" />
-                <Text  style={styles.Textheader}> Le {data.dateOfVisit} à {data.startTimeVisit}</Text>
+                <Text  style={styles.Textheader}> Le {formatDate(data.dateOfVisit)} à {data.startTimeVisit}</Text>
                 </View>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=> handleMajVisit(data)}>
                   <FontAwesome name="edit" size={30} color="white" />
                 </TouchableOpacity>
               </View>

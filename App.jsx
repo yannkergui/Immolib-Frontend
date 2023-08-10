@@ -42,6 +42,7 @@ import PersoMaVisite from "./screens/perso/persoMaVisite";
 import PersoPriseDeVisite from "./screens/perso/persoPriseDeVisite";
 import CompleteTonDossier from "./screens/perso/completeTonDossierPerso";
 import FirstScreen from "./screens/firstScreen";
+import PersoModifVisite from "./screens/perso/persoModifVisite";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
@@ -238,6 +239,9 @@ export default function App() {
             <Stack.Screen name="PersoMonDossier2Achat" component={PersoMonDossier2Achat} />
             <Stack.Screen name="PersoMonDossier3Achat" component={PersoMonDossier3Achat} />
             <Stack.Screen name="PersoMaVisite" component={PersoMaVisite} />
+            <Stack.Screen name="PersoModifVisite" component={PersoModifVisite} />
+             
+            
 
             {/* stack screens pro  */}
 
