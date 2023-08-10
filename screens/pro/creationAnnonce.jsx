@@ -7,6 +7,8 @@ import {
   Image,
   ScrollView,
   TextInput,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
@@ -121,6 +123,7 @@ export default function CreationAnnonce( {navigation} ) {
         end={{ x: 1, y: 1 }} // End point of the gradient
         style={styles.container}
       >
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container} keyboardVerticalOffset={Platform.OS==='ios' ? 70 : 300}>
         <View style={styles.header}>
         <TouchableOpacity onPress={() => {navigation.goBack()}}>
             <FontAwesome
@@ -162,7 +165,7 @@ export default function CreationAnnonce( {navigation} ) {
               style={styles.SwitchSelector}
               buttonColor="#47AFA5"
               buttonMargin={1.5}
-              animationDuration={250}
+              animationDuration={150}
               height={45}
             />
           </View>
@@ -174,10 +177,10 @@ export default function CreationAnnonce( {navigation} ) {
               onPress={(value) => setTransaction(value)}
               valuePadding={2.5}
               hasPadding
-              style={styles.SwitchSelector}
+              style={styles.SwitchSelector2}
               buttonColor="#47AFA5"
               buttonMargin={1.5}
-              animationDuration={250}
+              animationDuration={150}
               height={45}
             />
           </View>
@@ -189,10 +192,10 @@ export default function CreationAnnonce( {navigation} ) {
               onPress={(value) => setBienMeuble(value)}
               valuePadding={2.5}
               hasPadding
-              style={styles.SwitchSelector}
+              style={styles.SwitchSelector2}
               buttonColor="#47AFA5"
               buttonMargin={1.5}
-              animationDuration={250}
+              animationDuration={150}
               height={45}
             />
           </View>
@@ -291,6 +294,7 @@ export default function CreationAnnonce( {navigation} ) {
             </TouchableOpacity>
           </View>
         </ScrollView>
+        </KeyboardAvoidingView>
       </LinearGradient>
     </View>
   );
@@ -376,6 +380,9 @@ const styles = StyleSheet.create({
   },
 
   SwitchSelector: {
+    width: "75%",
+  },
+  SwitchSelector2: {
     width: "50%",
   },
 });
