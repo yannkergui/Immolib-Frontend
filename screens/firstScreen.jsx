@@ -69,7 +69,6 @@ const styles = StyleSheet.create({
   },
   textButton: {
     color: "#ffffff",
-    height: 30,
     fontWeight: "600",
     fontSize: 16,
   },

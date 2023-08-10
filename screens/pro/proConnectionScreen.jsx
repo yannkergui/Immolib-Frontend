@@ -17,7 +17,7 @@ export default function ProConnectionScreen({navigation}) {
    const [nom, setNom]=useState('');
    const [tel, setTel]=useState('');
    const [siret, setSiret]=useState("");
-   console.log(siret);
+  //  console.log(siret);
 
   // Etats pour gérer les erreurs d'INSCRIPTION seulement
   const [siretError, setSiretError] = useState(false);
@@ -100,17 +100,17 @@ export default function ProConnectionScreen({navigation}) {
 
 //désactivation du regex réel pour les tests /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const EMAIL_REGEX = /[a-z]/
-//désactivation du regex réel pour les tests /^(?:(?:(?:\+|00)33\s?|0)[0-9]\s?\d{8})$/
- const TEL_REGEX = /[0-9]{1}/
+//désactivation du regex réel pour les tests /[0-9]{1}/
+const TEL_REGEX = /^(?:(?:(?:\+|00)33\s?|0)[0-9]\s?\d{8})$/        
 //désactivation du regex réel pour les tests /\d{14}/g
  const SIRET_REGEX = /\d{1}/g
 
 
   const handleInscriptionBis = async () => {
 
-    console.log("mail", EMAIL_REGEX.test(email));
-    console.log("tel", TEL_REGEX.test(tel));
-    console.log("siret", SIRET_REGEX.test(siret));
+    // console.log("mail", EMAIL_REGEX.test(email));
+    // console.log("tel", TEL_REGEX.test(tel));
+    // console.log("siret", SIRET_REGEX.test(siret));
 
     if (!prenom || !nom || !motDePasse) {
       setErrorEmpty(true) 
@@ -146,7 +146,7 @@ const EMAIL_REGEX = /[a-z]/
     const data1 = await response1.json();
     const adrInsee = await data1.etablissement.adresseEtablissement
     
-    console.log(adrInsee);
+    // console.log(adrInsee);
 
     if (data1.header.message === "ok") {
 
@@ -162,11 +162,13 @@ const EMAIL_REGEX = /[a-z]/
           email: email,
           motDePasse: motDePasse,
           tel: tel,
-          denomination: data1.etablissement.uniteLegale.denominationUniteLegale,
-          siren: data1.etablissement.siren,
-          dateCreation: data1.etablissement.dateCreationEtablissement,
-          adresse: `${adrInsee.numeroVoieEtablissement}${adrInsee.indiceRepetitionEtablissement ? adrInsee.indiceRepetitionEtablissement : '' }, ${adrInsee.typeVoieEtablissement} ${adrInsee.libelleVoieEtablissement}, ${adrInsee.codePostalEtablissement} ${adrInsee.libelleCommuneEtablissement}`
-        })
+          agence: { denomination: data1.etablissement.uniteLegale.denominationUniteLegale,
+                    siren: data1.etablissement.siren,
+                    siret: data1.etablissement.siret,
+                    dateCreation: data1.etablissement.dateCreationEtablissement,
+                    adresse: `${adrInsee.numeroVoieEtablissement}${adrInsee.indiceRepetitionEtablissement ? adrInsee.indiceRepetitionEtablissement : '' }, ${adrInsee.typeVoieEtablissement} ${adrInsee.libelleVoieEtablissement}, ${adrInsee.codePostalEtablissement} ${adrInsee.libelleCommuneEtablissement}`
+                  }
+          })
       });
 
       const data2 = await response2.json();
@@ -188,11 +190,13 @@ const EMAIL_REGEX = /[a-z]/
                 tel: data2.newPro.tel,
                 motDePasse: data2.newPro.motDePasse,
                 token: data2.newPro.token,
-                denomination : data2.newPro.agence.denomination,
-                siren: data2.newPro.agence.siren,
-                siret: data2.newPro.agence.siret,
-                dateCreation: data2.newPro.agence.dateCreation,
-                adresse: data2.newPro.agence.adresse,
+                agence : {
+                  denomination : data2.newPro.agence.denomination,
+                  siren: data2.newPro.agence.siren,
+                  siret: data2.newPro.agence.siret,
+                  dateCreation: data2.newPro.agence.dateCreation,
+                  adresse: data2.newPro.agence.adresse,
+                }
               }
           )
         );
@@ -215,7 +219,7 @@ const EMAIL_REGEX = /[a-z]/
 
         // !!!!!!! Passage à l'écran ProPreferences PROBLEME !!!!!!!!!
 
-        navigation.navigate("ProHome");
+        navigation.navigate("TabNavigatorPro");
 
       }
       if (data2.error==="User already exists") {

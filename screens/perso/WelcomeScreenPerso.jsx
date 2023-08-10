@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'Nunitobold',
     color: 'white',
-    fontSize: 60,
+    fontSize: 50,
     fontStyle: 'normal',
     fontWeight: '600',
     lineHeight: 60, 

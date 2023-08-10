@@ -17,11 +17,10 @@ export default function PersoVisites({navigation}) {
   const refresher = useSelector((state) => state.refresher.value);
   console.log(refresher);
 
-  const [modaleMaj, setModaleMaj]=useState(false);
-
   // etat pour stocker les infos reçues du backend
   const [visitesPerso, setVisitesPerso] = useState([]);
-
+  
+  
   const user = useSelector((state) => state.user.value);
 
   // Fetch du backend au chargement de la page pour récupérer les visites liées au user
