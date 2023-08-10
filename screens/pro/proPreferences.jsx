@@ -23,6 +23,7 @@ export default function ProPreferences({navigation}) {
   const [tel, setTel]=useState('');
 
   const pro = useSelector((state) => state.pro.value);
+  console.log(pro);
 
   const [emailError, setEmailError] = useState(false);
   const [telError, setTelError] = useState(false);
