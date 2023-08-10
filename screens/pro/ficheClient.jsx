@@ -66,10 +66,11 @@ export default function FicheClient({navigation}) {
     couleur = 'green';
   }
 
-    // const [fontsLoaded] = useFonts({
-    //     Nunitobold: require('../../assets/fonts/Nunito/static/Nunito-Bold.ttf'),
-    //     NunitoSans: require('../../assets/fonts/Nunito_Sans/static/NunitoSans_7pt-Medium.ttf')
-    //   });
+    const [fontsLoaded] = useFonts({
+        Nunitobold: require('../../assets/fonts/Nunito/static/Nunito-Bold.ttf'),
+        NunitoSans: require('../../assets/fonts/Nunito_Sans/static/NunitoSans_7pt-Medium.ttf')
+      });
+      
   const handleSubmit = () => {
     navigation.navigate('ProPreferences')
   }  

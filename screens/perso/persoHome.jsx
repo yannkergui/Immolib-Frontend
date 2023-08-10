@@ -25,7 +25,8 @@ export default function PersoHome({navigation}) {
 
   const refresher = useSelector((state) => state.refresher.value);
 
-  
+  const [count, setCount]=useState(0);
+
   // Extraction des données de l'utilisateur depuis le store Redux
   const user = useSelector((state) => state.user.value);
 
@@ -56,32 +57,47 @@ export default function PersoHome({navigation}) {
 
         const closestVisit = findClosestVisit(updatedItems);
         setClosestVisit(closestVisit);
+        
+        //récupération des données du user
+        fetch(`http://${ipAdress}/users/${user.token}`)
+        .then(response => response.json())
+        .then(data => {
+          let compteur = 0
+          for (let key in data.user) {
+            if (data.user[key]!=='' && key!=='documents' && key !=='location' && key !== 'achat' && key !== 'token' && key !== '_id' && key !== '__v') {
+              compteur++;
+            } 
+            }
+            if (data.user.location!==null) {
+              for (let keyLoc in data.user.location) {
+                if (data.user.location[keyLoc]!=='') {
+                  compteur++;
+                }
+              }
+            } else if (data.user.achat!=={}) {
+              for (let keyAchat in data.user.achat) {
+                if (data.user.achat[keyAchat]!=='')
+                  compteur ++;
+              }
+            }
+          
+          setCount(compteur);
+          return (compteur);
+         })
       })
   }, [refresher]);
 
-// Fonction pour compter les champs non vides dans l'objet utilisateur
-const countNonEmptyFields = () => {
-  let count = 0;
-  // Parcours des propriétés de l'objet utilisateur
-  for (const key in user) {
-    // Vérification que la propriété a une valeur non vide avec tous les cas possibles
-    if (user[key] !== "" && user[key] !== null && user[key] !== undefined) {
-      count++;
-    }
-  }
-  return count;
-};
-
 // déclaration de la variable pour la completion du dossier
-let completion;
+let completion=0;
 // Vérification si l'utilisateur est déjà inscrit
 if (user.dejaInscrit) {
-  // Calcul du taux de complétion en pourcentage (pour les utilisateurs déjà inscrits)
-  completion = Math.floor((countNonEmptyFields() / 25) * 100);
+  console.log('user : ', user)
+  completion = Math.floor((count / 16) * 100);
 } else {
   // Calcul du taux de complétion en pourcentage (pour les nouveaux utilisateurs)
-  completion = Math.floor((countNonEmptyFields() / 15) * 100);
+  completion = Math.floor((count / 15) * 100);
 }
+console.log('completion : ', completion, 'count : ', count)
 
 
   // Configuration des noms de mois et jours en français pour le calendrier
