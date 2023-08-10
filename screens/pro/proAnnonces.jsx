@@ -8,12 +8,17 @@ import { useState, useEffect } from "react";
 import { ipAdress } from "../../immolibTools";
 import { monBienData } from '../../reducers/monBien';
 import { maVilleData } from '../../reducers/maVille';
+import {refresh} from "../../reducers/refresher"
+
 
 export default function ProAnnonces( {navigation} ) {
 
 
   const dispatch = useDispatch();
   const pro = useSelector((state) => state.pro.value);
+  const refresher = useSelector((state) => state.refresher.value);
+
+  console.log(refresher)
 
  
 
@@ -31,7 +36,7 @@ export default function ProAnnonces( {navigation} ) {
         setBiensPro(data.biens)
         // console.log(data.bien)
       })
-  }, []);
+  }, [refresher]);
 
   const goToMonAnnonce = (e) => {;
     dispatch(monBienData(e));
@@ -78,7 +83,7 @@ const annoncesVente = biensPro.map((data) => {
           <View style={styles.textContainer}>
           <Text style={styles.annonceTitre}>{data.titre} </Text>
           <Text style={styles.annonceAdresse}> {data.numeroRue} {data.rue} {data.ville} {data.codePostal}</Text>
-          <TouchableOpacity>
+            <TouchableOpacity>
               <FontAwesome name="remove" size={30} color="#1F2937" />
             </TouchableOpacity>
           </View>
@@ -145,15 +150,16 @@ const annoncesVente = biensPro.map((data) => {
           />
         </View>
         <StatusBar style="auto" />
+        <TouchableOpacity style={styles.next} onPress={handleCreerAnnonce}>
+          <Text>Créer une annonce</Text>
+        </TouchableOpacity>
         <ScrollView style={styles.scroll}
-        contentContainerStyle={styles.contentContainer}>
+          contentContainerStyle={styles.contentContainer}>
         <View style={styles.cardContainer}>
           {activPage === "location" && annoncesLocation}
           {activPage === "vente" && annoncesVente}
         </View>
-        <TouchableOpacity style={styles.next} onPress={handleCreerAnnonce}>
-          <Text>Créer une annonce</Text>
-        </TouchableOpacity>
+        
 
         </ScrollView>
         
@@ -287,15 +293,23 @@ textContainer: {
 next: {
   alignItems: "center",
   justifyContent: "center",
-  width: 150,
-  height: 50,
+  width: "40%",
+  height: 30,
   backgroundColor: "#47AFA5",
   borderColor: "white",
   borderWidth: 1,
   borderRadius: 10,
-  marginTop: 80,
-  bottom: 80,
+  marginRight: 3,
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 9,
+  },
+  shadowOpacity: 0.48,
+  shadowRadius: 11.95,
+  elevation: 18,
 },
+
 contentContainer: { 
   alignItems: "center",
   justifyContent: "center",

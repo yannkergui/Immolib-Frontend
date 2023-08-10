@@ -5,6 +5,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useFonts } from 'expo-font';
 import { useSelector } from 'react-redux';
+import { ipAdress } from "../../immolibTools";
 
 
 export default function FicheClient({navigation}) {
@@ -18,7 +19,52 @@ export default function FicheClient({navigation}) {
   const [switchValueImpot, setSwitchValueImpot] = useState(false);
   const [switchValuePret, setSwitchValuePret] = useState(false);
 
-  const user = useSelector((state) => state.monClient.value);
+  const client = useSelector((state) => state.monClient.value);
+
+  // Fonction pour calculer la complétude du dossier
+  const countNonEmptyFields = () => {
+    let count = 0;
+    if (client.recherche==='location') {
+      for (let key in client.location) {
+        count ++;
+      }
+    } else if (client.recherche === 'achat') {
+      for (let key in client.achat) {
+        count ++;
+      }
+    }
+    if (client.documents) {
+      for (let key in client.documents) {
+        count ++;
+      }
+    }
+    for (let key in client) {
+      if (client[key] && key!=='location' && key!=='achat' && key!=='documents' && key!=='token') {
+        count++;
+      }
+    }
+    return count;
+  };
+
+  //Calcul de la complétude du dossier
+  let completude = 0;
+  if (client.location) {
+    // 22 docs à compléter pour le locataire (à vérifier)
+    completude = Math.round(countNonEmptyFields()*100/22);
+  } else if (client.achat) {
+    // 25 docs à compléter pour l'acheteur (à vérifier)
+    completude = Math.round(countNonEmptyFields()*100/25);
+  }
+
+  //couleur pastille
+  let couleur = '';
+  if (completude<30) {
+    couleur = 'red';
+  } else if (completude >=30 && completude<70) {
+    couleur = 'orange';
+  } else {
+    couleur = 'green';
+  }
 
     // const [fontsLoaded] = useFonts({
     //     Nunitobold: require('../../assets/fonts/Nunito/static/Nunito-Bold.ttf'),
@@ -26,7 +72,7 @@ export default function FicheClient({navigation}) {
     //   });
   const handleSubmit = () => {
     navigation.navigate('ProPreferences')
-  }
+  }  
 
   return (
     <View style={styles.container}>
@@ -37,127 +83,133 @@ export default function FicheClient({navigation}) {
       style={styles.background}
         >
       <View style={styles.container}>
+          <View style={styles.hautPage}>
+            <View style={styles.header}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <FontAwesome style={styles.icon} name='chevron-left' size={20} color='#1F2937' />
+                </TouchableOpacity> 
+                <Text style={styles.Title}>Mon Client</Text>
+                <TouchableOpacity style={styles.iconcontainer} onPress={() => { handleSubmit()}}>
+                    <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' />
+                </TouchableOpacity>
+            </View>
+            <View style={styles.dossier}>
+              <Text style={styles.dossiertxt}>Dossier complet à {completude} %</Text>
+              <View style={[styles.pastille, {backgroundColor : couleur }]}></View>
+            </View> 
+          </View>
         <ScrollView style={styles.scrollContainer}>
-        <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-                <FontAwesome style={styles.icon} name='chevron-left' size={20} color='#1F2937' />
-            </TouchableOpacity> 
-            <Text style={styles.Title}>Mon Client</Text>
-            <TouchableOpacity style={styles.iconcontainer} onPress={() => { handleSubmit()}}>
-                <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' />
-            </TouchableOpacity>
-        </View>
         <View style={styles.CardsGroup}>
                 <Text style={styles.cardTitle}>Infos Client :</Text>
                 <View style={styles.clientsCard1}>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos}>Nom :</Text>
-                        <Text style={styles.Infos}>{user.usersId.nom}</Text>
+                        <Text style={styles.InfosGauche}>Nom :</Text>
+                        <Text style={styles.InfosDroite}>{client.nom}</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos}>Prénom : </Text>
-                        <Text style={styles.Infos}>{user.usersId.prenom}</Text>
+                        <Text style={styles.InfosGauche}>Prénom : </Text>
+                        <Text style={styles.InfosDroite}>{client.prenom}</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos}>Téléphone : </Text>
-                        <Text style={styles.Infos}>{user.usersId.tel}</Text>
+                        <Text style={styles.InfosGauche}>Téléphone : </Text>
+                        <Text style={styles.InfosDroite}>{client.tel}</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos}>Email :</Text>
-                        <Text style={styles.Infos}>{user.usersId.email}</Text>
+                        <Text style={styles.InfosGauche}>Email :</Text>
+                        <Text style={styles.InfosDroite}>{client.email}</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos}>salaire Mensuel :</Text>
-                        <Text style={styles.Infos}>{user.usersId.salaire} €</Text>
+                        <Text style={styles.InfosGauche}>salaire Mensuel :</Text>
+                        <Text style={styles.InfosDroite}>{client.salaire} €</Text>
                     </View>
                 </View>
             
                 <Text style={styles.cardTitle}>Sa Recherche :</Text>
-                {user.usersId.recherche==='location' &&
+                {client.recherche==='location' &&
                 <View style={styles.clientsCard2}>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2}>Recherche :</Text>
-                        <Text style={styles.Infos2}>{user.usersId.recherche}</Text>
+                        <Text style={styles.Infos2Gauche}>Recherche :</Text>
+                        <Text style={styles.Infos2Droite}>{client.recherche}</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2}>Zone de Recherche :</Text>
-                        <Text style={styles.Infos2}>{/*user.usersId.zone*/}Paris</Text>
+                        <Text style={styles.Infos2Gauche}>Zone de Recherche :</Text>
+                        <Text style={styles.Infos2Droite}>{/*client.zone*/}Paris</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2}>Budget Mensuel Max :</Text>
-                        <Text style={styles.Infos2}>{user.usersId.location.budgetMois} euros</Text>
+                        <Text style={styles.Infos2Gauche}>Budget Mensuel Max :</Text>
+                        <Text style={styles.Infos2Droite}>{client.location.budgetMois} euros</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2}>Type de Bien recherché :</Text>
-                        <Text style={styles.Infos2}>{user.usersId.location.typeBienLoc}</Text>
+                        <Text style={styles.Infos2Gauche}>Type de Bien recherché :</Text>
+                        <Text style={styles.Infos2Droite}>{client.location.typeBienLoc}</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2}>Surface Minimum :</Text>
-                        <Text style={styles.Infos2}>{user.usersId.location.minSurfaceLoc} m²</Text>
+                        <Text style={styles.Infos2Gauche}>Surface Minimum :</Text>
+                        <Text style={styles.Infos2Droite}>{client.location.minSurfaceLoc} m²</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2}>Nbre de pièces Minimum :</Text>
-                        <Text style={styles.Infos2}>{user.usersId.location.minPieceLoc}</Text>
+                        <Text style={styles.Infos2Gauche}>Nbre de pièces Minimum :</Text>
+                        <Text style={styles.Infos2Droite}>{client.location.minPieceLoc}</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2}>Nbre de locataires :</Text>
-                        <Text style={styles.Infos2}>{user.usersId.location.nbLoc}</Text>
+                        <Text style={styles.Infos2Gauche}>Nbre de locataires :</Text>
+                        <Text style={styles.Infos2Droite}>{client.location.nbLoc}</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2}>Bien Meublé :</Text>
-                        <Text style={styles.Infos2}>{user.usersId.location.meuble}</Text>
+                        <Text style={styles.Infos2Gauche}>Bien Meublé :</Text>
+                        <Text style={styles.Infos2Droite}>{client.location.meuble}</Text>
                     </View>
                 </View> }
 
-                {user.usersId.recherche==='achat' &&
+                {client.recherche==='achat' &&
                 <View style={styles.clientsCard2}>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2}>Recherche :</Text>
-                        <Text style={styles.Infos2}>{user.usersId.recherche}</Text>
+                        <Text style={styles.Infos2Gauche}>Recherche :</Text>
+                        <Text style={styles.Infos2Droite}>{client.recherche}</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2}>Zone de Recherche :</Text>
-                        <Text style={styles.Infos2}>{/*user.usersId.zone*/}Paris</Text>
+                        <Text style={styles.Infos2Gauche}>Zone de Recherche :</Text>
+                        <Text style={styles.Infos2Droite}>{/*client.zone*/}Paris</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2}>Budget Mensuel Max :</Text>
-                        <Text style={styles.Infos2}>{user.usersId.achat.budgetMax} euros</Text>
+                        <Text style={styles.Infos2Gauche}>Budget Mensuel Max :</Text>
+                        <Text style={styles.Infos2Droite}>{client.achat.budgetMax} euros</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2}>Type de Bien recherché :</Text>
-                        <Text style={styles.Infos2}>{user.usersId.achat.typeBienAchat}</Text>
+                        <Text style={styles.Infos2Gauche}>Type de Bien recherché :</Text>
+                        <Text style={styles.Infos2Droite}>{client.achat.typeBienAchat}</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2}>Surface Minimum :</Text>
-                        <Text style={styles.Infos2}>{user.usersId.achat.minSurfaceAchat} m²</Text>
+                        <Text style={styles.Infos2Gauche}>Surface Minimum :</Text>
+                        <Text style={styles.Infos2Droite}>{client.achat.minSurfaceAchat} m²</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2}>Nbre de pièces Minimum :</Text>
-                        <Text style={styles.Infos2}>{user.usersId.achat.minPieceAchat}</Text>
+                        <Text style={styles.Infos2Gauche}>Nbre de pièces Minimum :</Text>
+                        <Text style={styles.Infos2Droite}>{client.achat.minPieceAchat}</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2}>Type d'investissement</Text>
-                        <Text style={styles.Infos2}>{user.usersId.achat.typeInvest}</Text>
+                        <Text style={styles.Infos2Gauche}>Type d'investissement</Text>
+                        <Text style={styles.Infos2Droite}>{client.achat.typeInvest}</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2}>Primo accédant ?</Text>
-                        <Text style={styles.Infos2}>{user.usersId.achat.typeInvest ? "oui" : "non"}</Text>
+                        <Text style={styles.Infos2Gauche}>Primo accédant ?</Text>
+                        <Text style={styles.Infos2Droite}>{client.achat.typeInvest ? "oui" : "non"}</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2}>Financement</Text>
-                        <Text style={styles.Infos2}>{user.usersId.achat.financement}</Text>
+                        <Text style={styles.Infos2Gauche}>Financement</Text>
+                        <Text style={styles.Infos2Droite}>{client.achat.financement}</Text>
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos2}>accord Banque ?</Text>
-                        <Text style={styles.Infos2}>{user.usersId.achat.accordBanque ? "oui" : "non"}</Text>
+                        <Text style={styles.Infos2Gauche}>accord Banque ?</Text>
+                        <Text style={styles.Infos2Droite}>{client.achat.accordBanque ? "oui" : "non"}</Text>
                     </View>
                 </View> }
 
                 <Text style={styles.cardTitle}>Pièces Justificatives :</Text>
-                {user.usersId.recherche==='location' &&
+                {client.recherche==='location' &&
                 <View style={styles.clientsCard3}>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos}>{`\u2022`} Pièce d'identité</Text>
+                        <Text style={styles.Infos3Gauche}>{`\u2022`} Pièce d'identité</Text>
                         <Switch
                             style={styles.switch}
                             trackColor={{ false: "#767577", true: "#f4f3f4"}}
@@ -168,7 +220,7 @@ export default function FicheClient({navigation}) {
                             />
                     </View> 
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos}>{`\u2022`} Justificatif de Domicile</Text>
+                        <Text style={styles.Infos3Gauche}>{`\u2022`} Justificatif de Domicile</Text>
                         <Switch
                             style={styles.switch}
                             trackColor={{ false: "#767577", true: "#f4f3f4"}}
@@ -179,7 +231,7 @@ export default function FicheClient({navigation}) {
                             />
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos}>{`\u2022`} Fiche de paye 1</Text>
+                        <Text style={styles.Infos3Gauche}>{`\u2022`} Fiche de paye 1</Text>
                         <Switch
                             style={styles.switch}
                             trackColor={{ false: "#767577", true: "#f4f3f4"}}
@@ -190,7 +242,7 @@ export default function FicheClient({navigation}) {
                             />
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos}>{`\u2022`} Fiche de paye 2</Text>
+                        <Text style={styles.Infos3Gauche}>{`\u2022`} Fiche de paye 2</Text>
                         <Switch
                             style={styles.switch}
                             trackColor={{ false: "#767577", true: "#f4f3f4"}}
@@ -201,7 +253,7 @@ export default function FicheClient({navigation}) {
                             />
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos}>{`\u2022`} Fiche de paye 3</Text>
+                        <Text style={styles.Infos3Gauche}>{`\u2022`} Fiche de paye 3</Text>
                         <Switch
                             style={styles.switch}
                             trackColor={{ false: "#767577", true: "#f4f3f4"}}
@@ -212,7 +264,7 @@ export default function FicheClient({navigation}) {
                             />
                     </View>
                     <View style={styles.rowInfos}>
-                        <Text style={styles.Infos}>{`\u2022`} avis d'imposition</Text>
+                        <Text style={styles.Infos3Gauche}>{`\u2022`} avis d'imposition</Text>
                         <Switch
                             style={styles.switch}
                             trackColor={{ false: "#767577", true: "#f4f3f4"}}
@@ -223,10 +275,10 @@ export default function FicheClient({navigation}) {
                             />
                     </View>
             </View> }
-            {user.usersId.recherche==='achat' &&
+            {client.recherche==='achat' &&
             <View style={styles.clientsCard3}>
               <View style={styles.rowInfos}>
-              <Text style={styles.Infos}>{`\u2022`}Prêt accord banque</Text>
+              <Text style={styles.Infos3Gauche}>{`\u2022`}Prêt accord banque</Text>
               <Switch
                   style={styles.switch}
                   trackColor={{ false: "#767577", true: "#f4f3f4"}}
@@ -237,11 +289,9 @@ export default function FicheClient({navigation}) {
                   />
               </View>
             </View>}
-                    <View>
                         <TouchableOpacity style={styles.button}>
                             < Text style={styles.textButton}>Télécharger les Documents</Text>
                         </TouchableOpacity>
-                    </View>
 
             </View>
         </ScrollView>
@@ -257,7 +307,7 @@ container: {
   flex: 1,
   width: "100%",
   justifyContent: 'center',
-  alignItems:'center'
+  alignItems:'center',
 },
 background: {
   flex: 1,
@@ -266,11 +316,32 @@ background: {
 header: {
   flexDirection: 'row',
   width :'90%',
-  position: 'absolute',
-  top: 80, 
+  marginTop : '15%', 
   alignItems: 'center', // Center the content horizontally
   justifyContent: 'space-between',
-  zIndex: 1, 
+  padding : '2%',
+},
+hautPage : {
+  width : '100%',
+  justifyContent : 'center',
+  alignItems : 'center',
+},
+dossier : {
+  flexDirection : 'row',
+  padding : '3%',
+  alignItems : 'center',
+},
+dossiertxt : {
+  fontSize : 15,
+},
+pastille : {
+  width : 10,
+  height : 10,
+  borderRadius : 100,
+  marginLeft : '3%',
+},
+scrollContainer : {
+
 },
 iconcontainer :{
 top : 0,
@@ -299,18 +370,17 @@ Title: {
   textAlign:'center',
 },
 CardsGroup :{
-    top: '15%',
+    marginTop : '2%',
     justifyContent: 'center',
     alignItems: 'center',
-    
 },
 
 clientsCard1 :{
   justifyContent : 'center',
-  alignItems : 'flex-start',
+  alignItems : 'center',
   height: 220,
   width : 400,
-  borderRadius: 120,
+  borderRadius: 80,
   backgroundColor:'#BCCDB6',
   shadowColor: "#000",
     shadowOffset: {
@@ -321,13 +391,14 @@ clientsCard1 :{
     shadowRadius: 11.95,
     elevation: 18,
     margin: 10,
+    padding : 5,
 },
 clientsCard2 :{
     justifyContent : 'center',
-    alignItems : 'flex-start',
-    height: 300,
+    alignItems : 'center',
+    height: 350,
     width : 400,
-    borderRadius: 120,
+    borderRadius: 80,
     backgroundColor:'#BCCDB6',
     shadowColor: "#000",
       shadowOffset: {
@@ -338,10 +409,11 @@ clientsCard2 :{
       shadowRadius: 11.95,
       elevation: 18,
       margin: 10,
+      padding : 5,
   },
   clientsCard3 :{
     justifyContent : 'center',
-    alignItems : 'flex-start',
+    alignItems : 'center',
     //height:350,
     width : 400,
     borderRadius: 100,
@@ -355,6 +427,7 @@ clientsCard2 :{
       shadowRadius: 11.95,
       elevation: 18,
       margin: 10,
+      padding : 8,
   },
 clientsCardOrientation:{
   width : '100%',
@@ -385,19 +458,35 @@ centerCardOrientation:{
   justifyContent: 'space-around',
   alignItems : 'center',
 },
-Infos:{
+InfosGauche:{
     paddingBottom: 10,
-    paddingLeft: 45,
-    paddingRight: 45,
+    paddingLeft: 20,
     fontFamily: 'NunitoSans',
     fontSize: 16,
 },
-Infos2:{
-    paddingBottom: 10,
-    paddingLeft: 45,
-    paddingRight: 50,
-    fontFamily: 'NunitoSans',
-    fontSize: 12,
+InfosDroite:{
+  paddingBottom: 10,
+  paddingRight: 20,
+  fontFamily: 'NunitoSans',
+  fontSize: 16,
+},
+Infos2Gauche:{
+  paddingBottom: 10,
+  paddingLeft: 30,
+  fontFamily: 'NunitoSans',
+  fontSize: 16,
+},
+Infos2Droite:{
+  paddingBottom: 10,
+  paddingRight: 30,
+  fontFamily: 'NunitoSans',
+  fontSize: 16,
+},
+Infos3Gauche:{
+  paddingLeft: 30,
+  fontFamily: 'NunitoSans',
+  fontSize: 16,
+  paddingTop : 10,
 },
 cardTitle:{
     marginTop:5,   
@@ -406,18 +495,18 @@ cardTitle:{
     fontSize: 20,
 },
 rowInfos : {
-width: '100%',
+width: '95%',
 flexDirection:'row',
-justifyContent:'space-between'
+justifyContent:'space-between',
 },
 switch:{
     marginRight: 40,
-    marginBottom: 10,
+    // marginBottom: 10,
 },
 button: {
     alignItems: "center",
     justifyContent: "center",
-    width: 200,
+    width: '80%',
     height: 40,
     backgroundColor: "#47AFA5",
     borderRadius: 10,
@@ -433,14 +522,14 @@ button: {
     shadowOpacity: 0.48,
     shadowRadius: 11.95,
     elevation: 18,
+    margin : '5%',
   },
   textButton: {
     color: "#ffffff",
     fontFamily: 'Nunitobold',
     height: 30,
     fontWeight: "600",
-    fontSize: 12,
-    paddingTop: 7,
+    fontSize: 20,
   },
   
 });
