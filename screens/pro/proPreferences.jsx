@@ -4,11 +4,12 @@ import SwitchSelector from "react-native-switch-selector";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 //import { useFonts } from 'expo-font';
 
-import ipAdress from "../../immolibTools"
+import {ipAdress} from "../../immolibTools"
 
 import { useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { proDatas } from '../../reducers/pro';
+import FirstScreen from '../firstScreen';
 
 export default function ProPreferences({navigation}) {
 
@@ -24,7 +25,8 @@ export default function ProPreferences({navigation}) {
 
   const pro = useSelector((state) => state.pro.value);
 
-  console.log('test',pro._id);
+
+  console.log('test',pro);
 
   const [emailError, setEmailError] = useState(false);
   const [telError, setTelError] = useState(false);
@@ -179,7 +181,7 @@ function handlePhoto () {
                 <FontAwesome style={styles.icon} name='chevron-left' size={20} color='#1F2937' />
             </TouchableOpacity> 
             <Text style={styles.Title}>Mes préférences</Text>
-            <TouchableOpacity style={styles.iconcontainer} onPress={() => { handleSubmit()}}>
+            <TouchableOpacity style={styles.iconcontainer} onPress={() => { navigation.navigate('FirstScreen')}}>
                 <FontAwesome style={styles.icon} name='sign-out' size={30} color='#1F2937' />
             </TouchableOpacity>
         </View>
@@ -219,19 +221,19 @@ function handlePhoto () {
             <View style={styles.cardAgence}>
                     <View style={styles.lineAgence}>
                         <Text style={styles.labelsAgence}>Raison sociale :</Text>
-                        <Text style={styles.inputAgence}>{pro.denomination}</Text>
+                        <Text style={styles.inputAgence}>{pro.agence.denomination}</Text>
                     </View>
                     <View style={styles.lineAgence}>
                         <Text style={styles.labelsAgence}>Siren :</Text>
-                        <Text style={styles.inputAgence}>{pro.siren}</Text>
+                        <Text style={styles.inputAgence}>{pro.agence.siren}</Text>
                     </View>
                     <View style={styles.lineAgence}>
                         <Text style={styles.labelsAgence}>Siret :</Text>
-                        <Text style={styles.inputAgence}>{pro.siret}</Text>
+                        <Text style={styles.inputAgence}>{pro.agence.siret}</Text>
                     </View>
                     <View style={styles.lineAgence}>
                         <Text style={styles.labelsAgence}>Adresse :</Text>
-                        <Text style={styles.inputAgence}>{pro.adresse}</Text>
+                        <Text style={styles.inputAgence}>{pro.agence.adresse}</Text>
                     </View>
             </View>
             <Text style={styles.cardTitle}>Mes Disponibilités</Text>
