@@ -15,6 +15,7 @@ import { useState } from "react";
 import MapView, { Marker } from "react-native-maps";
 import maVille from "../../reducers/maVille";
 import { ipAdress } from "../../immolibTools";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 export default function MonAnnonce({ navigation }) {
@@ -33,7 +34,6 @@ export default function MonAnnonce({ navigation }) {
         style={styles.container}
       >
         <SafeAreaView>
-
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <FontAwesome
@@ -95,7 +95,7 @@ export default function MonAnnonce({ navigation }) {
             </MapView>
           </View>
         </ScrollView>
-                      </SafeAreaView>
+        </SafeAreaView>
       </LinearGradient>
     </View>
   );
@@ -144,11 +144,12 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     width: "100%",
-    height: "80%",
+    // height: "80%",
     // borderWidth: 1,
     borderColor: "white",
     top: 50,
     alignItems: "center",
+    marginBottom: 50,
   },
   annonceTitre: {
     fontSize: 20,
@@ -199,7 +200,8 @@ const styles = StyleSheet.create({
     right: 10,
   },
   map:{
-    height: 230,
+    height: 250,
+    marginBottom: 100,
     borderRadius:20,
   },
   mapView:{

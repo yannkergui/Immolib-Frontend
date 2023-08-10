@@ -9,7 +9,7 @@ import { maVisiteData } from "../../reducers/maVisite";
 import { ipAdress } from "../../immolibTools";
 import { refresh } from "../../reducers/refresher";
 
-export default function ProPriseDeVisite ({ navigation }) {
+export default function PersoModifVisite ({ navigation }) {
   const [selectedDate, setSelectedDate] = useState(Date);
   const [timeSlots, setTimeSlots] = useState(null);
   const [bienDataState, setBienDataState] = useState(null);
@@ -18,9 +18,10 @@ export default function ProPriseDeVisite ({ navigation }) {
 
   const user = useSelector((state) => state.user.value);
   const maVisite = useSelector((state) => state.maVisite.value);
+
   const refresher = useSelector((state) => state.refresher.value);
 
-  // console.log("reducer ma visite", maVisite);
+  console.log("reducer ma visite", maVisite);
 
   useEffect(() => {
     fetch(`http://${ipAdress}/biens/${maVisite.bienImmoId._id}`)

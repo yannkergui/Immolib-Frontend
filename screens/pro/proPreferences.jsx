@@ -24,6 +24,7 @@ export default function ProPreferences({navigation}) {
   const [tel, setTel]=useState('');
 
   const pro = useSelector((state) => state.pro.value);
+  console.log(pro);
 
 
   console.log('test',pro);
@@ -178,11 +179,11 @@ function handlePhoto () {
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.header}>
             <TouchableOpacity  onPress={() => navigation.goBack()}>
-                <FontAwesome style={styles.icon} name='chevron-left' size={20} color='#1F2937' />
+                <FontAwesome style={styles.iconLeft} name='chevron-left' size={20} color='#1F2937' />
             </TouchableOpacity> 
             <Text style={styles.Title}>Mes préférences</Text>
             <TouchableOpacity style={styles.iconcontainer} onPress={() => { navigation.navigate('FirstScreen')}}>
-                <FontAwesome style={styles.icon} name='sign-out' size={30} color='#1F2937' />
+                <FontAwesome style={styles.iconRight} name='sign-out' size={30} color='#1F2937' />
             </TouchableOpacity>
         </View>
         <ScrollView style={styles.scrollContainer}>
@@ -433,13 +434,13 @@ const styles = StyleSheet.create({
     width : 340,
     borderRadius: 25,
     backgroundColor: 'rgba(255, 255, 255, 0)',
-    shadowColor: "#000",
-    shadowOffset: {
-        width: 0,
-        height: 9,
-      },
-    shadowOpacity: 0.48,
-    shadowRadius: 11.95,
+    // shadowColor: "#000",
+    // shadowOffset: {
+    //     width: 0,
+    //     height: 9,
+    //   },
+    // shadowOpacity: 0.48,
+    // shadowRadius: 11.95,
     elevation: 18,
     marginLeft: 20,
     // borderColor: "white",
@@ -643,7 +644,8 @@ const styles = StyleSheet.create({
     height: 50,
     paddingLeft : 15,
     paddingTop : 8.5,
-    borderRadius : 100
+    borderRadius : 100,
+    marginRight: 15,
     },
     Title: {
       color: 'white',
@@ -684,4 +686,9 @@ const styles = StyleSheet.create({
       alignItems:'center',
       width:'100%',
     },
+    iconLeft:
+    {
+      marginLeft: 15,
+    },
+
 })

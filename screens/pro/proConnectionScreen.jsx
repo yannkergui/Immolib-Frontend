@@ -162,11 +162,13 @@ const TEL_REGEX = /^(?:(?:(?:\+|00)33\s?|0)[0-9]\s?\d{8})$/
           email: email,
           motDePasse: motDePasse,
           tel: tel,
-          denomination: data1.etablissement.uniteLegale.denominationUniteLegale,
-          siren: data1.etablissement.siren,
-          dateCreation: data1.etablissement.dateCreationEtablissement,
-          adresse: `${adrInsee.numeroVoieEtablissement}${adrInsee.indiceRepetitionEtablissement ? adrInsee.indiceRepetitionEtablissement : '' }, ${adrInsee.typeVoieEtablissement} ${adrInsee.libelleVoieEtablissement}, ${adrInsee.codePostalEtablissement} ${adrInsee.libelleCommuneEtablissement}`
-        })
+          agence: { denomination: data1.etablissement.uniteLegale.denominationUniteLegale,
+                    siren: data1.etablissement.siren,
+                    siret: data1.etablissement.siret,
+                    dateCreation: data1.etablissement.dateCreationEtablissement,
+                    adresse: `${adrInsee.numeroVoieEtablissement}${adrInsee.indiceRepetitionEtablissement ? adrInsee.indiceRepetitionEtablissement : '' }, ${adrInsee.typeVoieEtablissement} ${adrInsee.libelleVoieEtablissement}, ${adrInsee.codePostalEtablissement} ${adrInsee.libelleCommuneEtablissement}`
+                  }
+          })
       });
 
       const data2 = await response2.json();
@@ -188,11 +190,13 @@ const TEL_REGEX = /^(?:(?:(?:\+|00)33\s?|0)[0-9]\s?\d{8})$/
                 tel: data2.newPro.tel,
                 motDePasse: data2.newPro.motDePasse,
                 token: data2.newPro.token,
-                denomination : data2.newPro.agence.denomination,
-                siren: data2.newPro.agence.siren,
-                siret: data2.newPro.agence.siret,
-                dateCreation: data2.newPro.agence.dateCreation,
-                adresse: data2.newPro.agence.adresse,
+                agence : {
+                  denomination : data2.newPro.agence.denomination,
+                  siren: data2.newPro.agence.siren,
+                  siret: data2.newPro.agence.siret,
+                  dateCreation: data2.newPro.agence.dateCreation,
+                  adresse: data2.newPro.agence.adresse,
+                }
               }
           )
         );
