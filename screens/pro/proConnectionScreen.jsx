@@ -17,7 +17,7 @@ export default function ProConnectionScreen({navigation}) {
    const [nom, setNom]=useState('');
    const [tel, setTel]=useState('');
    const [siret, setSiret]=useState("");
-   console.log(siret);
+  //  console.log(siret);
 
   // Etats pour gérer les erreurs d'INSCRIPTION seulement
   const [siretError, setSiretError] = useState(false);
@@ -100,17 +100,17 @@ export default function ProConnectionScreen({navigation}) {
 
 //désactivation du regex réel pour les tests /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const EMAIL_REGEX = /[a-z]/
-//désactivation du regex réel pour les tests /^(?:(?:(?:\+|00)33\s?|0)[0-9]\s?\d{8})$/
- const TEL_REGEX = /[0-9]{1}/
+//désactivation du regex réel pour les tests /[0-9]{1}/
+const TEL_REGEX = /^(?:(?:(?:\+|00)33\s?|0)[0-9]\s?\d{8})$/        
 //désactivation du regex réel pour les tests /\d{14}/g
  const SIRET_REGEX = /\d{1}/g
 
 
   const handleInscriptionBis = async () => {
 
-    console.log("mail", EMAIL_REGEX.test(email));
-    console.log("tel", TEL_REGEX.test(tel));
-    console.log("siret", SIRET_REGEX.test(siret));
+    // console.log("mail", EMAIL_REGEX.test(email));
+    // console.log("tel", TEL_REGEX.test(tel));
+    // console.log("siret", SIRET_REGEX.test(siret));
 
     if (!prenom || !nom || !motDePasse) {
       setErrorEmpty(true) 
@@ -146,7 +146,7 @@ const EMAIL_REGEX = /[a-z]/
     const data1 = await response1.json();
     const adrInsee = await data1.etablissement.adresseEtablissement
     
-    console.log(adrInsee);
+    // console.log(adrInsee);
 
     if (data1.header.message === "ok") {
 
@@ -215,7 +215,7 @@ const EMAIL_REGEX = /[a-z]/
 
         // !!!!!!! Passage à l'écran ProPreferences PROBLEME !!!!!!!!!
 
-        navigation.navigate("ProHome");
+        navigation.navigate("TabNavigatorPro");
 
       }
       if (data2.error==="User already exists") {
