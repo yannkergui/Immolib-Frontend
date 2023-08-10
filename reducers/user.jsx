@@ -51,10 +51,11 @@ export const userSlice = createSlice({
     userDatas: (state, action) => {
       state.value = { ...state.value, ...action.payload };
     },
-    
-    
+    removeDatas: (state,action) => {
+      state.value = {}
+    }
   },
 });
 
-export const { userDatas, userDatasLoc } = userSlice.actions;
+export const { userDatas, userDatasLoc, removeDatas } = userSlice.actions;
 export default userSlice.reducer;

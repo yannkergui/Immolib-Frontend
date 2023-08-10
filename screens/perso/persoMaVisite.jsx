@@ -7,16 +7,22 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import MapView, { Marker } from 'react-native-maps';
 import { ipAdress } from "../../immolibTools";
+import {refresh} from "../../reducers/refresher";
+import Mailer from 'react-native-mail'
 
 
 
 export default function PersoMaVisite({navigation}) {
 
-  // récupération du reducer maVisite avec toutes les infos nécessaires pour les cards de ce screen
-  const maVisite = useSelector((state) => state.maVisite.value);
-  const coordonnees = useSelector((state) => state.maVille.value);
+  const dispatch = useDispatch();
 
-  console.log(coordonnees);
+  // récupération du reducer maVisite avec toutes les infos nécessaires pour les cards de ce screen
+  const maVisite = useSelector((state) => state.userMaVisite.value);
+  const coordonnees = useSelector((state) => state.maVille.value);
+  let photoBien = maVisite.bienImmoId.photo
+  let photoPro = maVisite.prosId.photo
+
+  console.log(maVisite);
 
   // fonction de click sur la Card visite pour dispatcher les infos dans le reducer afin de les afficher sur le screen suivant
   // et naviguer vers l'écran perso ma visite
@@ -31,6 +37,31 @@ export default function PersoMaVisite({navigation}) {
 
     Linking.openURL(phoneNumber);
  }
+
+ const onPressMail = (email) => {
+  const emailAddress = email; // Replace with the recipient's email address
+  const subject = `A propos de ma visite du ${maVisite.dateOfVisit} à ${maVisite.startTimeVisit}`;
+  const body = 'Je souhaite avoir des informations';
+
+  const mailtoUrl = `mailto:${emailAddress}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+  Linking.openURL(mailtoUrl);
+ }
+
+ //fonction click sur icône annuler une visite :
+function handleCancelVisit (e) { 
+  fetch(`http://${ipAdress}/visites/statut/${e._id}`, {
+  method : 'PUT',
+        headers : {'Content-Type' : 'application/json'},
+        body : JSON.stringify({statut : "annulé"})
+  })
+  .then(response => response.json())
+  .then(() => { dispatch(refresh())
+    navigation.goBack()})
+  
+}
+
+
 
   return (
     <View style={styles.container}>
@@ -47,25 +78,28 @@ export default function PersoMaVisite({navigation}) {
                 <FontAwesome style={styles.icon} name='chevron-left' size={20} color='#1F2937' />
             </TouchableOpacity> 
             <Text style={styles.Title}>Ma Visite</Text>
-            <TouchableOpacity style={styles.iconcontainer} onPress={() => { handleSubmit()}}>
+            <TouchableOpacity style={styles.iconcontainer} onPress={() => { navigation.navigate('TabNavigatorPerso')}}>
                 <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' />
             </TouchableOpacity>
         </View>
         <View style={styles.localcontainer}>
           {/* Card avec l'horaire de la visite et les boutons de mofification et suppréssions  */}
             <View style={styles.horaire}>
+                {maVisite.dateOfVisit ? 
                 <Text style={styles.lineTitle2}>Le {maVisite.dateOfVisit} à {maVisite.startTimeVisit}</Text>
+                : <Text>Allo</Text>
+                }
                 <TouchableOpacity style={styles.iconcontainer2}>
                     <FontAwesome name="edit" size={30} color="black" />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.iconcontainer2}>
+                <TouchableOpacity style={styles.iconcontainer2} onPress={()=> handleCancelVisit(maVisite)}>
                     <FontAwesome name="remove" size={30} color="black" />
                 </TouchableOpacity>
             </View>
        
-        <View style={styles.lineCard}>
+        <View style={styles.lineCard2}>
           {/* Card avec les infos du bien lié à la visite */}
-              <Image style={styles.image} source={require('../../assets/bed.jpg')}/>
+              <Image style={styles.image} source={{ uri: photoBien }}/>
             <View style={styles.lineText}>
                 <View style={styles.TextinCard}>
                     <Text style={styles.lineTitle}>{maVisite.bienImmoId.titre}</Text>
@@ -91,22 +125,28 @@ export default function PersoMaVisite({navigation}) {
           </View>
           {/* Card du professionnel avec possiblité d'envoyer un mail et d'appeler */}
           <View style={styles.lineCard}>
-              <Image style={styles.image2} source={require('../../assets/alice.jpeg')}/>
+{photoPro ?
+              <Image style={styles.image2} source={{ uri: photoPro }}/>
+            :  <TouchableOpacity style={styles.iconcontainer2} onPress={() => { navigation.navigate('TabNavigatorPerso', {screen : 'Mon Profil'}) }}>
+            <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' />
+        </TouchableOpacity>}
+
+
             <View style={styles.lineText2}>
                 <View style={styles.TextinCard2}>
                     <Text style={styles.lineTitle}>{maVisite.prosId.nom} {maVisite.prosId.prenom}</Text>
                     <Text style={styles.text}>{maVisite.prosId.agence.denomination}</Text>
                     <Text style={styles.text}>{maVisite.prosId.agence.adresse}</Text>
                     <Text style={styles.text}>Téléphone : {maVisite.prosId.tel}</Text>
-                    <Text style={styles.texttel} onPress={() => { onPressMobileNumberClick(maVisite.prosId.tel)}}>Email : {maVisite.prosId.tel}</Text>
+                    <Text style={styles.texttel} onPress={() => { onPressMobileNumberClick(maVisite.prosId.tel)}}>Email : {maVisite.prosId.mail}</Text>
                 </View>
             </View>
             <View>
-                <TouchableOpacity style={styles.iconcontainer2} onPress={() => { mailSubmit()}}>
+                <TouchableOpacity style={styles.iconcontainer2} onPress={() => { onPressMobileNumberClick(maVisite.prosId.tel)}}>
                     <FontAwesome style={styles.icon} name='phone' size={30} color='#1F2937' />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.iconcontainer2} >
-                    <FontAwesome style={styles.icon} name='envelope' size={25} color='#1F2937' />
+                    <FontAwesome style={styles.icon} name='envelope' size={25} color='#1F2937' onPress={() => {onPressMail(maVisite.prosId.email)}} />
                 </TouchableOpacity>
             </View>
           </View>   
@@ -191,6 +231,24 @@ lineCard: {
     alignItems:'center',
     width: 370,
     height:180,
+    borderRadius: 25,
+    backgroundColor: "#BCCDB6",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 9,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 11.95,
+    elevation: 18,
+
+  },
+  lineCard2: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems:'center',
+    width: 370,
+    height:220,
     borderRadius: 25,
     backgroundColor: "#BCCDB6",
     shadowColor: "#000",

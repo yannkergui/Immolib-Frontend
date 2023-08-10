@@ -14,6 +14,8 @@ import { useState } from "react";
 import MapView, { Marker } from "react-native-maps";
 import maVille from "../../reducers/maVille";
 import { ipAdress } from "../../immolibTools";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 
 export default function MonAnnonce({ navigation }) {
   const monBien = useSelector((state) => state.monBien.value);
@@ -39,13 +41,16 @@ const pro = useSelector((state)=> state.pro.value)
               size={20}
               color="#1F2937"
               right={60}
-            />
+              />
           </TouchableOpacity>
           <Text style={styles.Title}>Mon annonce</Text>
-          <TouchableOpacity>
-          {pro.photo && <Image source={{url: pro.photo}} style={styles.photo}/>}
-            {!pro.photo && <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' />}
-
+          <TouchableOpacity style={styles.iconcontainer}>
+            <FontAwesome
+              style={styles.icon}
+              name="user"
+              size={30}
+              color="#1F2937"
+            />
           </TouchableOpacity>
         </View>
         <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -79,10 +84,10 @@ const pro = useSelector((state)=> state.pro.value)
           <View style= {styles.mapView}>
             <MapView style= {styles.map}
                     initialRegion={{
-                        latitude: `${coordonnees.latitude}`,
-                        longitude: `${coordonnees.longitude}`,
-                        latitudeDelta: 0.008,
-                        longitudeDelta: 0.007,
+                      latitude: `${coordonnees.latitude}`,
+                      longitude: `${coordonnees.longitude}`,
+                      latitudeDelta: 0.008,
+                      longitudeDelta: 0.007,
                     }}
                     >
                       <Marker style= {styles.marker} coordinate={{latitude:`${coordonnees.latitude}` ,longitude:`${coordonnees.longitude}`}} />

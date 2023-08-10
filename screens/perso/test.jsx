@@ -18,7 +18,6 @@ export default function GrosTest({ navigation }) {
     setValuePrimo(value);
   };
 
-  console.log(valuePrimo);
   //Il faudra rajouter les components ={nomducomposant} dans les Tab.Screen pour rendre la navigation fonctionnelle.
   return (
     <View style={styles.container}>

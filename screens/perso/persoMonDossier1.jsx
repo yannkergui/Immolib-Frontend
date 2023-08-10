@@ -15,12 +15,11 @@ export default function PersoMonDossier1({ navigation }) {
 
   const maVisite = useSelector((state) => state.maVisite.value);
 
-  console.log(maVisite.newVisit.dateOfVisit);
-
-    // formattage de la date afin d'avoir un affichage plus fluide
-
-    let selectedDate = maVisite.newVisit.dateOfVisit
-    let frenchDate = moment(selectedDate).format("DD/MM/YYYY");
+  let selectedDate = `aujourd'hui`
+  // formattage de la date afin d'avoir un affichage plus fluide
+  if(maVisite.newVisit.dateOfVisit){
+  selectedDate = maVisite.newVisit.dateOfVisit}
+  let frenchDate = moment(selectedDate).format("DD/MM/YYYY");
  
 
   // les 2 etats mis à jour au clique sur le switch
@@ -55,7 +54,6 @@ export default function PersoMonDossier1({ navigation }) {
 
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
     <View style={styles.container}>
       {/* Use LinearGradient as the container's background */}
       <LinearGradient
@@ -75,11 +73,14 @@ export default function PersoMonDossier1({ navigation }) {
             <Text>3/3</Text>
           </View>
         </View>
+        <View style={styles.globalView}>
         <Text style={styles.title}>Mon Dossier</Text>
         <View style={styles.lineCard}>
         <Text style={styles.Title}>Visite Enregistrée le :</Text>
         <Text style={styles.Title}> {frenchDate} à {maVisite.newVisit.startTimeVisit}</Text>
         </View>
+        </View>
+        <View style={styles.globalView}>
         <Text style={styles.title}>Situation Actuelle</Text>
         <View style={styles.situationContainer}>
           <SwitchSelector
@@ -95,7 +96,15 @@ export default function PersoMonDossier1({ navigation }) {
             height={45}
           />
         </View>
-        <Text style={styles.title}>Je recherche</Text>
+        </View>
+        <View style={styles.globalView}>
+        <Text style={styles.title}>Ma zone de recherche</Text>
+        <View style={styles.zoneDeRecherche}>
+          <TextInput style={styles.input} placeholder="Ma Zone de recherche" onChangeText={(value) => setZone(value)}
+            placeholderTextColor="white"  value={zone}></TextInput>  
+        </View>
+        <View style={styles.basdepage}>
+        <Text style={styles.title2}>Je recherche</Text>
         <View style={styles.searchContainer}>
           <SwitchSelector
             options={SwitchRecherche}
@@ -110,22 +119,18 @@ export default function PersoMonDossier1({ navigation }) {
             height={45}
           />
         </View>
-        <Text style={styles.title}>Ma zone de recherche</Text>
-        <View style={styles.zoneDeRecherche}>
-          <TextInput  onChangeText={(value) => setZone(value)}
-              value={zone}></TextInput>
+        </View>
         </View>
         <View style={styles.nextBtnContainer}>
           <TouchableOpacity
             style={styles.next}
             onPress={(value) => handleEtapeSuivante(value)}
-          >
+            >
             <Text>Etape suivante</Text>
           </TouchableOpacity>
         </View>
       </LinearGradient>
     </View>
-    </KeyboardAvoidingView>
   );
 }
 
@@ -148,9 +153,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginTop: 35,
   },
-
-  //page sur laquelle se trouve l'utilisateur (background visible)
-
   pageNumberActive: {
     alignItems: "center",
     justifyContent: "center",
@@ -181,6 +183,13 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginTop: "8%",
   },
+  title2: {
+    fontFamily: "Nunito",
+    color: "white",
+    fontSize: 30,
+    fontStyle: "normal",
+    fontWeight: "600",
+  },
 
   textContainer: {
     borderColor: "#47AFA5",
@@ -197,9 +206,6 @@ const styles = StyleSheet.create({
     width: "80%",
     marginTop: 15,
   },
-
-  // selector = les boutons cliquables dans le champs situation et recherche. selectorActiv = le choix de l'utilisateur (en surbrillance + push en BDD )
-
   selector: {
     alignItems: "center",
     justifyContent: "center",
@@ -230,7 +236,7 @@ const styles = StyleSheet.create({
     height: "7%",
     alignItems: "center",
     justifyContent: "space-around",
-    marginTop: 20,
+    marginTop: 60,
   },
 
   nextBtnContainer: {
@@ -307,12 +313,27 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(128, 128, 128, 0.4)",
     backgroundColor: "rgba(128, 128, 128, 0.4)",
-    width: "70%",
+    width: "90%",
     height: 40,
     borderRadius: 10,
     top: 30,
     alignItems: "center",  
     justifyContent: "center",
     color: "white",
+  },
+  basdepage:{
+    marginTop:50,
+    justifyContent:'center',
+    alignItems:'center',
+  },
+  globalView:{
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  input:{
+    width:250,
+    justifyContent:'center',
+    textAlign:'center',
+    color:'white',
   }
 });

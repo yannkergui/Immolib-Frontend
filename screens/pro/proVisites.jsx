@@ -37,7 +37,6 @@ export default function ProVisites({ navigation }) {
 
   // etat pour rafraichir la page après la validation de la visite
   const refresher = useSelector((state) => state.refresher.value);
-  console.log("refresher", refresher);
 
   //création d'un useEffect pour récupérer les visites d'un pro
   useEffect(() => {

@@ -274,7 +274,7 @@ const TEL_REGEX = /^(?:(?:(?:\+|00)33\s?|0)[0-9]\s?\d{8})$/
 
           <Modal style={styles.modalConnect} visible={modalConnexion} animationType="fade" transparent>
                   <KeyboardAvoidingView behavior={"padding"} style={styles.container}>
-                    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                    <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss, setModalConnexion(!modalConnexion)}} accessible={false}>
                         <View style={styles.centeredView}>                  
                             <View style={styles.modalContainer}>
                               <View style={styles.inputsEtDelete}>
@@ -302,7 +302,7 @@ const TEL_REGEX = /^(?:(?:(?:\+|00)33\s?|0)[0-9]\s?\d{8})$/
 
           <Modal style={styles.modalInscription} visible={modalInscription} animationType="fade" transparent>
             <KeyboardAvoidingView behavior={"padding"} style={styles.container}>
-              <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+              <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss, setModalInscription(!modalInscription)}} accessible={false}>
                 <View style={styles.centeredView}>
                     <View style={styles.modalContainer}>
                       <View style={styles.inputsEtDelete}>

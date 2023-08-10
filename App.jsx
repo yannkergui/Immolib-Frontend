@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { LogBox } from 'react-native';
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -23,6 +24,7 @@ import ProPriseDeVisite from "./screens/pro/proPriseDeVisite";
 import CreationAnnonce from "./screens/pro/creationAnnonce";
 import MonAnnonce from "./screens/pro/monAnnonce";
 import ProDisponibilites from "./screens/pro/proDisponibilites";
+import SeLoger from "./seLoger"
 
 
 //imports perso screens
@@ -42,6 +44,7 @@ import PersoMaVisite from "./screens/perso/persoMaVisite";
 import PersoPriseDeVisite from "./screens/perso/persoPriseDeVisite";
 import CompleteTonDossier from "./screens/perso/completeTonDossierPerso";
 import FirstScreen from "./screens/firstScreen";
+import PersoModifVisite from "./screens/perso/persoModifVisite";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
@@ -53,6 +56,8 @@ import maVisite from "./reducers/maVisite";
 import maVille from "./reducers/maVille";
 import refresher from "./reducers/refresher";
 import monBien from "./reducers/monBien";
+import userMaVisite from "./reducers/userMaVisite";
+
 
 import { LogBox } from 'react-native';
 LogBox.ignoreAllLogs();//Ignore all log notifications
@@ -60,8 +65,10 @@ LogBox.ignoreAllLogs();//Ignore all log notifications
 import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
-  reducer: { user, pro, monClient, maVisite, maVille, refresher, monBien },
+  reducer: { user, pro, monClient, maVisite, maVille, refresher, monBien, userMaVisite },
 });
+
+LogBox.ignoreAllLogs();//Ignore all log notifications
 
 const TabNavigatorPro = () => {
   return (
@@ -218,6 +225,7 @@ export default function App() {
         <NavigationContainer>
           {/* ne pas toucher à cette partie */}
           <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
+          <Stack.Screen name="seLoger" component={SeLoger} />
           <Stack.Screen name="FirstScreen" component={FirstScreen} />
         
           <Stack.Screen
@@ -242,6 +250,9 @@ export default function App() {
             <Stack.Screen name="PersoMonDossier2Achat" component={PersoMonDossier2Achat} />
             <Stack.Screen name="PersoMonDossier3Achat" component={PersoMonDossier3Achat} />
             <Stack.Screen name="PersoMaVisite" component={PersoMaVisite} />
+            <Stack.Screen name="PersoModifVisite" component={PersoModifVisite} />
+             
+            
 
             {/* stack screens pro  */}
 

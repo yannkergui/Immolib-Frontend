@@ -6,6 +6,10 @@ import {
   Image,
   TextInput,
   SafeAreaView,
+  ScrollView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  KeyboardAvoidingView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import { useState } from "react";
@@ -26,8 +30,10 @@ export default function PersoMonDossier2Loc({ navigation }) {
 
   const maVisite = useSelector((state) => state.maVisite.value);
 
+  let selectedDate = `aujourd'hui`
   // formattage de la date afin d'avoir un affichage plus fluide
-  let selectedDate = maVisite.newVisit.dateOfVisit
+  if(maVisite.newVisit.dateOfVisit){
+  selectedDate = maVisite.newVisit.dateOfVisit}
   let frenchDate = moment(selectedDate).format("DD/MM/YYYY");
 
   // les 2 etats mis à jour au clique sur le switch
@@ -75,6 +81,12 @@ export default function PersoMonDossier2Loc({ navigation }) {
   
 
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <KeyboardAvoidingView
+    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -155} // Adjust this value as needed
+    style={styles.container}
+  >
     <View style={styles.container}>
       <LinearGradient
         colors={["#BCCDB6", "#46AFA5"]} // Set your desired gradient colors
@@ -105,6 +117,12 @@ export default function PersoMonDossier2Loc({ navigation }) {
           <View style={styles.formContainer}>
             <View style={styles.lineContainer}>
               <Text>Budget Mensuel Maximum</Text>
+              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <KeyboardAvoidingView
+    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -155} // Adjust this value as needed
+    style={styles.container}
+  >
               <TextInput
                 style={styles.input}
                 keyboardType="numeric"
@@ -112,6 +130,8 @@ export default function PersoMonDossier2Loc({ navigation }) {
                 onChangeText={(value) => setMonBudget(value)}
                 value={monBudget}
               ></TextInput>
+              </KeyboardAvoidingView>
+              </TouchableWithoutFeedback>
             </View>
             <View style={styles.lineContainer}>
               <Text>Bien recherché</Text>
@@ -189,6 +209,9 @@ export default function PersoMonDossier2Loc({ navigation }) {
         </SafeAreaView>
       </LinearGradient>
     </View>
+    </KeyboardAvoidingView>
+   </TouchableWithoutFeedback>
+
   );
 }
 
@@ -228,7 +251,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontStyle: "normal",
     fontWeight: "600",
-    marginTop: "7%",
+    marginTop: "3%",
   },
 
   pageNumberActive: {

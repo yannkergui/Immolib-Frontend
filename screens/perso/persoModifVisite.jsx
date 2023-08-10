@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import {View, Text, StyleSheet, TouchableOpacity, Modal, TouchableWithoutFeedback, KeyboardAvoidingView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Modal,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+} from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import moment from "moment";
@@ -9,7 +17,7 @@ import { maVisiteData } from "../../reducers/maVisite";
 import { ipAdress } from "../../immolibTools";
 import { refresh } from "../../reducers/refresher";
 
-export default function PersoModifVisite ({ navigation }) {
+export default function PersoModifVisite({ navigation }) {
   const [selectedDate, setSelectedDate] = useState(Date);
   const [timeSlots, setTimeSlots] = useState(null);
   const [bienDataState, setBienDataState] = useState(null);
@@ -18,7 +26,6 @@ export default function PersoModifVisite ({ navigation }) {
 
   const user = useSelector((state) => state.user.value);
   const maVisite = useSelector((state) => state.maVisite.value);
-
   const refresher = useSelector((state) => state.refresher.value);
 
   console.log("reducer ma visite", maVisite);
@@ -58,7 +65,7 @@ export default function PersoModifVisite ({ navigation }) {
     },
   };
 
-  let proid = maVisite.prosId;
+  let proid = maVisite.prosId._id;
   // console.log("proid", proid);
   LocaleConfig.locales["fr"] = {
     monthNames: [
@@ -214,44 +221,91 @@ export default function PersoModifVisite ({ navigation }) {
       .minutes(startTimeConvertit[1]);
     const formatedStartTimeVisit = startTimeVisit.format("HH:mm");
     const duration = 30;
-    let endTimeVisit = startTimeVisit.clone().add(duration, "minutes");
-    const formatedendTimeVisit = endTimeVisit.format("HH:mm");
-    console.log(formatedStartTimeVisit); // Output endTimeVisit in HH:mm format
-    let prosId = maVisite.prosId;
-    let userId = user._id;
-    let bienImmoId = bienData._id.bienid;
+    // let endTimeVisit = startTimeVisit.clone().add(duration, "minutes");
+    // const formatedendTimeVisit = endTimeVisit.format("HH:mm");
+    // console.log(formatedStartTimeVisit); // Output endTimeVisit in HH:mm format
+    // let prosId = maVisite.prosId;
+    // let userId = user._id;
+    // let bienImmoId = bienData._id.bienid;
     const dateDeVisite = moment(selectedDate).format("YYYY-MM-DD");
-    console.log(formatedStartTimeVisit);
 
     const idVisite = maVisite._id;
 
-    fetch(`http://${ipAdress}/visites/${idVisite}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        // prosId: prosId,
-        // usersId: userId,
-        dateOfVisit: dateDeVisite,
-        startTimeVisit: formatedStartTimeVisit,
-        // endTimeVisit: formatedendTimeVisit,
-        duration: duration,
-        // bienImmoId: bienImmoId,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data) {
-          console.log("data récupéré : ", data.data);
-          dispatch(maVisiteData(data.data));
-          dispatch(refresh());
-          setRdvModifié(true)
-          // navigation.navigate("TabNavigatorPro");
-        }
-      });
-    if (user.dejaInscrit === "true") {
-      // navigation.goBack();
+    if (maVisite.statut === "en attente") {
+      fetch(`http://${ipAdress}/visites/${idVisite}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          // prosId: prosId,
+          // usersId: userId,
+          dateOfVisit: dateDeVisite,
+          startTimeVisit: formatedStartTimeVisit,
+          // endTimeVisit: formatedendTimeVisit,
+          duration: duration,
+          // bienImmoId: bienImmoId,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data) {
+            console.log("data récupéré : ", data.data);
+            dispatch(maVisiteData(data.data));
+            dispatch(refresh());
+            setRdvModifié(true);
+            // navigation.navigate("TabNavigatorPro");
+          }
+        });
+    } else if (maVisite.statut === "confirmé") {
+      fetch(`http://${ipAdress}/visites/${idVisite}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          // prosId: prosId,
+          // usersId: userId,
+          dateOfVisit: dateDeVisite,
+          startTimeVisit: formatedStartTimeVisit,
+          // endTimeVisit: formatedendTimeVisit,
+          duration: duration,
+          // bienImmoId: bienImmoId,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data) {
+            console.log("Données visite modifiée :", data.data);
+            dispatch(maVisiteData(data.data));
+            dispatch(refresh());
+
+            // Enchaînement du deuxième fetch
+            return fetch(`http://${ipAdress}/visites/statut/${idVisite}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                statut: "en attente",
+              }),
+            });
+          }
+        })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data) {
+            console.log("Statut de la visite mis à jour :", data.data);
+           
+     
+            dispatch(refresh());
+            setRdvModifié(true);
+          }
+        })
+        .catch((error) => {
+          console.error("Erreur :", error);
+          // Gérer l'erreur ici
+        });
+
+      // if (user.dejaInscrit === "true") {
+      //   // navigation.goBack();
+      // }
     }
-  };
+};
 
   //constante relative à la modale de changement de page
   const [modalModifOuverte, setModalModifOuverte] = useState(false);
@@ -266,8 +320,9 @@ export default function PersoModifVisite ({ navigation }) {
       setTimeout(() => {
         setRdvModifié(false);
         setModalModifOuverte(false); // Ferme la modale
-        navigation.navigate("TabNavigatorPro")
-           }, 1500)
+
+        navigation.navigate("TabNavigatorPerso");
+      }, 1500);
     }
   }, [RdvModifié]);
 
@@ -279,7 +334,6 @@ export default function PersoModifVisite ({ navigation }) {
         end={{ x: 1, y: 1 }} // End point of the gradient
         style={styles.background}
       >
-
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <FontAwesome
@@ -339,8 +393,13 @@ export default function PersoModifVisite ({ navigation }) {
                 )
                 .map((timeSlot, index) => (
                   <View style={styles.displayCard}>
-                    <TouchableOpacity style={styles.Card} onPress={() => { setModalModifOuverte(true)
-                      setSelectedSlot(timeSlot)}}>
+                    <TouchableOpacity
+                      style={styles.Card}
+                      onPress={() => {
+                        setModalModifOuverte(true);
+                        setSelectedSlot(timeSlot);
+                      }}
+                    >
                       <Text key={index}>{timeSlot.startTime}</Text>
                     </TouchableOpacity>
                   </View>
@@ -350,32 +409,50 @@ export default function PersoModifVisite ({ navigation }) {
             )}
           </View>
         </View>
-        
-        <Modal style={styles.modalModifOuverte} visible={modalModifOuverte} animationType="fade" transparent>
+
+        <Modal
+          style={styles.modalModifOuverte}
+          visible={modalModifOuverte}
+          animationType="fade"
+          transparent
+        >
           <KeyboardAvoidingView behavior={"padding"} style={styles.container}>
-            <TouchableWithoutFeedback onPress={() => setModalModifOuverte(false)} accessible={false}>
+            <TouchableWithoutFeedback
+              onPress={() => setModalModifOuverte(false)}
+              accessible={false}
+            >
               <View style={styles.centeredView}>
                 <View style={styles.modalContainer}>
                   <View style={styles.inputsEtDelete}>
-                    {!RdvModifié?
-                    <>
-                    <Text>Modification de visite</Text>
-                    <TouchableOpacity style={styles.btnInscription} onPress={()=>{handleModif(selectedSlot.startTime)}}>
-                    <Text style={styles.textButton}>Confirmer</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.btnInscription} onPress={()=>setModalModifOuverte(false)}>
-                      <Text style={styles.textButton}>Annuler</Text>
-                    </TouchableOpacity>
-                    </>
-                     :
-                    <Text style={styles.textModaleConfirm}>Rendez-vous modifié ! ✅</Text>}
+                    {!RdvModifié ? (
+                      <>
+                        <Text>Modification de visite</Text>
+                        <TouchableOpacity
+                          style={styles.btnInscription}
+                          onPress={() => {
+                            handleModif(selectedSlot.startTime);
+                          }}
+                        >
+                          <Text style={styles.textButton}>Confirmer</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={styles.btnInscription}
+                          onPress={() => setModalModifOuverte(false)}
+                        >
+                          <Text style={styles.textButton}>Annuler</Text>
+                        </TouchableOpacity>
+                      </>
+                    ) : (
+                      <Text style={styles.textModaleConfirm}>
+                        Rendez-vous modifié ! ✅
+                      </Text>
+                    )}
                   </View>
                 </View>
               </View>
             </TouchableWithoutFeedback>
           </KeyboardAvoidingView>
         </Modal>
-            
       </LinearGradient>
     </View>
   );
@@ -385,7 +462,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
-  
   },
 
   background: {
@@ -405,7 +481,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     // borderColor: 'black',
     // borderWidth: 1,
-    zIndex: 1, 
+    zIndex: 1,
   },
   localContainer: {
     width: "90%",
@@ -414,7 +490,7 @@ const styles = StyleSheet.create({
     // borderColor: 'yellow',
     // borderWidth: 1,
   },
-  
+
   label: {
     fontSize: 18,
     fontWeight: "bold",
@@ -435,7 +511,7 @@ const styles = StyleSheet.create({
     elevation: 18,
     paddingBottom: 15,
   },
-  
+
   Card: {
     backgroundColor: "#47AFA5",
     borderRadius: 10,
@@ -482,7 +558,7 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 10,
     borderRadius: 10,
-    justifyContent: 'center',
+    justifyContent: "center",
     alignItems: "center",
   },
   inputs: {
@@ -508,22 +584,22 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  btnInscription : {
-    marginTop : 15,
-    backgroundColor : 'white',
-    padding : 10,
-    borderRadius : 10,
-    width : '70%',
+  btnInscription: {
+    marginTop: 15,
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 10,
+    width: "70%",
   },
-  textButton : {
-    color: '#47AFA5',
+  textButton: {
+    color: "#47AFA5",
     // height: 30,
     fontWeight: "600",
     fontSize: 14,
     // borderColor : 'black',
     // borderWidth : 1,
-    textAlign:'center',
-    paddingTop:3
+    textAlign: "center",
+    paddingTop: 3,
   },
 
   iconcontainer: {
@@ -547,6 +623,3 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
-
-
-

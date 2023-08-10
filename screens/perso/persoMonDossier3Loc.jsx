@@ -26,8 +26,10 @@ export default function PersoMonDossier3Loc({ navigation }) {
 
   const maVisite = useSelector((state) => state.maVisite.value);
 
+  let selectedDate = `aujourd'hui`
   // formattage de la date afin d'avoir un affichage plus fluide
-  let selectedDate = maVisite.newVisit.dateOfVisit
+  if(maVisite.newVisit.dateOfVisit){
+  selectedDate = maVisite.newVisit.dateOfVisit}
   let frenchDate = moment(selectedDate).format("DD/MM/YYYY");
 
   //Etat relatif au revenu renseigné 
@@ -322,9 +324,9 @@ export default function PersoMonDossier3Loc({ navigation }) {
           <View style={styles.lineContainer}>
             <Text>Revenus mensuels</Text>
             <TextInput
-              style={styles.input}
+              style={styles.zoneDeRecherche}
               keyboardType="numeric"
-              placeholder="/€"
+              placeholder="€"
               onChangeText={(value) => setMonRevenu(value)}
               value={monRevenu}
             ></TextInput>
@@ -636,7 +638,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 30,
   },
-  // scrollview:{
-  //   heigth: 200,
-  // },
+  zoneDeRecherche: {  
+    borderWidth: 1,
+    borderColor: "rgba(128, 128, 128, 0.4)",
+    backgroundColor: "rgba(128, 128, 128, 0.4)",
+    width: "40%",
+    height: 40,
+    borderRadius: 10,
+    alignItems: "center",  
+    justifyContent: "center",
+    color: "white",
+    textAlign:'right',
+    paddingRight:10,
+  },
 });

@@ -51,7 +51,6 @@ export default function PersoConnectionScreen({ navigation }) {
       .then(response => response.json())
       .then(data => {
         if (data.result) {
-          // console.log('data récupéré : ', data.data),
           dispatch(userDatas({_id: data.data._id,
                             prenom : data.data.prenom,
                             nom : data.data.nom, 
@@ -64,7 +63,7 @@ export default function PersoConnectionScreen({ navigation }) {
                           }));
 
           setModalConnexion(false)
-          navigation.navigate('TabNavigatorPerso');
+          navigation.navigate('PersoPriseDeVisite');
           setEmail('');
           setEmailError(false);
           setMdp('');
@@ -170,7 +169,7 @@ export default function PersoConnectionScreen({ navigation }) {
 
                   <Modal style={styles.modalConnect} visible={modalConnexion} animationType="fade" transparent>
                     <KeyboardAvoidingView behavior={"padding"} style={styles.container}>
-                        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                        <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss, setModalConnexion(!modalConnexion)}} accessible={false}>
                           <View style={styles.centeredView}>                  
                               <View style={styles.modalContainer}>
                                 <View style={styles.inputsEtDelete}>
@@ -199,7 +198,7 @@ export default function PersoConnectionScreen({ navigation }) {
 
                   <Modal style={styles.modalInscription} visible={modalInscription} animationType="fade" transparent>
                     <KeyboardAvoidingView behavior={"padding"} style={styles.container}>
-                      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                      <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss, setModalInscription(!modalInscription)}} accessible={false}>
                         <View style={styles.centeredView}>
                             <View style={styles.modalContainer}>
                               <View style={styles.inputsEtDelete}>
