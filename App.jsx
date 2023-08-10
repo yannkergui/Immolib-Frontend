@@ -48,16 +48,17 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Provider } from "react-redux";
 import user from "./reducers/user";
 import pro from "./reducers/pro";
-import monClient from "./reducers/monClient";
+import monclient from "./reducers/monClient";
 import maVisite from "./reducers/maVisite";
 import maVille from "./reducers/maVille";
+import refresher from "./reducers/refresher";
 import monBien from "./reducers/monBien";
-import refresher from "./reducers/refresher"
+
 
 import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
-  reducer: { user, pro, monClient, maVisite, maVille, monBien, refresher},
+  reducer: { user, pro, monClient, maVisite, maVille, refresher },
 });
 
 const TabNavigatorPro = () => {

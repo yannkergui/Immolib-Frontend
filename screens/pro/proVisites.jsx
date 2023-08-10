@@ -26,7 +26,7 @@ export default function ProVisites({ navigation }) {
   // constante relative à la connexion du pro
   const pro = useSelector((state) => state.pro.value);
 
-  console.log("pro dans proVisites", pro);
+  // console.log("pro dans proVisites", pro);
   
   // constante relative au dispatch
   const dispatch = useDispatch();
@@ -54,6 +54,7 @@ export default function ProVisites({ navigation }) {
         }
       });
   }, [refresher]);
+
   // constante relative au switch de changement de page
   const page = [
     { label: "En attente de validation", value: "en attente" },
@@ -81,7 +82,9 @@ export default function ProVisites({ navigation }) {
       setTimeout(() => {
         setRdvConfirmé(false);
         setModalConfirmation(false); // Ferme la modale
-      }, 1500);
+      }, 1500).then(() => {
+        navigation.navigate("TabNavigatorPro");
+      });
     }
   }, [RdvConfirmé]);
 
@@ -455,6 +458,7 @@ const styles = StyleSheet.create({
   },
   centeredView: {
     flex: 1,
+
     justifyContent: "center",
     alignItems: "center",
   },

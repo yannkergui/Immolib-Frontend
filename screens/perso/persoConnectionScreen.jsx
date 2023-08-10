@@ -6,9 +6,7 @@ import { useDispatch } from 'react-redux';
 import {userDatas} from '../../reducers/user';
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
-
 import { ipAdress } from "../../immolibTools";
-
 
 export default function PersoConnectionScreen({ navigation }) {
 
@@ -83,6 +81,9 @@ export default function PersoConnectionScreen({ navigation }) {
     } 
   }
 
+   // Etats pour gérer les erreurs d'INSCRIPTION seulement
+   const [existingEmail, setExistingEmail] = useState (false);
+
   // Premier bouton "S'inscrire" qui ouvre la modale
   const handleInscription = () => {
     setModalInscription(true);
@@ -113,6 +114,9 @@ export default function PersoConnectionScreen({ navigation }) {
                 setTelError(false);
                 setMdp('');
               } 
+              if (!data.result) {
+                setExistingEmail(true);
+              }
             })  
         } else {
           if (!EMAIL_REGEX.test(email)) {
@@ -134,6 +138,7 @@ export default function PersoConnectionScreen({ navigation }) {
     setPrenom('');
     setNom('');
     setMdp('');
+    setExistingEmail(false);
     setEmailError(false);
     setTelError(false);
     setErrorEmpty(false);
@@ -215,6 +220,7 @@ export default function PersoConnectionScreen({ navigation }) {
                                       <Text style={styles.textButton}>S'inscrire</Text>
                                 </TouchableOpacity> 
                                   {emailError && <Text style={styles.error}>Adresse mail invalide</Text>} 
+                                  {existingEmail && <Text style={styles.error}>Adresse mail déjà utilisée</Text>}
                                   {telError && <Text style={styles.error}>numéro de téléphone invalide</Text>}
                                   {errorEmpty && <Text style={styles.error}>Tous les champs ne sont pas complétés</Text>}   
                             </View>
