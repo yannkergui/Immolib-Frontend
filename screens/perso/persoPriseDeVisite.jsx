@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
     marginTop:20,
-    // justifyText:'center',
+    justifyText:'center',
     color :'#2d4150',
   },
   calendar:{

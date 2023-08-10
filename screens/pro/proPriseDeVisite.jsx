@@ -20,9 +20,7 @@ export default function ProPriseDeVisite({ navigation }) {
   const maVisite = useSelector((state) => state.maVisite.value);
   const refresher = useSelector((state) => state.refresher.value);
 
-
-
-  // console.log("reducer ma visite", maVisite);
+  // console.log("reducer ma visite", maVisite); 
 
   useEffect(() => {
     fetch(`http://${ipAdress}/biens/${maVisite.bienImmoId._id}`)

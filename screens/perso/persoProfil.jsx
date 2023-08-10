@@ -43,8 +43,8 @@ const countNonEmptyFields = () => {
 let completion 
 
 if(user.dejaInscrit){
-completion = (countNonEmptyFields()/25)*100
-} else {completion = (countNonEmptyFields()/15)*100}
+completion = Math.floor((countNonEmptyFields()/25)*100)
+} else {completion = Math.floor((countNonEmptyFields()/15)*100)}
 
 
 

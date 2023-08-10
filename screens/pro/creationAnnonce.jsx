@@ -24,8 +24,6 @@ export default function CreationAnnonce( {navigation} ) {
   const pro = useSelector((state) => state.pro.value);
   
 
-
-
   const [titre, setTitre] = useState("");
   const [description, setDescription] = useState("");
   const [typeDeBien, setTypeDeBien] = useState("maison");
@@ -215,7 +213,7 @@ export default function CreationAnnonce( {navigation} ) {
                 style={styles.input}
                 keyboardType="numeric"
                 onChangeText={(value) => setPrixVente(value)}
-                value={prixVente.toString()}
+                value={prixVente}
               />
             </View>
           )}
