@@ -17,8 +17,12 @@ export default function PersoMaVisite({navigation}) {
   const dispatch = useDispatch();
 
   // récupération du reducer maVisite avec toutes les infos nécessaires pour les cards de ce screen
-  const maVisite = useSelector((state) => state.maVisite.value);
+  const maVisite = useSelector((state) => state.userMaVisite.value);
   const coordonnees = useSelector((state) => state.maVille.value);
+  let photoBien = maVisite.bienImmoId.photo
+  let photoPro = maVisite.prosId.photo
+
+  console.log(maVisite);
 
   // fonction de click sur la Card visite pour dispatcher les infos dans le reducer afin de les afficher sur le screen suivant
   // et naviguer vers l'écran perso ma visite
@@ -74,14 +78,17 @@ function handleCancelVisit (e) {
                 <FontAwesome style={styles.icon} name='chevron-left' size={20} color='#1F2937' />
             </TouchableOpacity> 
             <Text style={styles.Title}>Ma Visite</Text>
-            <TouchableOpacity style={styles.iconcontainer} onPress={() => { handleSubmit()}}>
+            <TouchableOpacity style={styles.iconcontainer} onPress={() => { navigation.navigate('TabNavigatorPerso')}}>
                 <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' />
             </TouchableOpacity>
         </View>
         <View style={styles.localcontainer}>
           {/* Card avec l'horaire de la visite et les boutons de mofification et suppréssions  */}
             <View style={styles.horaire}>
+                {maVisite.dateOfVisit ? 
                 <Text style={styles.lineTitle2}>Le {maVisite.dateOfVisit} à {maVisite.startTimeVisit}</Text>
+                : <Text>Allo</Text>
+                }
                 <TouchableOpacity style={styles.iconcontainer2}>
                     <FontAwesome name="edit" size={30} color="black" />
                 </TouchableOpacity>
@@ -92,7 +99,7 @@ function handleCancelVisit (e) {
        
         <View style={styles.lineCard2}>
           {/* Card avec les infos du bien lié à la visite */}
-              <Image style={styles.image} source={require('../../assets/bed.jpg')}/>
+              <Image style={styles.image} source={{ uri: photoBien }}/>
             <View style={styles.lineText}>
                 <View style={styles.TextinCard}>
                     <Text style={styles.lineTitle}>{maVisite.bienImmoId.titre}</Text>
@@ -118,7 +125,13 @@ function handleCancelVisit (e) {
           </View>
           {/* Card du professionnel avec possiblité d'envoyer un mail et d'appeler */}
           <View style={styles.lineCard}>
-              <Image style={styles.image2} source={require('../../assets/alice.jpeg')}/>
+{photoPro ?
+              <Image style={styles.image2} source={{ uri: photoPro }}/>
+            :  <TouchableOpacity style={styles.iconcontainer2} onPress={() => { navigation.navigate('TabNavigatorPerso', {screen : 'Mon Profil'}) }}>
+            <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' />
+        </TouchableOpacity>}
+
+
             <View style={styles.lineText2}>
                 <View style={styles.TextinCard2}>
                     <Text style={styles.lineTitle}>{maVisite.prosId.nom} {maVisite.prosId.prenom}</Text>

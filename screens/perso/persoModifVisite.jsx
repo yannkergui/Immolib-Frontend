@@ -221,7 +221,6 @@ export default function PersoModifVisite ({ navigation }) {
     let userId = user._id;
     let bienImmoId = bienData._id.bienid;
     const dateDeVisite = moment(selectedDate).format("YYYY-MM-DD");
-    console.log(formatedStartTimeVisit);
 
     const idVisite = maVisite._id;
 
@@ -241,7 +240,6 @@ export default function PersoModifVisite ({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         if (data) {
-          console.log("data récupéré : ", data.data);
           dispatch(maVisiteData(data.data));
           dispatch(refresh());
           setRdvModifié(true)

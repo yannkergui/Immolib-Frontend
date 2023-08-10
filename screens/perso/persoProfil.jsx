@@ -55,7 +55,11 @@ if(user.dejaInscrit){
 completion = Math.floor((countNonEmptyFields()/25)*100)
 } else {completion = Math.floor((countNonEmptyFields()/15)*100)}
 
-
+const formatPhoneNumber = (phoneNumber) => {
+  const cleanedNumber = phoneNumber.replace(/[^\d]/g, ''); // Remove non-numeric characters
+  const formattedNumber = cleanedNumber.replace(/(\d{2})(?=\d)/g, '$1 '); // Insert spaces every two digits
+  return formattedNumber;
+};
 
   return (
     <View style={styles.container}>
@@ -79,7 +83,7 @@ completion = Math.floor((countNonEmptyFields()/25)*100)
             <View style={styles.caractProfil}>
               <Text style={styles.lineTitle2}>{user.prenom} {user.nom}</Text>
               <Text style={styles.lineTitle2}>{user.email}</Text>
-              <Text style={styles.lineTitle2}>{user.tel}</Text>
+              <Text style={styles.lineTitle2}>{formatPhoneNumber(user.tel)}</Text>
             </View>
           </View>
 
@@ -92,7 +96,7 @@ completion = Math.floor((countNonEmptyFields()/25)*100)
               </Text>
 
               <Text style={styles.msgIncomplet}>
-                Complète le pour ne plus rater de bien 😉
+                Complète le pour ne plus rater de biens 😉
               </Text>
             </View>
 

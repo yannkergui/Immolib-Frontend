@@ -15,12 +15,11 @@ export default function PersoMonDossier1({ navigation }) {
 
   const maVisite = useSelector((state) => state.maVisite.value);
 
-  console.log(maVisite.newVisit.dateOfVisit);
-
-    // formattage de la date afin d'avoir un affichage plus fluide
-
-    let selectedDate = maVisite.newVisit.dateOfVisit
-    let frenchDate = moment(selectedDate).format("DD/MM/YYYY");
+  let selectedDate = `aujourd'hui`
+  // formattage de la date afin d'avoir un affichage plus fluide
+  if(maVisite.newVisit.dateOfVisit){
+  selectedDate = maVisite.newVisit.dateOfVisit}
+  let frenchDate = moment(selectedDate).format("DD/MM/YYYY");
  
 
   // les 2 etats mis à jour au clique sur le switch

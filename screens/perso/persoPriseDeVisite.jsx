@@ -19,34 +19,37 @@ export default function PersoPriseDeVisite({navigation}) {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.value);
+  const bienData = useSelector((state) => state.monBien.value)
 
-  const bienData = {
-      "_id": {
-        "bienid": "64d498e5a3ca8066a1a3b49e"
-      },
-      "titre": "Appartement de grand Standing",
-      "description": "Superbe appartement dans le quartier le plus prisé de la capitale.  ",
-      "surface": 160,
-      "type": "appartement",
-      "transaction": "location",
-      "numeroRue": "20",
-      "rue": "Avenue des Champs-Elysées ",
-      "codePostal": 75008,
-      "ville": "Paris",
-      "nbPièces": 6,
-      "nbChambres": 4,
-      "meuble": true,
-      "photo": "https://res.cloudinary.com/dnzrnfglq/image/upload/v1691654372/k0revbl847ngig7txvsp.jpg",
-      "loyerMensuel": 5000,
-      "prixVente": 0,
-      "visites": [],
-      "pro": {
-        "proid": "64d4978ca3ca8066a1a3b480"
-      },
-      "__v": 0
-  }
+  console.log(bienData);
 
-  let proid = bienData.pro.proid
+  // const bienData = {
+  //     "_id": {
+  //       "bienid": "64d498e5a3ca8066a1a3b49e"
+  //     },
+  //     "titre": "Appartement de grand Standing",
+  //     "description": "Superbe appartement dans le quartier le plus prisé de la capitale.  ",
+  //     "surface": 160,
+  //     "type": "appartement",
+  //     "transaction": "location",
+  //     "numeroRue": "20",
+  //     "rue": "Avenue des Champs-Elysées ",
+  //     "codePostal": 75008,
+  //     "ville": "Paris",
+  //     "nbPièces": 6,
+  //     "nbChambres": 4,
+  //     "meuble": true,
+  //     "photo": "https://res.cloudinary.com/dnzrnfglq/image/upload/v1691654372/k0revbl847ngig7txvsp.jpg",
+  //     "loyerMensuel": 5000,
+  //     "prixVente": 0,
+  //     "visites": [],
+  //     "pro": {
+  //       "proid": "64d4978ca3ca8066a1a3b480"
+  //     },
+  //     "__v": 0
+  // }
+
+  let proid = bienData.pro
 
   LocaleConfig.locales['fr'] = {
     monthNames: [
@@ -188,9 +191,8 @@ export default function PersoPriseDeVisite({navigation}) {
     //on clone la date de Start et on ajoute la durée de 30 
     let endTimeVisit = startTimeVisit.clone().add(duration, 'minutes');
     const formatedendTimeVisit = endTimeVisit.format('HH:mm')
-    console.log(formatedStartTimeVisit); // Output endTimeVisit in HH:mm format
-    let prosId = bienData.pro.proid;
-    let bienImmoId = bienData._id.bienid
+    let prosId = bienData.pro;
+    let bienImmoId = bienData._id
     const dateDeVisite = moment(selectedDate).format("YYYY-MM-DD");
 
     fetch(`http://${ipAdress}/visites`, {
@@ -201,7 +203,7 @@ export default function PersoPriseDeVisite({navigation}) {
       .then(response => response.json())
       .then(data => {
         if (data) {
-          console.log('data récupéré : ', data)
+        
           dispatch(maVisiteData(data));
         }
         if (user.dejaInscrit === 'true'){

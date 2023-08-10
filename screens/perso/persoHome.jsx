@@ -163,7 +163,6 @@ if (user.dejaInscrit) {
 
 
   const findClosestVisit = (visits) => {
-console.log('test',visits);
     // Obtention de la date d'aujourd'hui au format ISO (AAAA-MM-JJ) 
     //(sans utiliser moment car probleme de compatibilité (je ne sais pas pkoi))
     const today = new Date().toISOString().split("T")[0];

@@ -51,7 +51,6 @@ export default function PersoConnectionScreen({ navigation }) {
       .then(response => response.json())
       .then(data => {
         if (data.result) {
-          // console.log('data récupéré : ', data.data),
           dispatch(userDatas({_id: data.data._id,
                             prenom : data.data.prenom,
                             nom : data.data.nom, 

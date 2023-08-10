@@ -30,8 +30,10 @@ export default function PersoMonDossier2Loc({ navigation }) {
 
   const maVisite = useSelector((state) => state.maVisite.value);
 
+  let selectedDate = `aujourd'hui`
   // formattage de la date afin d'avoir un affichage plus fluide
-  let selectedDate = maVisite.newVisit.dateOfVisit
+  if(maVisite.newVisit.dateOfVisit){
+  selectedDate = maVisite.newVisit.dateOfVisit}
   let frenchDate = moment(selectedDate).format("DD/MM/YYYY");
 
   // les 2 etats mis à jour au clique sur le switch

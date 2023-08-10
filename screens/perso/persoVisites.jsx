@@ -5,7 +5,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import SwitchSelector from "react-native-switch-selector";
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from "react";
-import { maVisiteData } from '../../reducers/maVisite';
+import { userMaVisiteData } from '../../reducers/userMaVisite';
 import { maVilleData } from '../../reducers/maVille';
 import {refresh} from "../../reducers/refresher";
 
@@ -15,7 +15,6 @@ export default function PersoVisites({navigation}) {
 
   const dispatch = useDispatch();
   const refresher = useSelector((state) => state.refresher.value);
-  console.log(refresher);
 
   // etat pour stocker les infos reçues du backend
   const [visitesPerso, setVisitesPerso] = useState([]);
@@ -46,7 +45,7 @@ export default function PersoVisites({navigation}) {
   // fonction de click sur la Card visite pour dispatcher les infos dans le reducer afin de les afficher sur le screen suivant
   // et naviguer vers l'écran perso ma visite
   const handleSubmit = (e) => {
-    dispatch(maVisiteData(e));
+    dispatch(userMaVisiteData(e));
     fetch (`https://api-adresse.data.gouv.fr/search/?q=${e.bienImmoId.numeroRue}+${e.bienImmoId.rue}+${e.bienImmoId.codePostal}`)
     .then((response) => response.json())
     .then((data) => {
@@ -87,7 +86,6 @@ function handleCancelVisit (e) {
   //Redirection vers la page de modification des visites :
 
   function handleMajVisit (e) {
-    console.log(e);
     dispatch(maVisiteData(e));
     navigation.navigate('PersoPriseDeVisite')
   }
@@ -377,7 +375,7 @@ const styles = StyleSheet.create({
   agenceDiv:{
     flexDirection:'row',
     justifyContent:'space-between',
-    width: '78.5%',
+    width: 370,
     alignItems: 'center',
   },
   scrollview:{
@@ -395,7 +393,7 @@ const styles = StyleSheet.create({
     },
     iconCard:{
       flexDirection:'row',
-      marginLeft: 160,
+      marginLeft: 0,
     },
     modalConnect : {
       flex : 1,
