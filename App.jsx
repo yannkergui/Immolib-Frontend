@@ -210,15 +210,12 @@ const TabNavigatorPerso = () => {
 export default function App() {
   return (
     <Provider store={store}>
-        <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
-            <Stack.Screen name="FirstScreen" component={FirstScreen} />
-            <Stack.Screen name="PersoConnexionScreen" component={PersoConnectionScreen} />
-            <Stack.Screen name="ProConnectionScreen" component={ProConnectionScreen} />
-            <Stack.Screen name="ProDisponibilites" component={ProDisponibilites} />
-            <Stack.Screen name="CompleteTonDossier" component={CompleteTonDossier} />
-            <Stack.Screen name="PersoPriseDeVisite" component={PersoPriseDeVisite} />
 
+        <NavigationContainer>
+          {/* ne pas toucher à cette partie */}
+          <Stack.Screen name="FirstScreen" component={FirstScreen} />
+          <Stack.Navigator screenOptions={{ headerShown: false }} style={styles.main}>
+        
           <Stack.Screen
                 name="TabNavigatorPerso"
                 component={TabNavigatorPerso}
@@ -228,19 +225,32 @@ export default function App() {
                 component={TabNavigatorPro}
                 style={styles.tabNavigator}
               />
-              <Stack.Screen name="PersoMaVisite" component={PersoMaVisite} />
-              <Stack.Screen name="PersoMonDossier1" component={PersoMonDossier1} />
-              <Stack.Screen name="PersoMonDossier2Achat" component={PersoMonDossier2Achat} />
-              <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
-              <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
-              <Stack.Screen name="PersoMonDossier2Loc" component={PersoMonDossier2Loc} />
-              <Stack.Screen name="PersoMonDossier3Loc" component={PersoMonDossier3Loc} />
-              <Stack.Screen name="PersoMonDossier3Achat" component={PersoMonDossier3Achat} />
-              <Stack.Screen name="ProHome" component={ProHome} />
-              <Stack.Screen name="ProTchats" component={ProTchats} />
-              <Stack.Screen name="FicheClient" component={FicheClient} />
-              <Stack.Screen name="CreationAnnonce" component={CreationAnnonce} />
-              <Stack.Screen name="ProPreferences" component={ProPreferences} />
+
+            {/* stack screens perso  */}
+
+            <Stack.Screen name="PersoConnexionScreen" component={PersoConnectionScreen} />
+            <Stack.Screen name="WelcomeScreenPerso" component={WelcomeScreenPerso} />
+            <Stack.Screen name="PersoPriseDeVisite" component={PersoPriseDeVisite} />
+            <Stack.Screen name="CompleteTonDossier" component={CompleteTonDossier} />
+            <Stack.Screen name="PersoMonDossier1" component={PersoMonDossier1} />
+            <Stack.Screen name="PersoMonDossier2Loc" component={PersoMonDossier2Loc} />
+            <Stack.Screen name="PersoMonDossier3Loc" component={PersoMonDossier3Loc} />
+            <Stack.Screen name="PersoMonDossier2Achat" component={PersoMonDossier2Achat} />
+            <Stack.Screen name="PersoMonDossier3Achat" component={PersoMonDossier3Achat} />
+            <Stack.Screen name="PersoMaVisite" component={PersoMaVisite} />
+
+            {/* stack screens pro  */}
+
+            <Stack.Screen name="ProConnectionScreen" component={ProConnectionScreen} />
+            <Stack.Screen name="WelcomeScreenPro" component={WelcomeScreenPro} />
+            <Stack.Screen name="ProDisponibilites" component={ProDisponibilites} />
+            <Stack.Screen name="FicheClient" component={FicheClient} />
+            <Stack.Screen name="MonAnnonce" component={MonAnnonce} />
+            <Stack.Screen name="CreationAnnonce" component={CreationAnnonce} />
+            <Stack.Screen name="ProPreferences" component={ProPreferences} />
+            <Stack.Screen name="ProPriseDeVisite" component={ProPriseDeVisite} />
+            <Stack.Screen name="CameraScreen" component={CameraScreen} />
+               
           </Stack.Navigator>
         </NavigationContainer>
     </Provider>
