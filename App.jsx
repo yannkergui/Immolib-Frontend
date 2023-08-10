@@ -7,6 +7,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
+//imports pro screens 
+
 import ProHome from "./screens/pro/proHome";
 import ProClients from "./screens/pro/proClients";
 import FicheClient from "./screens/pro/ficheClient"
@@ -14,7 +16,6 @@ import ProVisites from "./screens/pro/proVisites";
 import ProTchats from "./screens/pro/proTchats";
 import ProAnnonces from "./screens/pro/proAnnonces";
 import WelcomeScreenPro from "./screens/pro/WelcomeScreenPro";
-import MonDossierPro from "./screens/pro/monDossierpro"
 import ProConnectionScreen from "./screens/pro/proConnectionScreen";
 import ProPreferences from "./screens/pro/proPreferences";
 import CameraScreen from "./screens/pro/cameraScreen";
@@ -23,6 +24,8 @@ import CreationAnnonce from "./screens/pro/creationAnnonce";
 import MonAnnonce from "./screens/pro/monAnnonce";
 import ProDisponibilites from "./screens/pro/proDisponibilites";
 
+
+//imports perso screens
 
 import PersoConnectionScreen from "./screens/perso/persoConnectionScreen";
 import PersoHome from "./screens/perso/persoHome";
@@ -48,13 +51,14 @@ import pro from "./reducers/pro";
 import monClient from "./reducers/monClient";
 import maVisite from "./reducers/maVisite";
 import maVille from "./reducers/maVille";
+import refresher from "./reducers/refresher";
 import monBien from "./reducers/monBien";
-import refresher from "./reducers/refresher"
+
 
 import { configureStore } from "@reduxjs/toolkit";
 
 const store = configureStore({
-  reducer: { user, pro, monClient, maVisite, maVille, monBien, refresher},
+  reducer: { user, pro, monClient, maVisite, maVille, refresher, monBien },
 });
 
 const TabNavigatorPro = () => {
@@ -215,7 +219,7 @@ export default function App() {
             <Stack.Screen name="CompleteTonDossier" component={CompleteTonDossier} />
             <Stack.Screen name="PersoPriseDeVisite" component={PersoPriseDeVisite} />
 
-              <Stack.Screen
+          <Stack.Screen
                 name="TabNavigatorPerso"
                 component={TabNavigatorPerso}
               />

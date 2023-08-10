@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput, KeyboardAvoidingView,Image, ScrollView, Keyboard, TouchableWithoutFeedback } from "react-native";
+
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import { useDispatch } from 'react-redux';
@@ -214,7 +215,7 @@ const EMAIL_REGEX = /[a-z]/
 
         // !!!!!!! Passage à l'écran ProPreferences PROBLEME !!!!!!!!!
 
-        navigation.navigate("ProPreferences");
+        navigation.navigate("ProHome");
 
       }
       if (data2.error==="User already exists") {
