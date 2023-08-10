@@ -26,9 +26,9 @@ export default function PersoHome({navigation}) {
   useEffect(() => {
     fetch(`http://${ipAdress}/visites/user/${user._id}`)
       .then(response => response.json())
-      .then(data => {
+      .then(data => { 
         const updatedItems = {};
-        data.VisitesTrouvees.map(data => { 
+        data.VisitesTrouvees.map(data => {  console.log(data);
           // Extraction des informations de chaque visite
           const visitedate = data.dateOfVisit;
           const name = `${data.prosId.nom} ${data.prosId.prenom} - ${data.prosId.agence.denomination} - ${data.bienImmoId.titre}`;
