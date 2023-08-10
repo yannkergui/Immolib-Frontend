@@ -215,7 +215,7 @@ const EMAIL_REGEX = /[a-z]/
 
         // !!!!!!! Passage à l'écran ProPreferences PROBLEME !!!!!!!!!
 
-        navigation.navigate("ProHome");
+        navigation.navigate("TabNavigatorPro");
 
       }
       if (data2.error==="User already exists") {
