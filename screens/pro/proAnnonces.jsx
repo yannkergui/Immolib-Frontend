@@ -131,8 +131,9 @@ const annoncesVente = biensPro.map((data) => {
     >
         <View style={styles.header}> 
         <Text style={styles.Title}>Mes Annonces</Text>
-        <TouchableOpacity style={styles.iconcontainer}>
-          <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' />
+        <TouchableOpacity>
+            {pro.photo && <Image source={{url: pro.photo}} style={styles.photo}/>}
+            {!pro.photo && <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' />}
         </TouchableOpacity>
         </View>
       <View style={styles.pageContainer}>
@@ -176,11 +177,12 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   header: {
-    flexDirection: 'row',
-    width :'100%',
-    top: 40, 
-    alignItems: 'center', // Center the content horizontally
-    justifyContent: 'center'
+    flexDirection: "row",
+    width: "100%",
+    top: 40,
+    alignItems: "center", // Center the content horizontally
+    justifyContent: "flex-end",
+    paddingRight: 30,
   },
   iconcontainer :{
   position :'absolute',
@@ -195,13 +197,14 @@ const styles = StyleSheet.create({
   },
 
   Title: {
-    fontFamily: 'Nunitobold',
-    color: 'white',
+    // fontFamily: "Nunitobold",
+    color: "white",
     fontSize: 35,
-    fontStyle: 'normal',
-    fontWeight: '600', 
-    letterSpacing: -1.5, 
-    textAlign:'center',
+    fontStyle: "normal",
+    fontWeight: "600",
+    letterSpacing: -1.5,
+    textAlign: "center",
+    marginRight: 30,
   },
   
   pageContainer: {
@@ -313,6 +316,13 @@ next: {
 contentContainer: { 
   alignItems: "center",
   justifyContent: "center",
+},
+
+photo: {
+  width: 60,
+  height: 60,
+  borderRadius: 50,
+  marginBottom: 4,
 },
 
 });

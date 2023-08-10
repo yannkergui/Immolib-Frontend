@@ -411,14 +411,17 @@ const styles = StyleSheet.create({
   },
   modalConnect : {
     flex : 1,
-    width : '100%',
     alignItems:'center',
     justifyContent : 'center',
+    backgroundColor : 'red',
+
   },
   centeredView : {
     flex : 1,
     justifyContent : 'center',
     alignItems : 'center',
+    backgroundColor: 'rgba(208, 0, 108, 0.5)',
+    width: "100%",
   },
   modalContainer : {
     backgroundColor : 'rgba(255, 255, 255, 1)',

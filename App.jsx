@@ -59,6 +59,8 @@ import monBien from "./reducers/monBien";
 import userMaVisite from "./reducers/userMaVisite";
 
 
+import { LogBox } from 'react-native';
+LogBox.ignoreAllLogs();//Ignore all log notifications
 
 import { configureStore } from "@reduxjs/toolkit";
 
@@ -215,6 +217,8 @@ const TabNavigatorPerso = () => {
 };
 
 export default function App() {
+
+  
   return (
     <Provider store={store}>
 

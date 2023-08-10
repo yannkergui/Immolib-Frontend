@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
   Text,
@@ -15,13 +14,13 @@ import { useState } from "react";
 import MapView, { Marker } from "react-native-maps";
 import maVille from "../../reducers/maVille";
 import { ipAdress } from "../../immolibTools";
-
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 export default function MonAnnonce({ navigation }) {
   const monBien = useSelector((state) => state.monBien.value);
   const coordonnees = useSelector((state) => state.maVille.value);
-
+const pro = useSelector((state)=> state.pro.value)
 
   console.log("test", coordonnees);
 
@@ -51,7 +50,7 @@ export default function MonAnnonce({ navigation }) {
               name="user"
               size={30}
               color="#1F2937"
-              />
+            />
           </TouchableOpacity>
         </View>
         <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -111,9 +110,10 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-    zIndex: 1, 
+    top: 10,
+    alignItems: "center", // Center the content horizontally
+    justifyContent: "flex-end",
+    paddingRight: 30,
   },
   iconcontainer: {
     position: "absolute",
@@ -128,13 +128,14 @@ const styles = StyleSheet.create({
   },
 
   Title: {
-    fontFamily: "Nunitobold",
+    // fontFamily: "Nunitobold",
     color: "white",
     fontSize: 35,
     fontStyle: "normal",
     fontWeight: "600",
     letterSpacing: -1.5,
     textAlign: "center",
+    marginRight: 20,
   },
 
   image: {
@@ -214,5 +215,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.48,
     shadowRadius: 11.95,
     elevation: 18,
+  },
+  photo: {
+    width: 60,
+    height: 60,
+    borderRadius: 50,
+    marginBottom: 4,
   },
 });

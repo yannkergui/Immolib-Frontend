@@ -10,6 +10,7 @@ import {
   Keyboard,
   ScrollView,
   LayoutAnimation,
+  Image,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState, useEffect } from "react";
@@ -135,8 +136,11 @@ export default function ProVisites({ navigation }) {
     console.log("data", data);
   };
 
+
   const visiteEnAttente = visitesPro.map((data) => {
     // console.log("data visites en attente", data);
+
+
     if (data.statut === "en attente") {
       return (
         <View key={data._id} style={styles.visiteCard}>
@@ -151,26 +155,28 @@ export default function ProVisites({ navigation }) {
                 navigation.navigate("ProPriseDeVisite");
               }}
             >
+            </TouchableOpacity>
               <FontAwesome name="edit" size={30} color="#1F2937" />
-            </TouchableOpacity>
           </View>
-          <View style={styles.lineCard}>
+          <View >
             <View style={styles.descriptionCard}>
-              <Text>
-                {titreBien(data.bienImmoId.titre)} {""}
-              </Text>
-              <Text>
-                {data.bienImmoId.numeroRue}, {data.bienImmoId.rue}{" "}
-                {data.bienImmoId.codePostal}
-                {""} {data.bienImmoId.ville}
-              </Text>
+              <View>
+                <Text>
+                  {titreBien(data.bienImmoId.titre)} {""}
+                </Text>
+                <Text style={styles.texts} >
+                  {data.bienImmoId.numeroRue}, {data.bienImmoId.rue}, {""}
+                  {data.bienImmoId.codePostal} {""}
+                  {data.bienImmoId.ville}
+                </Text>
+              </View>
+              <TouchableOpacity onPress={() => openModalConfirmation(data)}>
+                <FontAwesome name="check" size={30} color="green" />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <FontAwesome name="remove" size={30} color="red" />
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={() => openModalConfirmation(data)}>
-              <FontAwesome name="check" size={30} color="green" />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <FontAwesome name="remove" size={30} color="red" />
-            </TouchableOpacity>
             <Modal
               style={styles.modalConfirmation}
               visible={modalConfirmation}
@@ -267,24 +273,111 @@ export default function ProVisites({ navigation }) {
               {" "}
               Le {formatDate(data.dateOfVisit)} à {data.startTimeVisit}{" "}
             </Text>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                visiteSelected(data);
+                navigation.navigate("ProPriseDeVisite");
+              }}
+            >
+            </TouchableOpacity>
               <FontAwesome name="edit" size={30} color="#1F2937" />
-            </TouchableOpacity>
           </View>
-          <View style={styles.lineCard}>
+          <View >
             <View style={styles.descriptionCard}>
-              <Text>
-                {titreBien(data.bienImmoId.titre)} {""}
-              </Text>
-              <Text>
-                {data.bienImmoId.numeroRue}, {data.bienImmoId.rue}{" "}
-                {data.bienImmoId.codePostal}
-                {""} {data.bienImmoId.ville}
-              </Text>
+              <View>
+                <Text>
+                  {titreBien(data.bienImmoId.titre)} {""}
+                </Text>
+                <Text style={styles.texts} >
+                  {data.bienImmoId.numeroRue}, {data.bienImmoId.rue}, {""}
+                  {data.bienImmoId.codePostal} {""}
+                  {data.bienImmoId.ville}
+                </Text>
+              </View>
+              <TouchableOpacity onPress={() => openModalConfirmation(data)}>
+                <FontAwesome name="check" size={30} color="green" />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <FontAwesome name="remove" size={30} color="red" />
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity>
-              <FontAwesome name="remove" size={30} color="#1F2937" />
-            </TouchableOpacity>
+            <Modal
+              style={styles.modalConfirmation}
+              visible={modalConfirmation}
+              animationType="fade"
+              transparent
+            >
+              <KeyboardAvoidingView
+                behavior={"padding"}
+                style={styles.container}
+              >
+                <TouchableWithoutFeedback
+                  onPress={() => {
+                    openModalConfirmation(), setSelectedVisite(null);
+                  }}
+                  accessible={false}
+                >
+                  <View style={styles.centeredView}>
+                    <View style={styles.modalContainer}>
+                      <View style={styles.inputsEtDelete}>
+                        {RdvConfirmé ? (
+                          <Text style={styles.textModaleConfirm}>
+                            Rendez-vous confirmé ! ✅
+                          </Text>
+                        ) : (
+                          <Text style={styles.inputs}>Confirmer ?</Text>
+                        )}
+                      </View>
+
+                      {!RdvConfirmé && selectedVisite ? (
+                        <Text style={styles.textButton}>
+                          Voulez-vous confirmer ce rendez-vous du{" "}
+                          {formatDate(selectedVisite.dateOfVisit)} à{" "}
+                          {selectedVisite.startTimeVisit} pour le bien du{" "}
+                          {selectedVisite.bienImmoId.numeroRue},{" "}
+                          {selectedVisite.bienImmoId.rue} à{" "}
+                          {selectedVisite.bienImmoId.codePostal} ?
+                        </Text>
+                      ) : null}
+
+                      <View style={styles.choixModal}>
+                        {!RdvConfirmé && (
+                          <TouchableOpacity
+                            style={styles.btnModal}
+                            onPress={() => {
+                              setRdvConfirmé(true);
+                              confirmVisite(selectedVisite._id); // Appeler la fonction de confirmation
+                            }}
+                          >
+                            <FontAwesome
+                              name="check"
+                              size={30}
+                              color="#1F2937"
+                            />
+                          </TouchableOpacity>
+                        )}
+                        <TouchableOpacity
+                          style={styles.btnModal}
+                          onPress={() => {
+                            openModalConfirmation(),
+                              setRdvConfirmé(false),
+                              setSelectedVisite(null);
+                          }}
+                        >
+                          {!RdvConfirmé ? (
+                            <FontAwesome
+                              name="remove"
+                              size={30}
+                              color="#1F2937"
+                            />
+                          ) : null}
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+                </TouchableWithoutFeedback>
+              </KeyboardAvoidingView>
+            </Modal>
           </View>
         </View>
       );
@@ -302,15 +395,10 @@ export default function ProVisites({ navigation }) {
         <View style={styles.header}>
           <Text style={styles.Title}>Mes Visites</Text>
           <TouchableOpacity
-            style={styles.iconcontainer}
             onPress={() => navigation.navigate("ProPreferences")}
           >
-            <FontAwesome
-              style={styles.icon}
-              name="user"
-              size={30}
-              color="#1F2937"
-            />
+            {pro.photo && <Image source={{url: pro.photo}} style={styles.photo}/>}
+            {!pro.photo && <FontAwesome style={styles.icon} name='user' size={30} color='#1F2937' />}
           </TouchableOpacity>
         </View>
         <View style={styles.pageContainer}>
@@ -356,7 +444,8 @@ const styles = StyleSheet.create({
     width: "100%",
     top: 40,
     alignItems: "center", // Center the content horizontally
-    justifyContent: "center",
+    justifyContent: "flex-end",
+    paddingRight: 30,
   },
   iconcontainer: {
     position: "absolute",
@@ -378,6 +467,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     letterSpacing: -1.5,
     textAlign: "center",
+    marginRight: 30,
   },
 
   pageContainer: {
@@ -420,9 +510,10 @@ const styles = StyleSheet.create({
   visiteCard: {
     justifyContent: "space-between",
     // alignItems: "center",
-
-    height: 150,
+    height: 140,
     width: "90%",
+    minWidth: "90%",
+    maxWidth: '90%',
     borderRadius: 25,
     backgroundColor: "#BCCDB6",
     shadowColor: "#000",
@@ -440,14 +531,26 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     margin: 15,
+    // borderColor: 'black',
+    // borderWidth: 1,
+    width:"90%",
   },
+
+  texts: {
+    width: 170,
+  },
+
   SwitchSelector3choix: {
     width: "100%",
   },
   descriptionCard: {
-    flexDirection: "column",
-
+    flexDirection: "row",
+    alignItems: "center",
     justifyContent: "space-between",
+    // borderColor: 'red',
+    // borderWidth: 1,
+    width: "90%",
+    margin: 15,
   },
   modalConfirmation: {
     flex: 1,
@@ -490,5 +593,11 @@ const styles = StyleSheet.create({
     margin: 10,
     justifyContent: "center",
     alignItems: "center",
+  },
+  photo: {
+    width: 60,
+    height: 60,
+    borderRadius: 50,
+    marginBottom: 4,
   },
 });
