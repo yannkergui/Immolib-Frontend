@@ -64,7 +64,7 @@ export default function PersoConnectionScreen({ navigation }) {
                           }));
 
           setModalConnexion(false)
-          navigation.navigate('TabNavigatorPerso');
+          navigation.navigate('PersoPriseDeVisite');
           setEmail('');
           setEmailError(false);
           setMdp('');
