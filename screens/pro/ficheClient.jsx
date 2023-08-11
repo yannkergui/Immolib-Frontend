@@ -349,8 +349,8 @@ scrollContainer : {
 //  justifyContent : 'center',
 //   alignItems : 'center',
   marginTop: 30,
-  borderColor: 'red',
-  borderWidth: 1,
+  // borderColor: 'red',
+  // borderWidth: 1,
   width: '90%',
   
 
@@ -386,8 +386,8 @@ CardsGroup :{
     justifyContent: 'center',
     alignItems: 'center',
     width: "80%",
-    borderColor: 'black',
-    borderWidth: 1,
+    // borderColor: 'black',
+    // borderWidth: 1,
 },
 
 clientsCard1 :{

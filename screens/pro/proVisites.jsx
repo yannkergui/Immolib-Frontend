@@ -82,9 +82,10 @@ export default function ProVisites({ navigation }) {
       setTimeout(() => {
         setRdvConfirmé(false);
         setModalConfirmation(false); // Ferme la modale
-      }, 1500).then(() => {
-        navigation.navigate("TabNavigatorPro");
-      });
+      }, 1500)
+      // .then(() => {
+      //   navigation.navigate("TabNavigatorPro");
+      // });
     }
   }, [RdvConfirmé]);
 

@@ -420,7 +420,7 @@ const styles = StyleSheet.create({
     flex : 1,
     justifyContent : 'center',
     alignItems : 'center',
-    backgroundColor: 'rgba(208, 0, 108, 0.5)',
+    backgroundColor: 'rgba(117, 117, 117, 0.6)',
     width: "100%",
   },
   modalContainer : {

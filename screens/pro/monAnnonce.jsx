@@ -14,7 +14,7 @@ import { useState } from "react";
 import MapView, { Marker } from "react-native-maps";
 import maVille from "../../reducers/maVille";
 import { ipAdress } from "../../immolibTools";
-import { SafeAreaView } from "react-native-safe-area-context";
+
 
 
 export default function MonAnnonce({ navigation }) {
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     letterSpacing: -1.5,
     textAlign: "center",
-    marginRight: 20,
+    marginRight: 80,
   },
 
   image: {

@@ -48,9 +48,9 @@ export default function ProAnnonces( {navigation} ) {
         longitude:  data.features[0].geometry.coordinates[0],
       };
       dispatch(maVilleData(newAdress))
+      navigation.navigate('MonAnnonce')
     
     })
-    navigation.navigate('MonAnnonce')
   };
 
  // constante relative au switch de changement de page 

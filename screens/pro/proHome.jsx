@@ -31,6 +31,7 @@ export default function ProHome({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         data.visitesTrouvees.forEach((data) => {
+          console.log(data)
           const visitedate = data.dateOfVisit;
           const name = `${data.usersId.nom ? data.usersId.nom : ''} ${data.usersId.prenom ? data.usersId.prenom : ''} - ${data.bienImmoId.titre ? data.bienImmoId.titre : ''}`
           const time = `${data.startTimeVisit ? data.startTimeVisit : ''}`;
