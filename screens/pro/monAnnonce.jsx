@@ -16,7 +16,6 @@ import maVille from "../../reducers/maVille";
 import { ipAdress } from "../../immolibTools";
 
 
-
 export default function MonAnnonce({ navigation }) {
   const monBien = useSelector((state) => state.monBien.value);
   const coordonnees = useSelector((state) => state.maVille.value);

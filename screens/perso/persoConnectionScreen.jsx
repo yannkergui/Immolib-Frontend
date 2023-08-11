@@ -308,9 +308,10 @@ const styles = StyleSheet.create({
   },
   centeredView : {
     flex : 1,
+    width : '100%',
     justifyContent : 'center',
     alignItems : 'center',
-    backgroundColor: 'rgba(208, 0, 108, 0.5)',
+    backgroundColor: 'rgba(117, 117, 117, 0.5)',
   },
   modalContainer : {
     backgroundColor : 'rgba(255, 255, 255, 1)',

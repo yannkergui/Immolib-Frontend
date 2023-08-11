@@ -14,6 +14,8 @@ import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from "react-redux";
 import { maVisiteData } from "../../reducers/maVisite";
+import {userMaVisiteData} from "../../reducers/userMaVisite"
+
 import { ipAdress } from "../../immolibTools";
 import { refresh } from "../../reducers/refresher";
 
@@ -25,8 +27,8 @@ export default function PersoModifVisite({ navigation }) {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.value);
-  const maVisite = useSelector((state) => state.maVisite.value);
-  const refresher = useSelector((state) => state.refresher.value);
+  const maVisite = useSelector((state) => state.userMaVisite.value);
+
 
   console.log("reducer ma visite", maVisite);
 

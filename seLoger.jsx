@@ -35,7 +35,7 @@ navigation.navigate('FirstScreen')
       console.log(data);
       return (
         <TouchableOpacity style={styles.annonceCard}
-        onPress={() => { goToMonAnnonce(data) }}>
+        >
           <View style={styles.lineCard}>
             <View style={styles.imageConatainer}>
             <Image
