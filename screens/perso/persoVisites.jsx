@@ -88,7 +88,7 @@ function handleCancelVisit (e) {
   //Redirection vers la page de modification des visites :
 
   function handleMajVisit (e) {
-    dispatch(maVisiteData(e));
+    dispatch(userMaVisiteData(e));
     navigation.navigate('PersoModifVisite')
   }
 
